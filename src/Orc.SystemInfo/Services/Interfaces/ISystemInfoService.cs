@@ -1,9 +1,10 @@
 ﻿namespace Orc.SystemInfo.Services
 {
     using System.Collections.Generic;
+    using Models;
 
     public interface ISystemInfoService
     {
-        IEnumerable<KeyValuePair<string, string>> GetSystemInfo();
+        IEnumerable<CoupledValue<string, string>> GetSystemInfo();
     }
 }
