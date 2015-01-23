@@ -1,4 +1,5 @@
 ﻿using Catel.IoC;
+using Orc.SystemInfo.Services;
 
 /// <summary>
 /// Used by the ModuleInit. All code inside the Initialize method is ran as soon as the assembly is loaded.
@@ -12,6 +13,6 @@ public static class ModuleInitializer
     {
         var serviceLocator = ServiceLocator.Default;
 
-        //serviceLocator.RegisterType<IAutomaticSupportService, AutomaticSupportService>();
+        serviceLocator.RegisterType<ISystemInfoService, SystemInfoService>();
     }
 }
