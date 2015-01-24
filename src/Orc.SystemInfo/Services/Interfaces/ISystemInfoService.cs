@@ -5,6 +5,6 @@
 
     public interface ISystemInfoService
     {
-        IEnumerable<CoupledValue<string, string>> GetSystemInfo();
+        IEnumerable<Pair<string, string>> GetSystemInfo();
     }
 }

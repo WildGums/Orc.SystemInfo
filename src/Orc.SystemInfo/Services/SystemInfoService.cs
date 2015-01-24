@@ -17,7 +17,7 @@ namespace Orc.SystemInfo.Services
     internal class SystemInfoService : ISystemInfoService
     {
         #region ISystemInfoService Members
-        public IEnumerable<CoupledValue<string, string>> GetSystemInfo()
+        public IEnumerable<Pair<string, string>> GetSystemInfo()
         {
             var wmi = new ManagementObjectSearcher("select * from Win32_OperatingSystem")
                 .Get()
@@ -29,35 +29,35 @@ namespace Orc.SystemInfo.Services
                 .Cast<ManagementObject>()
                 .First();
 
-            yield return new CoupledValue<string, string>("User name:", Environment.UserName);
-            yield return new CoupledValue<string, string>("User domain name:", Environment.UserDomainName);
-            yield return new CoupledValue<string, string>("Machine name:", Environment.MachineName);
-            yield return new CoupledValue<string, string>("OS version:", Environment.OSVersion.ToString());
-            yield return new CoupledValue<string, string>("Version:", Environment.Version.ToString());
+            yield return new Pair<string, string>("User name:", Environment.UserName);
+            yield return new Pair<string, string>("User domain name:", Environment.UserDomainName);
+            yield return new Pair<string, string>("Machine name:", Environment.MachineName);
+            yield return new Pair<string, string>("OS version:", Environment.OSVersion.ToString());
+            yield return new Pair<string, string>("Version:", Environment.Version.ToString());
 
-            yield return new CoupledValue<string, string>("OS name:", GetObjectValue(wmi, "Caption"));
-            yield return new CoupledValue<string, string>("MaxProcessRAM:", GetObjectValue(wmi, "MaxProcessMemorySize"));
-            yield return new CoupledValue<string, string>("Architecture:", GetObjectValue(wmi, "OSArchitecture"));
-            yield return new CoupledValue<string, string>("ProcessorId:", GetObjectValue(wmi, "ProcessorId"));
-            yield return new CoupledValue<string, string>("Build:", GetObjectValue(wmi, "BuildNumber"));
+            yield return new Pair<string, string>("OS name:", GetObjectValue(wmi, "Caption"));
+            yield return new Pair<string, string>("MaxProcessRAM:", GetObjectValue(wmi, "MaxProcessMemorySize"));
+            yield return new Pair<string, string>("Architecture:", GetObjectValue(wmi, "OSArchitecture"));
+            yield return new Pair<string, string>("ProcessorId:", GetObjectValue(wmi, "ProcessorId"));
+            yield return new Pair<string, string>("Build:", GetObjectValue(wmi, "BuildNumber"));
 
-            yield return new CoupledValue<string, string>("CPU name:", GetObjectValue(cpu, "Name"));
-            yield return new CoupledValue<string, string>("Description:", GetObjectValue(cpu, "Caption"));
-            yield return new CoupledValue<string, string>("Address width:", GetObjectValue(cpu, "AddressWidth"));
-            yield return new CoupledValue<string, string>("Data width:", GetObjectValue(cpu, "DataWidth"));
-            yield return new CoupledValue<string, string>("SpeedMHz:", GetObjectValue(cpu, "MaxClockSpeed"));
-            yield return new CoupledValue<string, string>("BusSpeedMHz:", GetObjectValue(cpu, "ExtClock"));
-            yield return new CoupledValue<string, string>("Number of cores:", GetObjectValue(cpu, "NumberOfCores"));
-            yield return new CoupledValue<string, string>("Number of logical processors:", GetObjectValue(cpu, "NumberOfLogicalProcessors"));
+            yield return new Pair<string, string>("CPU name:", GetObjectValue(cpu, "Name"));
+            yield return new Pair<string, string>("Description:", GetObjectValue(cpu, "Caption"));
+            yield return new Pair<string, string>("Address width:", GetObjectValue(cpu, "AddressWidth"));
+            yield return new Pair<string, string>("Data width:", GetObjectValue(cpu, "DataWidth"));
+            yield return new Pair<string, string>("SpeedMHz:", GetObjectValue(cpu, "MaxClockSpeed"));
+            yield return new Pair<string, string>("BusSpeedMHz:", GetObjectValue(cpu, "ExtClock"));
+            yield return new Pair<string, string>("Number of cores:", GetObjectValue(cpu, "NumberOfCores"));
+            yield return new Pair<string, string>("Number of logical processors:", GetObjectValue(cpu, "NumberOfLogicalProcessors"));
 
-            yield return new CoupledValue<string, string>("Current culture:", CultureInfo.CurrentCulture.ToString());
+            yield return new Pair<string, string>("Current culture:", CultureInfo.CurrentCulture.ToString());
 
-            yield return new CoupledValue<string, string>("Installed .Net versions:", string.Empty);
+            yield return new Pair<string, string>("Installed .Net versions:", string.Empty);
 
             var versions = GetVersionFromRegistry();
             foreach (var version in versions)
             {
-                yield return new CoupledValue<string, string>(string.Empty, version);
+                yield return new Pair<string, string>(string.Empty, version);
             }
         }
         #endregion
