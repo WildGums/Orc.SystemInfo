@@ -88,9 +88,8 @@ namespace Orc.SystemInfo.Services
         private static IEnumerable<string> GetVersionFromRegistry()
         {
             // Opens the registry key for the .NET Framework entry. 
-            using (RegistryKey ndpKey =
-                RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, "").
-                    OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\"))
+            using (var ndpKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, string.Empty)
+                .OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\"))
             {
                 // As an alternative, if you know the computers you will query are running .NET Framework 4.5  
                 // or later, you can use: 
@@ -101,33 +100,36 @@ namespace Orc.SystemInfo.Services
                     if (versionKeyName.StartsWith("v"))
                     {
                         var versionKey = ndpKey.OpenSubKey(versionKeyName);
-                        var name = (string)versionKey.GetValue("Version", "");
-                        var sp = versionKey.GetValue("SP", "").ToString();
-                        var install = versionKey.GetValue("Install", "").ToString();
-                        if (sp != "" && install == "1")
+                        var name = (string)versionKey.GetValue("Version", string.Empty);
+                        var sp = versionKey.GetValue("SP", string.Empty).ToString();
+                        var install = versionKey.GetValue("Install", string.Empty).ToString();
+                        if (sp != string.Empty && install == "1")
                         {
                             yield return (versionKeyName + "  " + name + "  SP" + sp);
                         }
-                        if (name != "")
+
+                        if (string.IsNullOrEmpty(name))
                         {
                             continue;
                         }
-                        foreach (string subKeyName in versionKey.GetSubKeyNames())
+
+                        foreach (var subKeyName in versionKey.GetSubKeyNames())
                         {
                             var subKey = versionKey.OpenSubKey(subKeyName);
-                            name = (string)subKey.GetValue("Version", "");
-                            if (name != "")
+                            name = (string)subKey.GetValue("Version", string.Empty);
+                            if (!string.IsNullOrEmpty(name))
                             {
-                                sp = subKey.GetValue("SP", "").ToString();
+                                sp = subKey.GetValue("SP", string.Empty).ToString();
                             }
-                            install = subKey.GetValue("Install", "").ToString();
-                            if (install == "") //no install info, must be later.
+
+                            install = subKey.GetValue("Install", string.Empty).ToString();
+                            if (string.IsNullOrEmpty(install)) //no install info, must be later.
                             {
                                 yield return (versionKeyName + "  " + name);
                             }
                             else
                             {
-                                if (sp != "" && install == "1")
+                                if (!string.IsNullOrEmpty(sp) && install == "1")
                                 {
                                     yield return (versionKeyName + "  " + subKeyName + "  " + name + "  SP" + sp);
                                 }
