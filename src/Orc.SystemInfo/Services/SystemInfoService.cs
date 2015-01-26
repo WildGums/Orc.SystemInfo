@@ -94,7 +94,7 @@ namespace Orc.SystemInfo.Services
                 {
                     using (var versionKey = ndpKey.OpenSubKey(versionKeyName))
                     {
-                        foreach (var fullName in BuildFrameworkNamesRecursively(versionKey, versionKeyName, true))
+                        foreach (var fullName in BuildFrameworkNamesRecursively(versionKey, versionKeyName, topLevel:true))
                         {
                             yield return fullName;
                         }
@@ -103,10 +103,11 @@ namespace Orc.SystemInfo.Services
             }
         }
 
-        private static IEnumerable<string> BuildFrameworkNamesRecursively(RegistryKey registryKey, string name, bool topLevel = false)
+        private static IEnumerable<string> BuildFrameworkNamesRecursively(RegistryKey registryKey, string name, string topLevelSP = "0", bool topLevel = false)
         {
             Argument.IsNotNull(() => registryKey);
             Argument.IsNotNullOrEmpty(() => name);
+            Argument.IsNotNullOrEmpty(() => topLevelSP);
 
             if (registryKey == null)
             {
@@ -118,6 +119,11 @@ namespace Orc.SystemInfo.Services
             var version = (string) registryKey.GetValue("Version", string.Empty);
             var sp = registryKey.GetValue("SP", "0").ToString();
             var install = registryKey.GetValue("Install", string.Empty).ToString();
+
+            if (string.Equals(sp, "0"))
+            {
+                sp = topLevelSP;
+            }
 
             if (!string.Equals(sp, "0") && string.Equals(install, "1"))
             {
@@ -135,7 +141,7 @@ namespace Orc.SystemInfo.Services
             {
                 using (var subKey = registryKey.OpenSubKey(subKeyName))
                 {
-                    foreach (var subName in BuildFrameworkNamesRecursively(subKey, string.Format("{0} {1}", name, subKeyName), !topLevelInitialized))
+                    foreach (var subName in BuildFrameworkNamesRecursively(subKey, string.Format("{0} {1}", name, subKeyName), sp, !topLevelInitialized))
                     {
                         yield return subName;
                         subnamesCount++;
