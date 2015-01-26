@@ -3,6 +3,8 @@
 //   Copyright (c) 2008 - 2015 Wild Gums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
+
 namespace Orc.SystemInfo.Services
 {
     using System;
@@ -10,7 +12,8 @@ namespace Orc.SystemInfo.Services
     using System.Globalization;
     using System.Linq;
     using System.Management;
-
+    using System.Text.RegularExpressions;
+    using Catel;
     using Microsoft.Win32;
     using Models;
 
@@ -29,35 +32,33 @@ namespace Orc.SystemInfo.Services
                 .Cast<ManagementObject>()
                 .First();
 
-            yield return new Pair<string, string>("User name:", Environment.UserName);
-            yield return new Pair<string, string>("User domain name:", Environment.UserDomainName);
-            yield return new Pair<string, string>("Machine name:", Environment.MachineName);
-            yield return new Pair<string, string>("OS version:", Environment.OSVersion.ToString());
-            yield return new Pair<string, string>("Version:", Environment.Version.ToString());
+            yield return new Pair<string, string>("User name", Environment.UserName);
+            yield return new Pair<string, string>("User domain name", Environment.UserDomainName);
+            yield return new Pair<string, string>("Machine name", Environment.MachineName);
+            yield return new Pair<string, string>("OS version", Environment.OSVersion.ToString());
+            yield return new Pair<string, string>("Version", Environment.Version.ToString());
 
-            yield return new Pair<string, string>("OS name:", GetObjectValue(wmi, "Caption"));
-            yield return new Pair<string, string>("MaxProcessRAM:", GetObjectValue(wmi, "MaxProcessMemorySize"));
-            yield return new Pair<string, string>("Architecture:", GetObjectValue(wmi, "OSArchitecture"));
-            yield return new Pair<string, string>("ProcessorId:", GetObjectValue(wmi, "ProcessorId"));
-            yield return new Pair<string, string>("Build:", GetObjectValue(wmi, "BuildNumber"));
+            yield return new Pair<string, string>("OS name", GetObjectValue(wmi, "Caption"));
+            yield return new Pair<string, string>("MaxProcessRAM", GetObjectValue(wmi, "MaxProcessMemorySize"));
+            yield return new Pair<string, string>("Architecture", GetObjectValue(wmi, "OSArchitecture"));
+            yield return new Pair<string, string>("ProcessorId", GetObjectValue(wmi, "ProcessorId"));
+            yield return new Pair<string, string>("Build", GetObjectValue(wmi, "BuildNumber"));
 
-            yield return new Pair<string, string>("CPU name:", GetObjectValue(cpu, "Name"));
-            yield return new Pair<string, string>("Description:", GetObjectValue(cpu, "Caption"));
-            yield return new Pair<string, string>("Address width:", GetObjectValue(cpu, "AddressWidth"));
-            yield return new Pair<string, string>("Data width:", GetObjectValue(cpu, "DataWidth"));
-            yield return new Pair<string, string>("SpeedMHz:", GetObjectValue(cpu, "MaxClockSpeed"));
-            yield return new Pair<string, string>("BusSpeedMHz:", GetObjectValue(cpu, "ExtClock"));
-            yield return new Pair<string, string>("Number of cores:", GetObjectValue(cpu, "NumberOfCores"));
-            yield return new Pair<string, string>("Number of logical processors:", GetObjectValue(cpu, "NumberOfLogicalProcessors"));
+            yield return new Pair<string, string>("CPU name", GetObjectValue(cpu, "Name"));
+            yield return new Pair<string, string>("Description", GetObjectValue(cpu, "Caption"));
+            yield return new Pair<string, string>("Address width", GetObjectValue(cpu, "AddressWidth"));
+            yield return new Pair<string, string>("Data width", GetObjectValue(cpu, "DataWidth"));
+            yield return new Pair<string, string>("SpeedMHz", GetObjectValue(cpu, "MaxClockSpeed"));
+            yield return new Pair<string, string>("BusSpeedMHz", GetObjectValue(cpu, "ExtClock"));
+            yield return new Pair<string, string>("Number of cores", GetObjectValue(cpu, "NumberOfCores"));
+            yield return new Pair<string, string>("Number of logical processors", GetObjectValue(cpu, "NumberOfLogicalProcessors"));
 
-            yield return new Pair<string, string>("Current culture:", CultureInfo.CurrentCulture.ToString());
+            yield return new Pair<string, string>("Current culture", CultureInfo.CurrentCulture.ToString());
 
-            yield return new Pair<string, string>("Installed .Net versions:", string.Empty);
-
-            var versions = GetVersionFromRegistry();
-            foreach (var version in versions)
+            yield return new Pair<string, string>(".Net Framework versions", string.Empty);
+            foreach (var pair in GetNetFrameworkVersions())
             {
-                yield return new Pair<string, string>(string.Empty, version);
+                yield return new Pair<string, string>(string.Empty, pair);
             }
         }
         #endregion
@@ -85,62 +86,66 @@ namespace Orc.SystemInfo.Services
             return finalValue;
         }
 
-        private static IEnumerable<string> GetVersionFromRegistry()
+        private static IEnumerable<string> GetNetFrameworkVersions()
         {
-            // Opens the registry key for the .NET Framework entry. 
-            using (var ndpKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, string.Empty)
-                .OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\"))
+            using (var ndpKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, string.Empty).OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\"))
             {
-                // As an alternative, if you know the computers you will query are running .NET Framework 4.5  
-                // or later, you can use: 
-                // using (RegistryKey ndpKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine,  
-                // RegistryView.Registry32).OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\"))
-                foreach (string versionKeyName in ndpKey.GetSubKeyNames())
+                foreach (var versionKeyName in ndpKey.GetSubKeyNames().Where(x => x.StartsWith("v")))
                 {
-                    if (versionKeyName.StartsWith("v"))
+                    using (var versionKey = ndpKey.OpenSubKey(versionKeyName))
                     {
-                        var versionKey = ndpKey.OpenSubKey(versionKeyName);
-                        var name = (string)versionKey.GetValue("Version", string.Empty);
-                        var sp = versionKey.GetValue("SP", string.Empty).ToString();
-                        var install = versionKey.GetValue("Install", string.Empty).ToString();
-                        if (sp != string.Empty && install == "1")
+                        foreach (var fullName in BuildFrameworkNamesRecursively(versionKey, versionKeyName, true))
                         {
-                            yield return (versionKeyName + "  " + name + "  SP" + sp);
-                        }
-
-                        if (string.IsNullOrEmpty(name))
-                        {
-                            continue;
-                        }
-
-                        foreach (var subKeyName in versionKey.GetSubKeyNames())
-                        {
-                            var subKey = versionKey.OpenSubKey(subKeyName);
-                            name = (string)subKey.GetValue("Version", string.Empty);
-                            if (!string.IsNullOrEmpty(name))
-                            {
-                                sp = subKey.GetValue("SP", string.Empty).ToString();
-                            }
-
-                            install = subKey.GetValue("Install", string.Empty).ToString();
-                            if (string.IsNullOrEmpty(install)) //no install info, must be later.
-                            {
-                                yield return (versionKeyName + "  " + name);
-                            }
-                            else
-                            {
-                                if (!string.IsNullOrEmpty(sp) && install == "1")
-                                {
-                                    yield return (versionKeyName + "  " + subKeyName + "  " + name + "  SP" + sp);
-                                }
-                                else if (install == "1")
-                                {
-                                    yield return (versionKeyName + "  " + subKeyName + "  " + name);
-                                }
-                            }
+                            yield return fullName;
                         }
                     }
                 }
+            }
+        }
+
+        private static IEnumerable<string> BuildFrameworkNamesRecursively(RegistryKey registryKey, string name, bool topLevel = false)
+        {
+            Argument.IsNotNull(() => registryKey);
+            Argument.IsNotNullOrEmpty(() => name);
+
+            if (registryKey == null)
+            {
+                yield break;
+            }
+
+            var fullVersion = string.Empty;
+
+            var version = (string) registryKey.GetValue("Version", string.Empty);
+            var sp = registryKey.GetValue("SP", "0").ToString();
+            var install = registryKey.GetValue("Install", string.Empty).ToString();
+
+            if (!string.Equals(sp, "0") && string.Equals(install, "1"))
+            {
+                fullVersion = string.Format("{0} {1} SP{2}", name, version, sp);
+            }
+            else if (string.Equals(install, "1"))
+            {
+                fullVersion = string.Format("{0} {1}", name, version);
+            }
+
+            var topLevelInitialized = !topLevel || !string.IsNullOrEmpty(fullVersion);
+
+            var subnamesCount = 0;
+            foreach (var subKeyName in registryKey.GetSubKeyNames().Where(x => Regex.IsMatch(x, @"^\d{4}$|^Client$|^Full$")))
+            {
+                using (var subKey = registryKey.OpenSubKey(subKeyName))
+                {
+                    foreach (var subName in BuildFrameworkNamesRecursively(subKey, string.Format("{0} {1}", name, subKeyName), !topLevelInitialized))
+                    {
+                        yield return subName;
+                        subnamesCount++;
+                    }
+                }
+            }
+
+            if (subnamesCount == 0)
+            {
+                yield return fullVersion;
             }
         }
         #endregion
