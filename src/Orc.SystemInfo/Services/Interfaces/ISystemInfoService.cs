@@ -11,6 +11,6 @@ namespace Orc.SystemInfo
 
     public interface ISystemInfoService
     {
-        IEnumerable<Pair<string, string>> GetSystemInfo();
+        IEnumerable<SystemInfoElement> GetSystemInfo();
     }
 }

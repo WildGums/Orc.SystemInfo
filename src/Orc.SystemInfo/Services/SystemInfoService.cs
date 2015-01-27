@@ -19,7 +19,7 @@ namespace Orc.SystemInfo
     internal class SystemInfoService : ISystemInfoService
     {
         #region ISystemInfoService Members
-        public IEnumerable<Pair<string, string>> GetSystemInfo()
+        public IEnumerable<SystemInfoElement> GetSystemInfo()
         {
             var wmi = new ManagementObjectSearcher("select * from Win32_OperatingSystem")
                 .Get()
@@ -31,33 +31,33 @@ namespace Orc.SystemInfo
                 .Cast<ManagementObject>()
                 .First();
 
-            yield return new Pair<string, string>("User name", Environment.UserName);
-            yield return new Pair<string, string>("User domain name", Environment.UserDomainName);
-            yield return new Pair<string, string>("Machine name", Environment.MachineName);
-            yield return new Pair<string, string>("OS version", Environment.OSVersion.ToString());
-            yield return new Pair<string, string>("Version", Environment.Version.ToString());
+            yield return new SystemInfoElement("User name", Environment.UserName);
+            yield return new SystemInfoElement("User domain name", Environment.UserDomainName);
+            yield return new SystemInfoElement("Machine name", Environment.MachineName);
+            yield return new SystemInfoElement("OS version", Environment.OSVersion.ToString());
+            yield return new SystemInfoElement("Version", Environment.Version.ToString());
 
-            yield return new Pair<string, string>("OS name", GetObjectValue(wmi, "Caption"));
-            yield return new Pair<string, string>("MaxProcessRAM", GetObjectValue(wmi, "MaxProcessMemorySize"));
-            yield return new Pair<string, string>("Architecture", GetObjectValue(wmi, "OSArchitecture"));
-            yield return new Pair<string, string>("ProcessorId", GetObjectValue(wmi, "ProcessorId"));
-            yield return new Pair<string, string>("Build", GetObjectValue(wmi, "BuildNumber"));
+            yield return new SystemInfoElement("OS name", GetObjectValue(wmi, "Caption"));
+            yield return new SystemInfoElement("MaxProcessRAM", GetObjectValue(wmi, "MaxProcessMemorySize"));
+            yield return new SystemInfoElement("Architecture", GetObjectValue(wmi, "OSArchitecture"));
+            yield return new SystemInfoElement("ProcessorId", GetObjectValue(wmi, "ProcessorId"));
+            yield return new SystemInfoElement("Build", GetObjectValue(wmi, "BuildNumber"));
 
-            yield return new Pair<string, string>("CPU name", GetObjectValue(cpu, "Name"));
-            yield return new Pair<string, string>("Description", GetObjectValue(cpu, "Caption"));
-            yield return new Pair<string, string>("Address width", GetObjectValue(cpu, "AddressWidth"));
-            yield return new Pair<string, string>("Data width", GetObjectValue(cpu, "DataWidth"));
-            yield return new Pair<string, string>("SpeedMHz", GetObjectValue(cpu, "MaxClockSpeed"));
-            yield return new Pair<string, string>("BusSpeedMHz", GetObjectValue(cpu, "ExtClock"));
-            yield return new Pair<string, string>("Number of cores", GetObjectValue(cpu, "NumberOfCores"));
-            yield return new Pair<string, string>("Number of logical processors", GetObjectValue(cpu, "NumberOfLogicalProcessors"));
+            yield return new SystemInfoElement("CPU name", GetObjectValue(cpu, "Name"));
+            yield return new SystemInfoElement("Description", GetObjectValue(cpu, "Caption"));
+            yield return new SystemInfoElement("Address width", GetObjectValue(cpu, "AddressWidth"));
+            yield return new SystemInfoElement("Data width", GetObjectValue(cpu, "DataWidth"));
+            yield return new SystemInfoElement("SpeedMHz", GetObjectValue(cpu, "MaxClockSpeed"));
+            yield return new SystemInfoElement("BusSpeedMHz", GetObjectValue(cpu, "ExtClock"));
+            yield return new SystemInfoElement("Number of cores", GetObjectValue(cpu, "NumberOfCores"));
+            yield return new SystemInfoElement("Number of logical processors", GetObjectValue(cpu, "NumberOfLogicalProcessors"));
 
-            yield return new Pair<string, string>("Current culture", CultureInfo.CurrentCulture.ToString());
+            yield return new SystemInfoElement("Current culture", CultureInfo.CurrentCulture.ToString());
 
-            yield return new Pair<string, string>(".Net Framework versions", string.Empty);
+            yield return new SystemInfoElement(".Net Framework versions", string.Empty);
             foreach (var pair in GetNetFrameworkVersions())
             {
-                yield return new Pair<string, string>(string.Empty, pair);
+                yield return new SystemInfoElement(string.Empty, pair);
             }
         }
         #endregion
