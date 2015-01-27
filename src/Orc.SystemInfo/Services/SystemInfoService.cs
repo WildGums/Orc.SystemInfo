@@ -13,52 +13,60 @@ namespace Orc.SystemInfo
     using System.Linq;
     using System.Management;
     using System.Text.RegularExpressions;
+    using System.Threading.Tasks;
     using Catel;
     using Microsoft.Win32;
 
-    internal class SystemInfoService : ISystemInfoService
+    public class SystemInfoService : ISystemInfoService
     {
         #region ISystemInfoService Members
-        public IEnumerable<SystemInfoElement> GetSystemInfo()
+        public async Task<IEnumerable<SystemInfoElement>> GetSystemInfo()
         {
-            var wmi = new ManagementObjectSearcher("select * from Win32_OperatingSystem")
-                .Get()
-                .Cast<ManagementObject>()
-                .First();
-
-            var cpu = new ManagementObjectSearcher("select * from Win32_Processor")
-                .Get()
-                .Cast<ManagementObject>()
-                .First();
-
-            yield return new SystemInfoElement("User name", Environment.UserName);
-            yield return new SystemInfoElement("User domain name", Environment.UserDomainName);
-            yield return new SystemInfoElement("Machine name", Environment.MachineName);
-            yield return new SystemInfoElement("OS version", Environment.OSVersion.ToString());
-            yield return new SystemInfoElement("Version", Environment.Version.ToString());
-
-            yield return new SystemInfoElement("OS name", GetObjectValue(wmi, "Caption"));
-            yield return new SystemInfoElement("MaxProcessRAM", GetObjectValue(wmi, "MaxProcessMemorySize"));
-            yield return new SystemInfoElement("Architecture", GetObjectValue(wmi, "OSArchitecture"));
-            yield return new SystemInfoElement("ProcessorId", GetObjectValue(wmi, "ProcessorId"));
-            yield return new SystemInfoElement("Build", GetObjectValue(wmi, "BuildNumber"));
-
-            yield return new SystemInfoElement("CPU name", GetObjectValue(cpu, "Name"));
-            yield return new SystemInfoElement("Description", GetObjectValue(cpu, "Caption"));
-            yield return new SystemInfoElement("Address width", GetObjectValue(cpu, "AddressWidth"));
-            yield return new SystemInfoElement("Data width", GetObjectValue(cpu, "DataWidth"));
-            yield return new SystemInfoElement("SpeedMHz", GetObjectValue(cpu, "MaxClockSpeed"));
-            yield return new SystemInfoElement("BusSpeedMHz", GetObjectValue(cpu, "ExtClock"));
-            yield return new SystemInfoElement("Number of cores", GetObjectValue(cpu, "NumberOfCores"));
-            yield return new SystemInfoElement("Number of logical processors", GetObjectValue(cpu, "NumberOfLogicalProcessors"));
-
-            yield return new SystemInfoElement("Current culture", CultureInfo.CurrentCulture.ToString());
-
-            yield return new SystemInfoElement(".Net Framework versions", string.Empty);
-            foreach (var pair in GetNetFrameworkVersions())
+            return await Task.Factory.StartNew(() =>
             {
-                yield return new SystemInfoElement(string.Empty, pair);
-            }
+                var items = new List<SystemInfoElement>();
+
+                var wmi = new ManagementObjectSearcher("select * from Win32_OperatingSystem")
+                    .Get()
+                    .Cast<ManagementObject>()
+                    .First();
+
+                var cpu = new ManagementObjectSearcher("select * from Win32_Processor")
+                    .Get()
+                    .Cast<ManagementObject>()
+                    .First();
+
+                items.Add(new SystemInfoElement("User name", Environment.UserName));
+                items.Add(new SystemInfoElement("User domain name", Environment.UserDomainName));
+                items.Add(new SystemInfoElement("Machine name", Environment.MachineName));
+                items.Add(new SystemInfoElement("OS version", Environment.OSVersion.ToString()));
+                items.Add(new SystemInfoElement("Version", Environment.Version.ToString()));
+
+                items.Add(new SystemInfoElement("OS name", GetObjectValue(wmi, "Caption")));
+                items.Add(new SystemInfoElement("MaxProcessRAM", GetObjectValue(wmi, "MaxProcessMemorySize")));
+                items.Add(new SystemInfoElement("Architecture", GetObjectValue(wmi, "OSArchitecture")));
+                items.Add(new SystemInfoElement("ProcessorId", GetObjectValue(wmi, "ProcessorId")));
+                items.Add(new SystemInfoElement("Build", GetObjectValue(wmi, "BuildNumber")));
+
+                items.Add(new SystemInfoElement("CPU name", GetObjectValue(cpu, "Name")));
+                items.Add(new SystemInfoElement("Description", GetObjectValue(cpu, "Caption")));
+                items.Add(new SystemInfoElement("Address width", GetObjectValue(cpu, "AddressWidth")));
+                items.Add(new SystemInfoElement("Data width", GetObjectValue(cpu, "DataWidth")));
+                items.Add(new SystemInfoElement("SpeedMHz", GetObjectValue(cpu, "MaxClockSpeed")));
+                items.Add(new SystemInfoElement("BusSpeedMHz", GetObjectValue(cpu, "ExtClock")));
+                items.Add(new SystemInfoElement("Number of cores", GetObjectValue(cpu, "NumberOfCores")));
+                items.Add(new SystemInfoElement("Number of logical processors", GetObjectValue(cpu, "NumberOfLogicalProcessors")));
+
+                items.Add(new SystemInfoElement("Current culture", CultureInfo.CurrentCulture.ToString()));
+
+                items.Add(new SystemInfoElement(".Net Framework versions", string.Empty));
+                foreach (var pair in GetNetFrameworkVersions())
+                {
+                    items.Add(new SystemInfoElement(string.Empty, pair));
+                }
+
+                return items;
+            });
         }
         #endregion
 
