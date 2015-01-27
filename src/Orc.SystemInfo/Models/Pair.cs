@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.SystemInfo.Models
+namespace Orc.SystemInfo
 {
     using System;
 

@@ -11,7 +11,6 @@ namespace Orc.SystemInfo.Example.ViewModels
     using System.Linq;
     using System.Threading.Tasks;
     using Catel.MVVM;
-    using Services;
 
     public class MainViewModel : ViewModelBase
     {

@@ -1,5 +1,5 @@
 ﻿using Catel.IoC;
-using Orc.SystemInfo.Services;
+using Orc.SystemInfo;
 
 /// <summary>
 /// Used by the ModuleInit. All code inside the Initialize method is ran as soon as the assembly is loaded.

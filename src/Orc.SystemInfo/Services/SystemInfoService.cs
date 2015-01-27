@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.SystemInfo.Services
+namespace Orc.SystemInfo
 {
     using System;
     using System.Collections.Generic;
@@ -15,7 +15,6 @@ namespace Orc.SystemInfo.Services
     using System.Text.RegularExpressions;
     using Catel;
     using Microsoft.Win32;
-    using Models;
 
     internal class SystemInfoService : ISystemInfoService
     {
