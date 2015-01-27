@@ -14,15 +14,39 @@ namespace Orc.SystemInfo
     {
         public SystemInfoElement()
         {
+            Name = string.Empty;
+            Value = string.Empty;
         }
 
-        public SystemInfoElement(string value1, string value2)
+        public SystemInfoElement(string name, string value)
+            : this()
         {
-            Value1 = value1;
-            Value2 = value2;
+            Name = name;
+            Value = value;
         }
 
-        public string Value1 { get; set; }
-        public string Value2 { get; set; }
+        public string Name { get; set; }
+        public string Value { get; set; }
+
+        public override string ToString()
+        {
+            var result = Name;
+
+            if (!string.IsNullOrWhiteSpace(Value))
+            {
+                if (string.IsNullOrWhiteSpace(result))
+                {
+                    result = "  ";
+                }
+                else
+                {
+                    result += ": ";
+                }
+
+                result += Value;
+            }
+
+            return result;
+        }
     }
 }

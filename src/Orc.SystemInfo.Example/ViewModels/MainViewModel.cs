@@ -27,7 +27,7 @@ namespace Orc.SystemInfo.Example.ViewModels
         private async Task OnShowSystemInfoExecute()
         {
             var systemInfo = await _systemInfoService.GetSystemInfo();
-            var systemInfoLines = systemInfo.Select(x => string.Format("{0} {1}", x.Value1, x.Value2));
+            var systemInfoLines = systemInfo.Select(x => string.Format("{0} {1}", x.Name, x.Value));
             SystemInfo = String.Join("\n", systemInfoLines);
         }
 
