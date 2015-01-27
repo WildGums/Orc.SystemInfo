@@ -25,7 +25,6 @@
     
     <dependencies>
       <dependency id="Catel.Core" version="[replaced]" />
-      <dependency id="Catel.MVVM" version="[replaced]" />
     </dependencies>
   </metadata>
 </package>
