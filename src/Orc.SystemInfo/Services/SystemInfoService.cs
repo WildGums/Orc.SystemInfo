@@ -88,7 +88,8 @@ namespace Orc.SystemInfo.Services
 
         private static IEnumerable<string> GetNetFrameworkVersions()
         {
-            using (var ndpKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, string.Empty).OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\"))
+            using (var ndpKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, string.Empty)
+                .OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\"))
             {
                 foreach (var versionKeyName in ndpKey.GetSubKeyNames().Where(x => x.StartsWith("v")))
                 {
@@ -96,18 +97,21 @@ namespace Orc.SystemInfo.Services
                     {
                         foreach (var fullName in BuildFrameworkNamesRecursively(versionKey, versionKeyName, topLevel:true))
                         {
-                            yield return fullName;
+                            if (!string.IsNullOrWhiteSpace(fullName))
+                            {
+                                yield return fullName;
+                            }
                         }
                     }
                 }
             }
         }
 
-        private static IEnumerable<string> BuildFrameworkNamesRecursively(RegistryKey registryKey, string name, string topLevelSP = "0", bool topLevel = false)
+        private static IEnumerable<string> BuildFrameworkNamesRecursively(RegistryKey registryKey, string name, string topLevelSp = "0", bool topLevel = false)
         {
             Argument.IsNotNull(() => registryKey);
             Argument.IsNotNullOrEmpty(() => name);
-            Argument.IsNotNullOrEmpty(() => topLevelSP);
+            Argument.IsNotNullOrEmpty(() => topLevelSp);
 
             if (registryKey == null)
             {
@@ -122,7 +126,7 @@ namespace Orc.SystemInfo.Services
 
             if (string.Equals(sp, "0"))
             {
-                sp = topLevelSP;
+                sp = topLevelSp;
             }
 
             if (!string.Equals(sp, "0") && string.Equals(install, "1"))
