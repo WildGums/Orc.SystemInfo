@@ -65,8 +65,8 @@ namespace Orc.SystemInfo
                 var memStatus = new Kernel32.MEMORYSTATUSEX();
                 if (Kernel32.GlobalMemoryStatusEx(memStatus))
                 {
-                    items.Add(new SystemInfoElement("Total memory", memStatus.ullTotalPhys / (1024 * 1024) + "Mb"));
-                    items.Add(new SystemInfoElement("Available memory", memStatus.ullAvailPhys / (1024 * 1024) + "Mb"));
+                    items.Add(new SystemInfoElement("Total memory", memStatus.ullTotalPhys/(1024*1024) + "Mb"));
+                    items.Add(new SystemInfoElement("Available memory", memStatus.ullAvailPhys/(1024*1024) + "Mb"));
                 }
 
                 items.Add(new SystemInfoElement("Current culture", CultureInfo.CurrentCulture.ToString()));
@@ -85,12 +85,12 @@ namespace Orc.SystemInfo
         #region Methods
         private static TimeSpan GetSystemUpTime()
         {
-            PerformanceCounter upTime = new PerformanceCounter("System", "System Up Time");
+            var upTime = new PerformanceCounter("System", "System Up Time");
             upTime.NextValue();
             return TimeSpan.FromSeconds(upTime.NextValue());
         }
 
-        private string GetObjectValue(ManagementObject obj, string key)
+        private static string GetObjectValue(ManagementObject obj, string key)
         {
             var finalValue = "n/a";
 
@@ -121,7 +121,7 @@ namespace Orc.SystemInfo
                 {
                     using (var versionKey = ndpKey.OpenSubKey(versionKeyName))
                     {
-                        foreach (var fullName in BuildFrameworkNamesRecursively(versionKey, versionKeyName, topLevel:true))
+                        foreach (var fullName in BuildFrameworkNamesRecursively(versionKey, versionKeyName, topLevel: true))
                         {
                             if (!string.IsNullOrWhiteSpace(fullName))
                             {
