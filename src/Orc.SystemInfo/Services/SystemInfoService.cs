@@ -9,6 +9,7 @@ namespace Orc.SystemInfo
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Globalization;
     using System.Linq;
     using System.Management;
@@ -16,6 +17,7 @@ namespace Orc.SystemInfo
     using System.Threading.Tasks;
     using Catel;
     using Microsoft.Win32;
+    using Win32;
 
     public class SystemInfoService : ISystemInfoService
     {
@@ -57,6 +59,16 @@ namespace Orc.SystemInfo
                 items.Add(new SystemInfoElement("Number of cores", GetObjectValue(cpu, "NumberOfCores")));
                 items.Add(new SystemInfoElement("Number of logical processors", GetObjectValue(cpu, "NumberOfLogicalProcessors")));
 
+                items.Add(new SystemInfoElement("System up time", GetSystemUpTime().ToString()));
+                items.Add(new SystemInfoElement("Application up time", (DateTime.Now - Process.GetCurrentProcess().StartTime).ToString()));
+
+                var memStatus = new Kernel32.MEMORYSTATUSEX();
+                if (Kernel32.GlobalMemoryStatusEx(memStatus))
+                {
+                    items.Add(new SystemInfoElement("Total memory", memStatus.ullTotalPhys / (1024 * 1024) + "Mb"));
+                    items.Add(new SystemInfoElement("Available memory", memStatus.ullAvailPhys / (1024 * 1024) + "Mb"));
+                }
+
                 items.Add(new SystemInfoElement("Current culture", CultureInfo.CurrentCulture.ToString()));
 
                 items.Add(new SystemInfoElement(".Net Framework versions", string.Empty));
@@ -71,6 +83,13 @@ namespace Orc.SystemInfo
         #endregion
 
         #region Methods
+        private static TimeSpan GetSystemUpTime()
+        {
+            PerformanceCounter upTime = new PerformanceCounter("System", "System Up Time");
+            upTime.NextValue();
+            return TimeSpan.FromSeconds(upTime.NextValue());
+        }
+
         private string GetObjectValue(ManagementObject obj, string key)
         {
             var finalValue = "n/a";
