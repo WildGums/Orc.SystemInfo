@@ -1,11 +1,11 @@
 Orc.SystemInfo
 ==================
 
-This library is used to retrieve the system information from a computer.
+This library is used to retrieve the system information details from a computer.
 
-Use the GetSystemInfo() method or the ISystemInfoService to get system information.
+Use the `GetSystemInfo()` method or the `ISystemInfoService` to get the system information details.
 
-GetSystemInfo() returns an `IEnumerable<SystemInfoElement>`
+`GetSystemInfo()` returns an `IEnumerable<SystemInfoElement>`
 
 ```c#
 [Serializable]
