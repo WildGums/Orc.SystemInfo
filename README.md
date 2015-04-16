@@ -18,7 +18,7 @@ public class SystemInfoElement
 }
 ```
 
-The following information will be displayed:
+The following information will be retreived:
 
 - User name
 - User domain
