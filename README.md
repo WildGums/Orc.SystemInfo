@@ -1,6 +1,8 @@
 Orc.SystemInfo
 ==================
 
+[![Join the chat at https://gitter.im/WildGums/Orc.SystemInfo](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/WildGums/Orc.SystemInfo?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 This library is used to retrieve the system information details from a computer.
 
 Use the `GetSystemInfo()` method or the `ISystemInfoService` to get the system information details.
