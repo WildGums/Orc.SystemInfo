@@ -45,7 +45,7 @@ namespace Orc.SystemInfo
                 items.Add(new SystemInfoElement("Version", Environment.Version.ToString()));
 
                 items.Add(new SystemInfoElement("OS name", GetObjectValue(wmi, "Caption")));
-                items.Add(new SystemInfoElement("MaxProcessRAM", GetObjectValue(wmi, "MaxProcessMemorySize")));
+                items.Add(new SystemInfoElement("MaxProcessRAM", (GetLongObjectValue(wmi, "MaxProcessMemorySize")).SizeConverter()));
                 items.Add(new SystemInfoElement("Architecture", GetObjectValue(wmi, "OSArchitecture")));
                 items.Add(new SystemInfoElement("ProcessorId", GetObjectValue(wmi, "ProcessorId")));
                 items.Add(new SystemInfoElement("Build", GetObjectValue(wmi, "BuildNumber")));
@@ -100,6 +100,28 @@ namespace Orc.SystemInfo
                 if (value != null)
                 {
                     finalValue = value.ToString();
+                }
+            }
+            catch (ManagementException)
+            {
+            }
+            catch (Exception)
+            {
+            }
+
+            return finalValue;
+        }
+
+        private static long GetLongObjectValue(ManagementObject obj, string key)
+        {
+            long finalValue = 0;
+
+            try
+            {
+                var value = obj[key];
+                if (value != null)
+                {
+                    finalValue = Convert.ToInt64(value);
                 }
             }
             catch (ManagementException)
