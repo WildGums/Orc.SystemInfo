@@ -13,11 +13,16 @@ namespace Orc.SystemInfo
     {
         private static readonly string[] SizeSuffixes = {"bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
 
-        public static string SizeConverter(this Int64 value)
+        public static string ToReadableSize(this ulong value)
+        {
+            return ToReadableSize((long) value);
+        }
+
+        public static string ToReadableSize(this long value)
         {
             if (value < 0)
             {
-                return "-" + SizeConverter(-value);
+                return "-" + ToReadableSize(-value);
             }
 
             var i = 0;
@@ -30,7 +35,7 @@ namespace Orc.SystemInfo
                 i++;
             }
 
-            return string.Format("{0:N1} {1}", finalValue, SizeSuffixes[i]);
+            return string.Format("{0:N2} {1}", finalValue, SizeSuffixes[i]);
         }
     }
 }

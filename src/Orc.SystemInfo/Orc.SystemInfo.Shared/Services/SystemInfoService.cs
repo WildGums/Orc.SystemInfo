@@ -45,10 +45,17 @@ namespace Orc.SystemInfo
                 items.Add(new SystemInfoElement("Version", Environment.Version.ToString()));
 
                 items.Add(new SystemInfoElement("OS name", GetObjectValue(wmi, "Caption")));
-                items.Add(new SystemInfoElement("MaxProcessRAM", (GetLongObjectValue(wmi, "MaxProcessMemorySize")).SizeConverter()));
                 items.Add(new SystemInfoElement("Architecture", GetObjectValue(wmi, "OSArchitecture")));
                 items.Add(new SystemInfoElement("ProcessorId", GetObjectValue(wmi, "ProcessorId")));
                 items.Add(new SystemInfoElement("Build", GetObjectValue(wmi, "BuildNumber")));
+                items.Add(new SystemInfoElement("MaxProcessRAM", (GetLongObjectValue(wmi, "MaxProcessMemorySize")).ToReadableSize()));
+
+                var memStatus = new Kernel32.MEMORYSTATUSEX();
+                if (Kernel32.GlobalMemoryStatusEx(memStatus))
+                {
+                    items.Add(new SystemInfoElement("Total memory", memStatus.ullTotalPhys.ToReadableSize()));
+                    items.Add(new SystemInfoElement("Available memory", memStatus.ullAvailPhys.ToReadableSize()));
+                }
 
                 items.Add(new SystemInfoElement("CPU name", GetObjectValue(cpu, "Name")));
                 items.Add(new SystemInfoElement("Description", GetObjectValue(cpu, "Caption")));
@@ -61,13 +68,6 @@ namespace Orc.SystemInfo
 
                 items.Add(new SystemInfoElement("System up time", GetSystemUpTime().ToString()));
                 items.Add(new SystemInfoElement("Application up time", (DateTime.Now - Process.GetCurrentProcess().StartTime).ToString()));
-
-                var memStatus = new Kernel32.MEMORYSTATUSEX();
-                if (Kernel32.GlobalMemoryStatusEx(memStatus))
-                {
-                    items.Add(new SystemInfoElement("Total memory", memStatus.ullTotalPhys/(1024*1024) + "Mb"));
-                    items.Add(new SystemInfoElement("Available memory", memStatus.ullAvailPhys/(1024*1024) + "Mb"));
-                }
 
                 items.Add(new SystemInfoElement("Current culture", CultureInfo.CurrentCulture.ToString()));
 
