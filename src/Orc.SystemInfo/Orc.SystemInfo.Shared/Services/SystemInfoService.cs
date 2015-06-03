@@ -16,15 +16,16 @@ namespace Orc.SystemInfo
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using Catel;
+    using Catel.Threading;
     using Microsoft.Win32;
     using Win32;
 
     public class SystemInfoService : ISystemInfoService
     {
         #region ISystemInfoService Members
-        public async Task<IEnumerable<SystemInfoElement>> GetSystemInfo()
+        public Task<IEnumerable<SystemInfoElement>> GetSystemInfo()
         {
-            return await Task.Factory.StartNew(() =>
+            return TaskHelper.Run(() =>
             {
                 var items = new List<SystemInfoElement>();
 
@@ -77,7 +78,7 @@ namespace Orc.SystemInfo
                     items.Add(new SystemInfoElement(string.Empty, pair));
                 }
 
-                return items;
+                return (IEnumerable<SystemInfoElement>)items;
             });
         }
         #endregion
