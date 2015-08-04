@@ -8,10 +8,9 @@
 namespace Orc.SystemInfo
 {
     using System.Collections.Generic;
-    using System.Threading.Tasks;
 
     public interface ISystemInfoService
     {
-        Task<IEnumerable<SystemInfoElement>> GetSystemInfo();
+        IEnumerable<SystemInfoElement> GetSystemInfo();
     }
 }

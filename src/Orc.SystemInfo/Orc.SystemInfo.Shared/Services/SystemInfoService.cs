@@ -23,63 +23,60 @@ namespace Orc.SystemInfo
     public class SystemInfoService : ISystemInfoService
     {
         #region ISystemInfoService Members
-        public Task<IEnumerable<SystemInfoElement>> GetSystemInfo()
+        public IEnumerable<SystemInfoElement> GetSystemInfo()
         {
-            return TaskHelper.Run(() =>
+            var items = new List<SystemInfoElement>();
+
+            var wmi = new ManagementObjectSearcher("select * from Win32_OperatingSystem")
+                .Get()
+                .Cast<ManagementObject>()
+                .First();
+
+            var cpu = new ManagementObjectSearcher("select * from Win32_Processor")
+                .Get()
+                .Cast<ManagementObject>()
+                .First();
+
+            items.Add(new SystemInfoElement("User name", Environment.UserName));
+            items.Add(new SystemInfoElement("User domain name", Environment.UserDomainName));
+            items.Add(new SystemInfoElement("Machine name", Environment.MachineName));
+            items.Add(new SystemInfoElement("OS version", Environment.OSVersion.ToString()));
+            items.Add(new SystemInfoElement("Version", Environment.Version.ToString()));
+
+            items.Add(new SystemInfoElement("OS name", GetObjectValue(wmi, "Caption")));
+            items.Add(new SystemInfoElement("Architecture", GetObjectValue(wmi, "OSArchitecture")));
+            items.Add(new SystemInfoElement("ProcessorId", GetObjectValue(wmi, "ProcessorId")));
+            items.Add(new SystemInfoElement("Build", GetObjectValue(wmi, "BuildNumber")));
+            items.Add(new SystemInfoElement("MaxProcessRAM", (GetLongObjectValue(wmi, "MaxProcessMemorySize")).ToReadableSize()));
+
+            var memStatus = new Kernel32.MEMORYSTATUSEX();
+            if (Kernel32.GlobalMemoryStatusEx(memStatus))
             {
-                var items = new List<SystemInfoElement>();
+                items.Add(new SystemInfoElement("Total memory", memStatus.ullTotalPhys.ToReadableSize()));
+                items.Add(new SystemInfoElement("Available memory", memStatus.ullAvailPhys.ToReadableSize()));
+            }
 
-                var wmi = new ManagementObjectSearcher("select * from Win32_OperatingSystem")
-                    .Get()
-                    .Cast<ManagementObject>()
-                    .First();
+            items.Add(new SystemInfoElement("CPU name", GetObjectValue(cpu, "Name")));
+            items.Add(new SystemInfoElement("Description", GetObjectValue(cpu, "Caption")));
+            items.Add(new SystemInfoElement("Address width", GetObjectValue(cpu, "AddressWidth")));
+            items.Add(new SystemInfoElement("Data width", GetObjectValue(cpu, "DataWidth")));
+            items.Add(new SystemInfoElement("SpeedMHz", GetObjectValue(cpu, "MaxClockSpeed")));
+            items.Add(new SystemInfoElement("BusSpeedMHz", GetObjectValue(cpu, "ExtClock")));
+            items.Add(new SystemInfoElement("Number of cores", GetObjectValue(cpu, "NumberOfCores")));
+            items.Add(new SystemInfoElement("Number of logical processors", GetObjectValue(cpu, "NumberOfLogicalProcessors")));
 
-                var cpu = new ManagementObjectSearcher("select * from Win32_Processor")
-                    .Get()
-                    .Cast<ManagementObject>()
-                    .First();
+            items.Add(new SystemInfoElement("System up time", GetSystemUpTime().ToString()));
+            items.Add(new SystemInfoElement("Application up time", (DateTime.Now - Process.GetCurrentProcess().StartTime).ToString()));
 
-                items.Add(new SystemInfoElement("User name", Environment.UserName));
-                items.Add(new SystemInfoElement("User domain name", Environment.UserDomainName));
-                items.Add(new SystemInfoElement("Machine name", Environment.MachineName));
-                items.Add(new SystemInfoElement("OS version", Environment.OSVersion.ToString()));
-                items.Add(new SystemInfoElement("Version", Environment.Version.ToString()));
+            items.Add(new SystemInfoElement("Current culture", CultureInfo.CurrentCulture.ToString()));
 
-                items.Add(new SystemInfoElement("OS name", GetObjectValue(wmi, "Caption")));
-                items.Add(new SystemInfoElement("Architecture", GetObjectValue(wmi, "OSArchitecture")));
-                items.Add(new SystemInfoElement("ProcessorId", GetObjectValue(wmi, "ProcessorId")));
-                items.Add(new SystemInfoElement("Build", GetObjectValue(wmi, "BuildNumber")));
-                items.Add(new SystemInfoElement("MaxProcessRAM", (GetLongObjectValue(wmi, "MaxProcessMemorySize")).ToReadableSize()));
+            items.Add(new SystemInfoElement(".Net Framework versions", string.Empty));
+            foreach (var pair in GetNetFrameworkVersions())
+            {
+                items.Add(new SystemInfoElement(string.Empty, pair));
+            }
 
-                var memStatus = new Kernel32.MEMORYSTATUSEX();
-                if (Kernel32.GlobalMemoryStatusEx(memStatus))
-                {
-                    items.Add(new SystemInfoElement("Total memory", memStatus.ullTotalPhys.ToReadableSize()));
-                    items.Add(new SystemInfoElement("Available memory", memStatus.ullAvailPhys.ToReadableSize()));
-                }
-
-                items.Add(new SystemInfoElement("CPU name", GetObjectValue(cpu, "Name")));
-                items.Add(new SystemInfoElement("Description", GetObjectValue(cpu, "Caption")));
-                items.Add(new SystemInfoElement("Address width", GetObjectValue(cpu, "AddressWidth")));
-                items.Add(new SystemInfoElement("Data width", GetObjectValue(cpu, "DataWidth")));
-                items.Add(new SystemInfoElement("SpeedMHz", GetObjectValue(cpu, "MaxClockSpeed")));
-                items.Add(new SystemInfoElement("BusSpeedMHz", GetObjectValue(cpu, "ExtClock")));
-                items.Add(new SystemInfoElement("Number of cores", GetObjectValue(cpu, "NumberOfCores")));
-                items.Add(new SystemInfoElement("Number of logical processors", GetObjectValue(cpu, "NumberOfLogicalProcessors")));
-
-                items.Add(new SystemInfoElement("System up time", GetSystemUpTime().ToString()));
-                items.Add(new SystemInfoElement("Application up time", (DateTime.Now - Process.GetCurrentProcess().StartTime).ToString()));
-
-                items.Add(new SystemInfoElement("Current culture", CultureInfo.CurrentCulture.ToString()));
-
-                items.Add(new SystemInfoElement(".Net Framework versions", string.Empty));
-                foreach (var pair in GetNetFrameworkVersions())
-                {
-                    items.Add(new SystemInfoElement(string.Empty, pair));
-                }
-
-                return (IEnumerable<SystemInfoElement>)items;
-            });
+            return items;
         }
         #endregion
 
@@ -169,7 +166,7 @@ namespace Orc.SystemInfo
 
             var fullVersion = string.Empty;
 
-            var version = (string) registryKey.GetValue("Version", string.Empty);
+            var version = (string)registryKey.GetValue("Version", string.Empty);
             var sp = registryKey.GetValue("SP", "0").ToString();
             var install = registryKey.GetValue("Install", string.Empty).ToString();
 
