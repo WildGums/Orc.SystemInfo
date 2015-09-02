@@ -1,0 +1,17 @@
+﻿<catel:Window x:Class="Orc.SystemInfo.Example.Views.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:catel="http://catel.codeplex.com"
+        Title="MainView" Height="350" Width="525">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Button Content="Show system information" Grid.Column="0" Grid.Row="0" Command="{Binding ShowSystemInfo}"/>
+        <TextBox Text="{Binding SystemInfo}" Grid.Column="0" Grid.Row="1" VerticalScrollBarVisibility="Auto" />
+    </Grid>
+
+</catel:Window>
