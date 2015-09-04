@@ -14,9 +14,7 @@ namespace Orc.SystemInfo
     using System.Linq;
     using System.Management;
     using System.Text.RegularExpressions;
-    using System.Threading.Tasks;
     using Catel;
-    using Catel.Threading;
     using Microsoft.Win32;
     using Win32;
 
@@ -65,7 +63,7 @@ namespace Orc.SystemInfo
             items.Add(new SystemInfoElement("Number of cores", GetObjectValue(cpu, "NumberOfCores")));
             items.Add(new SystemInfoElement("Number of logical processors", GetObjectValue(cpu, "NumberOfLogicalProcessors")));
 
-            items.Add(new SystemInfoElement("System up time", GetSystemUpTime().ToString()));
+            items.Add(new SystemInfoElement("System up time", GetSystemUpTime()));
             items.Add(new SystemInfoElement("Application up time", (DateTime.Now - Process.GetCurrentProcess().StartTime).ToString()));
 
             items.Add(new SystemInfoElement("Current culture", CultureInfo.CurrentCulture.ToString()));
@@ -81,11 +79,18 @@ namespace Orc.SystemInfo
         #endregion
 
         #region Methods
-        private static TimeSpan GetSystemUpTime()
+        private static string GetSystemUpTime()
         {
-            var upTime = new PerformanceCounter("System", "System Up Time");
-            upTime.NextValue();
-            return TimeSpan.FromSeconds(upTime.NextValue());
+            try
+            {
+                var upTime = new PerformanceCounter("System", "System Up Time");
+                upTime.NextValue();
+                return TimeSpan.FromSeconds(upTime.NextValue()).ToString();
+            }
+            catch (Exception)
+            {
+                return "n/a";
+            }
         }
 
         private static string GetObjectValue(ManagementObject obj, string key)
