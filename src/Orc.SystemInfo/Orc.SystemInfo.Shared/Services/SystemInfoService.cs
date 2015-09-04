@@ -15,25 +15,18 @@ namespace Orc.SystemInfo
     using System.Management;
     using System.Text.RegularExpressions;
     using Catel;
+    using Catel.Logging;
     using Microsoft.Win32;
     using Win32;
 
     public class SystemInfoService : ISystemInfoService
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         #region ISystemInfoService Members
         public IEnumerable<SystemInfoElement> GetSystemInfo()
         {
             var items = new List<SystemInfoElement>();
-
-            var wmi = new ManagementObjectSearcher("select * from Win32_OperatingSystem")
-                .Get()
-                .Cast<ManagementObject>()
-                .First();
-
-            var cpu = new ManagementObjectSearcher("select * from Win32_Processor")
-                .Get()
-                .Cast<ManagementObject>()
-                .First();
 
             items.Add(new SystemInfoElement("User name", Environment.UserName));
             items.Add(new SystemInfoElement("User domain name", Environment.UserDomainName));
@@ -41,11 +34,24 @@ namespace Orc.SystemInfo
             items.Add(new SystemInfoElement("OS version", Environment.OSVersion.ToString()));
             items.Add(new SystemInfoElement("Version", Environment.Version.ToString()));
 
-            items.Add(new SystemInfoElement("OS name", GetObjectValue(wmi, "Caption")));
-            items.Add(new SystemInfoElement("Architecture", GetObjectValue(wmi, "OSArchitecture")));
-            items.Add(new SystemInfoElement("ProcessorId", GetObjectValue(wmi, "ProcessorId")));
-            items.Add(new SystemInfoElement("Build", GetObjectValue(wmi, "BuildNumber")));
-            items.Add(new SystemInfoElement("MaxProcessRAM", (GetLongObjectValue(wmi, "MaxProcessMemorySize")).ToReadableSize()));
+            try
+            {
+                var wmi = new ManagementObjectSearcher("select * from Win32_OperatingSystem")
+                    .Get()
+                    .Cast<ManagementObject>()
+                    .First();
+
+                items.Add(new SystemInfoElement("OS name", GetObjectValue(wmi, "Caption")));
+                items.Add(new SystemInfoElement("Architecture", GetObjectValue(wmi, "OSArchitecture")));
+                items.Add(new SystemInfoElement("ProcessorId", GetObjectValue(wmi, "ProcessorId")));
+                items.Add(new SystemInfoElement("Build", GetObjectValue(wmi, "BuildNumber")));
+                items.Add(new SystemInfoElement("MaxProcessRAM", (GetLongObjectValue(wmi, "MaxProcessMemorySize")).ToReadableSize()));
+            }
+            catch (Exception ex)
+            {
+                items.Add(new SystemInfoElement("OS info", "n/a, please contact support"));
+                Log.Warning(ex, "Failed to retrieve OS information");
+            }
 
             var memStatus = new Kernel32.MEMORYSTATUSEX();
             if (Kernel32.GlobalMemoryStatusEx(memStatus))
@@ -54,14 +60,27 @@ namespace Orc.SystemInfo
                 items.Add(new SystemInfoElement("Available memory", memStatus.ullAvailPhys.ToReadableSize()));
             }
 
-            items.Add(new SystemInfoElement("CPU name", GetObjectValue(cpu, "Name")));
-            items.Add(new SystemInfoElement("Description", GetObjectValue(cpu, "Caption")));
-            items.Add(new SystemInfoElement("Address width", GetObjectValue(cpu, "AddressWidth")));
-            items.Add(new SystemInfoElement("Data width", GetObjectValue(cpu, "DataWidth")));
-            items.Add(new SystemInfoElement("SpeedMHz", GetObjectValue(cpu, "MaxClockSpeed")));
-            items.Add(new SystemInfoElement("BusSpeedMHz", GetObjectValue(cpu, "ExtClock")));
-            items.Add(new SystemInfoElement("Number of cores", GetObjectValue(cpu, "NumberOfCores")));
-            items.Add(new SystemInfoElement("Number of logical processors", GetObjectValue(cpu, "NumberOfLogicalProcessors")));
+            try
+            {
+                var cpu = new ManagementObjectSearcher("select * from Win32_Processor")
+                    .Get()
+                    .Cast<ManagementObject>()
+                    .First();
+
+                items.Add(new SystemInfoElement("CPU name", GetObjectValue(cpu, "Name")));
+                items.Add(new SystemInfoElement("Description", GetObjectValue(cpu, "Caption")));
+                items.Add(new SystemInfoElement("Address width", GetObjectValue(cpu, "AddressWidth")));
+                items.Add(new SystemInfoElement("Data width", GetObjectValue(cpu, "DataWidth")));
+                items.Add(new SystemInfoElement("SpeedMHz", GetObjectValue(cpu, "MaxClockSpeed")));
+                items.Add(new SystemInfoElement("BusSpeedMHz", GetObjectValue(cpu, "ExtClock")));
+                items.Add(new SystemInfoElement("Number of cores", GetObjectValue(cpu, "NumberOfCores")));
+                items.Add(new SystemInfoElement("Number of logical processors", GetObjectValue(cpu, "NumberOfLogicalProcessors")));
+            }
+            catch (Exception ex)
+            {
+                items.Add(new SystemInfoElement("CPU info", "n/a, please contact support"));
+                Log.Warning(ex, "Failed to retrieve CPU information");
+            }
 
             items.Add(new SystemInfoElement("System up time", GetSystemUpTime()));
             items.Add(new SystemInfoElement("Application up time", (DateTime.Now - Process.GetCurrentProcess().StartTime).ToString()));
@@ -139,23 +158,34 @@ namespace Orc.SystemInfo
 
         private static IEnumerable<string> GetNetFrameworkVersions()
         {
-            using (var ndpKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, string.Empty)
-                .OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\"))
+            var versions = new List<string>();
+
+            try
             {
-                foreach (var versionKeyName in ndpKey.GetSubKeyNames().Where(x => x.StartsWith("v")))
+                using (var ndpKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, string.Empty)
+                    .OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\"))
                 {
-                    using (var versionKey = ndpKey.OpenSubKey(versionKeyName))
+                    foreach (var versionKeyName in ndpKey.GetSubKeyNames().Where(x => x.StartsWith("v")))
                     {
-                        foreach (var fullName in BuildFrameworkNamesRecursively(versionKey, versionKeyName, topLevel: true))
+                        using (var versionKey = ndpKey.OpenSubKey(versionKeyName))
                         {
-                            if (!string.IsNullOrWhiteSpace(fullName))
+                            foreach (var fullName in BuildFrameworkNamesRecursively(versionKey, versionKeyName, topLevel: true))
                             {
-                                yield return fullName;
+                                if (!string.IsNullOrWhiteSpace(fullName))
+                                {
+                                    versions.Add(fullName);
+                                }
                             }
                         }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, "Failed to get .net framework versions");
+            }
+
+            return versions;
         }
 
         private static IEnumerable<string> BuildFrameworkNamesRecursively(RegistryKey registryKey, string name, string topLevelSp = "0", bool topLevel = false)
