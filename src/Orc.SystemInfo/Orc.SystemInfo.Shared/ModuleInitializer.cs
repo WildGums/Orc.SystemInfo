@@ -14,5 +14,6 @@ public static class ModuleInitializer
         var serviceLocator = ServiceLocator.Default;
 
         serviceLocator.RegisterType<ISystemInfoService, SystemInfoService>();
+        serviceLocator.RegisterType<ISystemIdentificationService, SystemIdentificationService>();
     }
 }

@@ -1,19 +1,17 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MainViewModel.cs" company="Wild Gums">
+// <copyright file="IdentificationView.xaml.cs" company="Wild Gums">
 //   Copyright (c) 2008 - 2015 Wild Gums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.SystemInfo.Example.ViewModels
+namespace Orc.SystemInfo.Example.Views
 {
-    using Catel.MVVM;
-
-    public class MainViewModel : ViewModelBase
+    public partial class SystemIdentificationView
     {
-        public MainViewModel()
+        public SystemIdentificationView()
         {
-            Title = "Orc.SystemInfo example";
+            InitializeComponent();
         }
     }
 }
