@@ -16,6 +16,7 @@ namespace Orc.SystemInfo
     using Catel;
     using Catel.Caching;
     using Catel.Logging;
+    using Catel.Threading;
     using MethodTimer;
 
     public class SystemIdentificationService : ISystemIdentificationService
@@ -42,12 +43,27 @@ namespace Orc.SystemInfo
             {
                 Log.Debug("Retrieving machine id");
 
-                var values = new List<string>();
-                values.Add("CPU >> " + GetCpuId());
-                values.Add("BASE >> " + GetMotherboardId());
-                values.Add("HDD >> " + GetHardDriveId());
-                values.Add("GPU >> " + GetGpuId());
-                //values.Add("MAC >> " + GetMacId());
+                var cpuId = string.Empty;
+                var motherboardId = string.Empty;
+                var hddId = string.Empty;
+                var gpuId = string.Empty;
+
+                TaskHelper.RunAndWait(new Action[]
+                {
+                    () => cpuId = "CPU >> " + GetCpuId(),
+                    () => motherboardId = "BASE >> " + GetMotherboardId(),
+                    () => hddId = "HDD >> " + GetHardDriveId(),
+                    () => gpuId = "GPU >> " + GetGpuId(),
+                    //() => gpuId = "MAC >> " + _systemIdentificationService.GetMacId(),
+                });
+
+                var values = new List<string>(new[]
+                {
+                    cpuId,
+                    motherboardId,
+                    hddId,
+                    gpuId
+                });
 
                 var hashedValues = new List<string>();
 
@@ -77,7 +93,7 @@ namespace Orc.SystemInfo
         {
             return _cacheStorage.GetFromCacheOrFetch("MacId", () =>
             {
-                var identifier = "Wireless: " + _windowsManagementInformationService.GetIdentifier("Win32_NetworkAdapter", "MACAddress", "AdapterType", "Wireless") + 
+                var identifier = "Wireless: " + _windowsManagementInformationService.GetIdentifier("Win32_NetworkAdapter", "MACAddress", "AdapterType", "Wireless") +
                                  "Wired: " + _windowsManagementInformationService.GetIdentifier("Win32_NetworkAdapter", "MACAddress", "AdapterType", "Ethernet 802.3");
 
                 Log.Debug("Using mac id '{0}'", identifier);
