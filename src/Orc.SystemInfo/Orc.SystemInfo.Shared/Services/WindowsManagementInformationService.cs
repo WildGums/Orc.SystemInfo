@@ -24,8 +24,14 @@ namespace Orc.SystemInfo
         {
             var result = string.Empty;
 
-            var managementClass = new ManagementClass(wmiClass);
-            var managementObjectCollection = managementClass.GetInstances();
+            var query = string.Format("SELECT {0}{1} FROM {2}", wmiProperty,
+                string.IsNullOrWhiteSpace(additionalWmiToCheck) ? string.Empty : string.Format(", {0}", additionalWmiToCheck), wmiClass);
+            var wmiSearcher = new ManagementObjectSearcher(query);
+            var managementObjectCollection = wmiSearcher.Get();
+
+            //var managementClass = new ManagementClass(wmiClass);
+            //var managementObjectCollection = managementClass.GetInstances();
+
             foreach (var managementObject in managementObjectCollection)
             {
                 // Only get the first one
@@ -44,7 +50,7 @@ namespace Orc.SystemInfo
                                 wmiToCheckValueValue = additionalWmiToCheckValue.Substring(1);
                             }
 
-                            var equals = string.Equals(wmiToCheckValue.ToString(), wmiToCheckValueValue, StringComparison.OrdinalIgnoreCase);
+                            var equals = string.Equals(wmiToCheckValue, wmiToCheckValueValue, StringComparison.OrdinalIgnoreCase);
                             if ((!equals && !invert) || (equals && invert))
                             {
                                 Log.Debug("Cannot use mgmt object '{0}', wmi property '{1}' is '{2}' but expected '{3}'", wmiClass,

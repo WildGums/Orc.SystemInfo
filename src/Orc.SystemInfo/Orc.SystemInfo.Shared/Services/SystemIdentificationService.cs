@@ -9,7 +9,6 @@ namespace Orc.SystemInfo
 {
     using System;
     using System.Collections.Generic;
-    using System.Management;
     using System.Security.Cryptography;
     using System.Text;
 
@@ -155,7 +154,9 @@ namespace Orc.SystemInfo
             return _cacheStorage.GetFromCacheOrFetch("CpuId", () =>
             {
                 // Uses first CPU identifier available in order of preference
-                var identifier = _windowsManagementInformationService.GetIdentifier("Win32_Processor", "UniqueId");
+                var identifier = string.Empty;
+
+                identifier = _windowsManagementInformationService.GetIdentifier("Win32_Processor", "UniqueId");
                 if (!string.IsNullOrWhiteSpace(identifier))
                 {
                     Log.Debug("Using Processor.UniqueId to identify cpu '{0}'", identifier);

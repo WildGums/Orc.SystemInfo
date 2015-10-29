@@ -24,6 +24,8 @@ namespace Orc.SystemInfo
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        private const string NotAvailable = "n/a";
+
         private readonly IWindowsManagementInformationService _windowsManagementInformationService;
 
         public SystemInfoService(IWindowsManagementInformationService windowsManagementInformationService)
@@ -54,10 +56,10 @@ namespace Orc.SystemInfo
                     .Cast<ManagementObject>()
                     .First();
 
-                items.Add(new SystemInfoElement("OS name", wmi.GetValue("Caption")));
-                items.Add(new SystemInfoElement("Architecture", wmi.GetValue("OSArchitecture")));
-                items.Add(new SystemInfoElement("ProcessorId", wmi.GetValue("ProcessorId")));
-                items.Add(new SystemInfoElement("Build", wmi.GetValue("BuildNumber")));
+                items.Add(new SystemInfoElement("OS name", wmi.GetValue("Caption", NotAvailable)));
+                items.Add(new SystemInfoElement("Architecture", wmi.GetValue("OSArchitecture", NotAvailable)));
+                items.Add(new SystemInfoElement("ProcessorId", wmi.GetValue("ProcessorId", NotAvailable)));
+                items.Add(new SystemInfoElement("Build", wmi.GetValue("BuildNumber", NotAvailable)));
                 items.Add(new SystemInfoElement("MaxProcessRAM", (wmi.GetLongValue("MaxProcessMemorySize")).ToReadableSize()));
             }
             catch (Exception ex)
@@ -80,14 +82,14 @@ namespace Orc.SystemInfo
                     .Cast<ManagementObject>()
                     .First();
 
-                items.Add(new SystemInfoElement("CPU name", cpu.GetValue("Name")));
-                items.Add(new SystemInfoElement("Description", cpu.GetValue("Caption")));
-                items.Add(new SystemInfoElement("Address width", cpu.GetValue("AddressWidth")));
-                items.Add(new SystemInfoElement("Data width", cpu.GetValue("DataWidth")));
-                items.Add(new SystemInfoElement("SpeedMHz", cpu.GetValue("MaxClockSpeed")));
-                items.Add(new SystemInfoElement("BusSpeedMHz", cpu.GetValue("ExtClock")));
-                items.Add(new SystemInfoElement("Number of cores", cpu.GetValue("NumberOfCores")));
-                items.Add(new SystemInfoElement("Number of logical processors", cpu.GetValue("NumberOfLogicalProcessors")));
+                items.Add(new SystemInfoElement("CPU name", cpu.GetValue("Name", NotAvailable)));
+                items.Add(new SystemInfoElement("Description", cpu.GetValue("Caption", NotAvailable)));
+                items.Add(new SystemInfoElement("Address width", cpu.GetValue("AddressWidth", NotAvailable)));
+                items.Add(new SystemInfoElement("Data width", cpu.GetValue("DataWidth", NotAvailable)));
+                items.Add(new SystemInfoElement("SpeedMHz", cpu.GetValue("MaxClockSpeed", NotAvailable)));
+                items.Add(new SystemInfoElement("BusSpeedMHz", cpu.GetValue("ExtClock", NotAvailable)));
+                items.Add(new SystemInfoElement("Number of cores", cpu.GetValue("NumberOfCores", NotAvailable)));
+                items.Add(new SystemInfoElement("Number of logical processors", cpu.GetValue("NumberOfLogicalProcessors", NotAvailable)));
             }
             catch (Exception ex)
             {

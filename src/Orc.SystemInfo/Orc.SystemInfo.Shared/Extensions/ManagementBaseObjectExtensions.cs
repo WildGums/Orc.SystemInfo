@@ -12,9 +12,9 @@ namespace Orc.SystemInfo
 
     public static class ManagementBaseObjectExtensions
     {
-        public static string GetValue(this ManagementBaseObject obj, string key)
+        public static string GetValue(this ManagementBaseObject obj, string key, string defaultValue = null)
         {
-            var finalValue = "n/a";
+            var finalValue = defaultValue;
 
             try
             {
