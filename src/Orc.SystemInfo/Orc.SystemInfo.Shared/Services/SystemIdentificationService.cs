@@ -16,6 +16,7 @@ namespace Orc.SystemInfo
     using Catel;
     using Catel.Caching;
     using Catel.Logging;
+    using MethodTimer;
 
     public class SystemIdentificationService : ISystemIdentificationService
     {
@@ -23,6 +24,7 @@ namespace Orc.SystemInfo
 
         private readonly ICacheStorage<string, string> _cacheStorage = new CacheStorage<string, string>();
 
+        [Time]
         public virtual string GetMachineId(string separator = "-", bool hashCombination = true)
         {
             Argument.IsNotNull(() => separator);
@@ -62,6 +64,7 @@ namespace Orc.SystemInfo
             });
         }
 
+        [Time]
         public virtual string GetMacId()
         {
             return _cacheStorage.GetFromCacheOrFetch("MacId", () =>
@@ -75,6 +78,7 @@ namespace Orc.SystemInfo
             });
         }
 
+        [Time]
         public virtual string GetGpuId()
         {
             return _cacheStorage.GetFromCacheOrFetch("GpuId", () =>
@@ -87,6 +91,7 @@ namespace Orc.SystemInfo
             });
         }
 
+        [Time]
         public virtual string GetHardDriveId()
         {
             return _cacheStorage.GetFromCacheOrFetch("HardDriveId", () =>
@@ -104,6 +109,7 @@ namespace Orc.SystemInfo
             });
         }
 
+        [Time]
         public virtual string GetMotherboardId()
         {
             return _cacheStorage.GetFromCacheOrFetch("MotherboardId", () =>
@@ -118,6 +124,7 @@ namespace Orc.SystemInfo
             });
         }
 
+        [Time]
         public virtual string GetCpuId()
         {
             return _cacheStorage.GetFromCacheOrFetch("CpuId", () =>

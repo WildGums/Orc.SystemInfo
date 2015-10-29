@@ -98,6 +98,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Logging\TextBoxLogListener.cs" />
     <Compile Include="ViewModels\SystemIdentificationViewModel.cs" />
     <Compile Include="Views\SystemIdentificationView.xaml.cs">
       <DependentUpon>SystemIdentificationView.xaml</DependentUpon>

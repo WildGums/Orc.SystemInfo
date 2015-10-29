@@ -16,6 +16,7 @@ namespace Orc.SystemInfo
     using System.Text.RegularExpressions;
     using Catel;
     using Catel.Logging;
+    using MethodTimer;
     using Microsoft.Win32;
     using Win32;
 
@@ -24,8 +25,11 @@ namespace Orc.SystemInfo
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         #region ISystemInfoService Members
+        [Time]
         public IEnumerable<SystemInfoElement> GetSystemInfo()
         {
+            Log.Debug("Retrieving system info");
+
             var items = new List<SystemInfoElement>();
 
             items.Add(new SystemInfoElement("User name", Environment.UserName));
@@ -92,6 +96,8 @@ namespace Orc.SystemInfo
             {
                 items.Add(new SystemInfoElement(string.Empty, pair));
             }
+
+            Log.Debug("Retrieved system info");
 
             return items;
         }
