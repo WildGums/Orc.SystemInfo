@@ -11,14 +11,17 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\LongExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ManagementBaseObjectExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MethodTimeLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\SystemInfoElement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ISystemIdentificationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ISystemInfoService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IWindowsManagementInformationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\SystemIdentificationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\SystemInfoService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\WindowsManagementInformationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Win32\Kernel32.cs" />
   </ItemGroup>
 </Project>

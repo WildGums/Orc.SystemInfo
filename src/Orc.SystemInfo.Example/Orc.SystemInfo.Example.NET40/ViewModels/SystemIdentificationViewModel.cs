@@ -49,13 +49,16 @@ namespace Orc.SystemInfo.Example.ViewModels
 
             await TaskShim.WhenAll(new []
             {
-                SetValueAsync(() => _systemIdentificationService.GetMachineId(), x => MachineId = x),
                 SetValueAsync(() => _systemIdentificationService.GetCpuId(), x => CpuId = x),
                 SetValueAsync(() => _systemIdentificationService.GetGpuId(), x => GpuId = x),
                 SetValueAsync(() => _systemIdentificationService.GetHardDriveId(), x => HardDriveId = x),
                 SetValueAsync(() => _systemIdentificationService.GetMacId(), x => MacId = x),
                 SetValueAsync(() => _systemIdentificationService.GetMotherboardId(), x => MotherboardId = x)
             });
+
+            // Note: we calculate the machine id last because we don't want to cause "false timings" in our demo app (the machine id
+            // has to wait for all the others to finish so will take much longer then it actually does)
+            await TaskHelper.Run(() => SetValueAsync(() => _systemIdentificationService.GetMachineId(), x => MachineId = x), true);
 
             IsBusy = false;
         }

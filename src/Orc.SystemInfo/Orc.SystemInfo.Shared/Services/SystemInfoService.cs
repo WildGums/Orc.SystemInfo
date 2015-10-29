@@ -24,6 +24,15 @@ namespace Orc.SystemInfo
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        private readonly IWindowsManagementInformationService _windowsManagementInformationService;
+
+        public SystemInfoService(IWindowsManagementInformationService windowsManagementInformationService)
+        {
+            Argument.IsNotNull(() => windowsManagementInformationService);
+
+            _windowsManagementInformationService = windowsManagementInformationService;
+        }
+
         #region ISystemInfoService Members
         [Time]
         public IEnumerable<SystemInfoElement> GetSystemInfo()
@@ -45,11 +54,11 @@ namespace Orc.SystemInfo
                     .Cast<ManagementObject>()
                     .First();
 
-                items.Add(new SystemInfoElement("OS name", GetObjectValue(wmi, "Caption")));
-                items.Add(new SystemInfoElement("Architecture", GetObjectValue(wmi, "OSArchitecture")));
-                items.Add(new SystemInfoElement("ProcessorId", GetObjectValue(wmi, "ProcessorId")));
-                items.Add(new SystemInfoElement("Build", GetObjectValue(wmi, "BuildNumber")));
-                items.Add(new SystemInfoElement("MaxProcessRAM", (GetLongObjectValue(wmi, "MaxProcessMemorySize")).ToReadableSize()));
+                items.Add(new SystemInfoElement("OS name", wmi.GetValue("Caption")));
+                items.Add(new SystemInfoElement("Architecture", wmi.GetValue("OSArchitecture")));
+                items.Add(new SystemInfoElement("ProcessorId", wmi.GetValue("ProcessorId")));
+                items.Add(new SystemInfoElement("Build", wmi.GetValue("BuildNumber")));
+                items.Add(new SystemInfoElement("MaxProcessRAM", (wmi.GetLongValue("MaxProcessMemorySize")).ToReadableSize()));
             }
             catch (Exception ex)
             {
@@ -71,14 +80,14 @@ namespace Orc.SystemInfo
                     .Cast<ManagementObject>()
                     .First();
 
-                items.Add(new SystemInfoElement("CPU name", GetObjectValue(cpu, "Name")));
-                items.Add(new SystemInfoElement("Description", GetObjectValue(cpu, "Caption")));
-                items.Add(new SystemInfoElement("Address width", GetObjectValue(cpu, "AddressWidth")));
-                items.Add(new SystemInfoElement("Data width", GetObjectValue(cpu, "DataWidth")));
-                items.Add(new SystemInfoElement("SpeedMHz", GetObjectValue(cpu, "MaxClockSpeed")));
-                items.Add(new SystemInfoElement("BusSpeedMHz", GetObjectValue(cpu, "ExtClock")));
-                items.Add(new SystemInfoElement("Number of cores", GetObjectValue(cpu, "NumberOfCores")));
-                items.Add(new SystemInfoElement("Number of logical processors", GetObjectValue(cpu, "NumberOfLogicalProcessors")));
+                items.Add(new SystemInfoElement("CPU name", cpu.GetValue("Name")));
+                items.Add(new SystemInfoElement("Description", cpu.GetValue("Caption")));
+                items.Add(new SystemInfoElement("Address width", cpu.GetValue("AddressWidth")));
+                items.Add(new SystemInfoElement("Data width", cpu.GetValue("DataWidth")));
+                items.Add(new SystemInfoElement("SpeedMHz", cpu.GetValue("MaxClockSpeed")));
+                items.Add(new SystemInfoElement("BusSpeedMHz", cpu.GetValue("ExtClock")));
+                items.Add(new SystemInfoElement("Number of cores", cpu.GetValue("NumberOfCores")));
+                items.Add(new SystemInfoElement("Number of logical processors", cpu.GetValue("NumberOfLogicalProcessors")));
             }
             catch (Exception ex)
             {
@@ -116,50 +125,6 @@ namespace Orc.SystemInfo
             {
                 return "n/a";
             }
-        }
-
-        private static string GetObjectValue(ManagementObject obj, string key)
-        {
-            var finalValue = "n/a";
-
-            try
-            {
-                var value = obj[key];
-                if (value != null)
-                {
-                    finalValue = value.ToString();
-                }
-            }
-            catch (ManagementException)
-            {
-            }
-            catch (Exception)
-            {
-            }
-
-            return finalValue;
-        }
-
-        private static long GetLongObjectValue(ManagementObject obj, string key)
-        {
-            long finalValue = 0;
-
-            try
-            {
-                var value = obj[key];
-                if (value != null)
-                {
-                    finalValue = Convert.ToInt64(value);
-                }
-            }
-            catch (ManagementException)
-            {
-            }
-            catch (Exception)
-            {
-            }
-
-            return finalValue;
         }
 
         private static IEnumerable<string> GetNetFrameworkVersions()

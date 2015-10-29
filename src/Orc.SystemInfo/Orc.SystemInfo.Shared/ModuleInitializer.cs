@@ -13,6 +13,7 @@ public static class ModuleInitializer
     {
         var serviceLocator = ServiceLocator.Default;
 
+        serviceLocator.RegisterType<IWindowsManagementInformationService, WindowsManagementInformationService>();
         serviceLocator.RegisterType<ISystemInfoService, SystemInfoService>();
         serviceLocator.RegisterType<ISystemIdentificationService, SystemIdentificationService>();
     }
