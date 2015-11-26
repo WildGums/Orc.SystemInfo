@@ -1,4 +1,6 @@
 ﻿using Catel.IoC;
+using Catel.Services;
+using Catel.Services.Models;
 using Orc.SystemInfo;
 
 /// <summary>
@@ -16,5 +18,8 @@ public static class ModuleInitializer
         serviceLocator.RegisterType<IWindowsManagementInformationService, WindowsManagementInformationService>();
         serviceLocator.RegisterType<ISystemInfoService, SystemInfoService>();
         serviceLocator.RegisterType<ISystemIdentificationService, SystemIdentificationService>();
+
+        var languageService = serviceLocator.ResolveType<ILanguageService>();
+        languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.SystemInfo", "Orc.SystemInfo.Properties", "Resources"));
     }
 }
