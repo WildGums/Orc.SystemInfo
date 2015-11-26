@@ -16,6 +16,7 @@ namespace Orc.SystemInfo
     using System.Text.RegularExpressions;
     using Catel;
     using Catel.Logging;
+    using Catel.Services;
     using MethodTimer;
     using Microsoft.Win32;
     using Win32;
@@ -24,15 +25,17 @@ namespace Orc.SystemInfo
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private const string NotAvailable = "n/a";
-
         private readonly IWindowsManagementInformationService _windowsManagementInformationService;
+        private readonly ILanguageService _languageService;
 
-        public SystemInfoService(IWindowsManagementInformationService windowsManagementInformationService)
+        public SystemInfoService(IWindowsManagementInformationService windowsManagementInformationService,
+            ILanguageService languageService)
         {
             Argument.IsNotNull(() => windowsManagementInformationService);
+            Argument.IsNotNull(() => languageService);
 
             _windowsManagementInformationService = windowsManagementInformationService;
+            _languageService = languageService;
         }
 
         #region ISystemInfoService Members
@@ -41,13 +44,15 @@ namespace Orc.SystemInfo
         {
             Log.Debug("Retrieving system info");
 
+            var notAvailable = _languageService.GetString("SystemInfo_NotAvailable");
+               
             var items = new List<SystemInfoElement>();
 
-            items.Add(new SystemInfoElement("User name", Environment.UserName));
-            items.Add(new SystemInfoElement("User domain name", Environment.UserDomainName));
-            items.Add(new SystemInfoElement("Machine name", Environment.MachineName));
-            items.Add(new SystemInfoElement("OS version", Environment.OSVersion.ToString()));
-            items.Add(new SystemInfoElement("Version", Environment.Version.ToString()));
+            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_UserName"), Environment.UserName));
+            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_UserDomainName"), Environment.UserDomainName));
+            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_MachineName"), Environment.MachineName));
+            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_OsVersion"), Environment.OSVersion.ToString()));
+            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_Version"), Environment.Version.ToString()));
 
             try
             {
@@ -56,23 +61,23 @@ namespace Orc.SystemInfo
                     .Cast<ManagementObject>()
                     .First();
 
-                items.Add(new SystemInfoElement("OS name", wmi.GetValue("Caption", NotAvailable)));
-                items.Add(new SystemInfoElement("Architecture", wmi.GetValue("OSArchitecture", NotAvailable)));
-                items.Add(new SystemInfoElement("ProcessorId", wmi.GetValue("ProcessorId", NotAvailable)));
-                items.Add(new SystemInfoElement("Build", wmi.GetValue("BuildNumber", NotAvailable)));
-                items.Add(new SystemInfoElement("MaxProcessRAM", (wmi.GetLongValue("MaxProcessMemorySize")).ToReadableSize()));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_OsName"), wmi.GetValue("Caption", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_Architecture"), wmi.GetValue("OSArchitecture", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_ProcessorId"), wmi.GetValue("ProcessorId", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_Build"), wmi.GetValue("BuildNumber", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_MaxProcossRam"), (wmi.GetLongValue("MaxProcessMemorySize")).ToReadableSize()));
             }
             catch (Exception ex)
             {
-                items.Add(new SystemInfoElement("OS info", "n/a, please contact support"));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_OsInfo"), "n/a, please contact support"));
                 Log.Warning(ex, "Failed to retrieve OS information");
             }
 
             var memStatus = new Kernel32.MEMORYSTATUSEX();
             if (Kernel32.GlobalMemoryStatusEx(memStatus))
             {
-                items.Add(new SystemInfoElement("Total memory", memStatus.ullTotalPhys.ToReadableSize()));
-                items.Add(new SystemInfoElement("Available memory", memStatus.ullAvailPhys.ToReadableSize()));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_TotalMemory"), memStatus.ullTotalPhys.ToReadableSize()));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_AvailableMemory"), memStatus.ullAvailPhys.ToReadableSize()));
             }
 
             try
@@ -82,27 +87,27 @@ namespace Orc.SystemInfo
                     .Cast<ManagementObject>()
                     .First();
 
-                items.Add(new SystemInfoElement("CPU name", cpu.GetValue("Name", NotAvailable)));
-                items.Add(new SystemInfoElement("Description", cpu.GetValue("Caption", NotAvailable)));
-                items.Add(new SystemInfoElement("Address width", cpu.GetValue("AddressWidth", NotAvailable)));
-                items.Add(new SystemInfoElement("Data width", cpu.GetValue("DataWidth", NotAvailable)));
-                items.Add(new SystemInfoElement("SpeedMHz", cpu.GetValue("MaxClockSpeed", NotAvailable)));
-                items.Add(new SystemInfoElement("BusSpeedMHz", cpu.GetValue("ExtClock", NotAvailable)));
-                items.Add(new SystemInfoElement("Number of cores", cpu.GetValue("NumberOfCores", NotAvailable)));
-                items.Add(new SystemInfoElement("Number of logical processors", cpu.GetValue("NumberOfLogicalProcessors", NotAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_CpuName"), cpu.GetValue("Name", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_Description"), cpu.GetValue("Caption", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_AddressWidth"), cpu.GetValue("AddressWidth", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_DataWidth"), cpu.GetValue("DataWidth", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_ClockSpeedMHz"), cpu.GetValue("MaxClockSpeed", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_BusSpeedMHz"), cpu.GetValue("ExtClock", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_NumberOfCores"), cpu.GetValue("NumberOfCores", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_NumberOfLogicalProcessors"), cpu.GetValue("NumberOfLogicalProcessors", notAvailable)));
             }
             catch (Exception ex)
             {
-                items.Add(new SystemInfoElement("CPU info", "n/a, please contact support"));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_CpuInfo"), "n/a, please contact support"));
                 Log.Warning(ex, "Failed to retrieve CPU information");
             }
 
-            items.Add(new SystemInfoElement("System up time", GetSystemUpTime()));
-            items.Add(new SystemInfoElement("Application up time", (DateTime.Now - Process.GetCurrentProcess().StartTime).ToString()));
+            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_SystemUpTime"), GetSystemUpTime()));
+            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_ApplicationUpTime"), (DateTime.Now - Process.GetCurrentProcess().StartTime).ToString()));
 
-            items.Add(new SystemInfoElement("Current culture", CultureInfo.CurrentCulture.ToString()));
+            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_CurrentCulture"), CultureInfo.CurrentCulture.ToString()));
 
-            items.Add(new SystemInfoElement(".Net Framework versions", string.Empty));
+            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_DotNetFrameworkVersions"), string.Empty));
             foreach (var pair in GetNetFrameworkVersions())
             {
                 items.Add(new SystemInfoElement(string.Empty, pair));

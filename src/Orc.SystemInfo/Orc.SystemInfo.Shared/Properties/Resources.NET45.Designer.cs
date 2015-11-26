@@ -59,5 +59,248 @@ namespace Orc.SystemInfo.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Address width.
+        /// </summary>
+        internal static string SystemInfo_AddressWidth {
+            get {
+                return ResourceManager.GetString("SystemInfo_AddressWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application up time.
+        /// </summary>
+        internal static string SystemInfo_ApplicationUpTime {
+            get {
+                return ResourceManager.GetString("SystemInfo_ApplicationUpTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Architecture.
+        /// </summary>
+        internal static string SystemInfo_Architecture {
+            get {
+                return ResourceManager.GetString("SystemInfo_Architecture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Available memory.
+        /// </summary>
+        internal static string SystemInfo_AvailableMemory {
+            get {
+                return ResourceManager.GetString("SystemInfo_AvailableMemory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Build.
+        /// </summary>
+        internal static string SystemInfo_Build {
+            get {
+                return ResourceManager.GetString("SystemInfo_Build", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bus speed (Mhz).
+        /// </summary>
+        internal static string SystemInfo_BusSpeedMhz {
+            get {
+                return ResourceManager.GetString("SystemInfo_BusSpeedMhz", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clock speed (Mhz).
+        /// </summary>
+        internal static string SystemInfo_ClockSpeedMhz {
+            get {
+                return ResourceManager.GetString("SystemInfo_ClockSpeedMhz", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CPU info.
+        /// </summary>
+        internal static string SystemInfo_CpuInfo {
+            get {
+                return ResourceManager.GetString("SystemInfo_CpuInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CPU name.
+        /// </summary>
+        internal static string SystemInfo_CpuName {
+            get {
+                return ResourceManager.GetString("SystemInfo_CpuName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current culture.
+        /// </summary>
+        internal static string SystemInfo_CurrentCulture {
+            get {
+                return ResourceManager.GetString("SystemInfo_CurrentCulture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data width.
+        /// </summary>
+        internal static string SystemInfo_DataWidth {
+            get {
+                return ResourceManager.GetString("SystemInfo_DataWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        internal static string SystemInfo_Description {
+            get {
+                return ResourceManager.GetString("SystemInfo_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .NET Framework versions.
+        /// </summary>
+        internal static string SystemInfo_DotNetFrameworkVersions {
+            get {
+                return ResourceManager.GetString("SystemInfo_DotNetFrameworkVersions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Machine name.
+        /// </summary>
+        internal static string SystemInfo_MachineName {
+            get {
+                return ResourceManager.GetString("SystemInfo_MachineName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max. process RAM.
+        /// </summary>
+        internal static string SystemInfo_MaxProcessRam {
+            get {
+                return ResourceManager.GetString("SystemInfo_MaxProcessRam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to n/a.
+        /// </summary>
+        internal static string SystemInfo_NotAvailable {
+            get {
+                return ResourceManager.GetString("SystemInfo_NotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of cores.
+        /// </summary>
+        internal static string SystemInfo_NumberOfCores {
+            get {
+                return ResourceManager.GetString("SystemInfo_NumberOfCores", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of logical processors.
+        /// </summary>
+        internal static string SystemInfo_NumberOfLogicalProcessors {
+            get {
+                return ResourceManager.GetString("SystemInfo_NumberOfLogicalProcessors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OS info.
+        /// </summary>
+        internal static string SystemInfo_OsInfo {
+            get {
+                return ResourceManager.GetString("SystemInfo_OsInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OS name.
+        /// </summary>
+        internal static string SystemInfo_OsName {
+            get {
+                return ResourceManager.GetString("SystemInfo_OsName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OS version.
+        /// </summary>
+        internal static string SystemInfo_OsVersion {
+            get {
+                return ResourceManager.GetString("SystemInfo_OsVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processor ID.
+        /// </summary>
+        internal static string SystemInfo_ProcessorId {
+            get {
+                return ResourceManager.GetString("SystemInfo_ProcessorId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to System up time.
+        /// </summary>
+        internal static string SystemInfo_SystemUpTime {
+            get {
+                return ResourceManager.GetString("SystemInfo_SystemUpTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total memory.
+        /// </summary>
+        internal static string SystemInfo_TotalMemory {
+            get {
+                return ResourceManager.GetString("SystemInfo_TotalMemory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User domain name.
+        /// </summary>
+        internal static string SystemInfo_UserDomainName {
+            get {
+                return ResourceManager.GetString("SystemInfo_UserDomainName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User name.
+        /// </summary>
+        internal static string SystemInfo_UserName {
+            get {
+                return ResourceManager.GetString("SystemInfo_UserName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version.
+        /// </summary>
+        internal static string SystemInfo_Version {
+            get {
+                return ResourceManager.GetString("SystemInfo_Version", resourceCulture);
+            }
+        }
     }
 }
