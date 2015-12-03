@@ -16,6 +16,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\SystemInfoElement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\DotNetFrameworkService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IDotNetFrameworkService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ISystemIdentificationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ISystemInfoService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IWindowsManagementInformationService.cs" />
