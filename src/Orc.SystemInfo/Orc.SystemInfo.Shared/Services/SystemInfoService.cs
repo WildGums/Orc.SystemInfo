@@ -14,194 +14,126 @@ namespace Orc.SystemInfo
     using System.Linq;
     using System.Management;
     using System.Text.RegularExpressions;
-    using System.Threading.Tasks;
     using Catel;
-    using Catel.Threading;
+    using Catel.Logging;
+    using Catel.Services;
+    using MethodTimer;
     using Microsoft.Win32;
     using Win32;
 
     public class SystemInfoService : ISystemInfoService
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        private readonly IWindowsManagementInformationService _windowsManagementInformationService;
+        private readonly IDotNetFrameworkService _dotNetFrameworkService;
+        private readonly ILanguageService _languageService;
+
+        public SystemInfoService(IWindowsManagementInformationService windowsManagementInformationService,
+            IDotNetFrameworkService dotNetFrameworkService, ILanguageService languageService)
+        {
+            Argument.IsNotNull(() => windowsManagementInformationService);
+            Argument.IsNotNull(() => dotNetFrameworkService);
+            Argument.IsNotNull(() => languageService);
+
+            _windowsManagementInformationService = windowsManagementInformationService;
+            _dotNetFrameworkService = dotNetFrameworkService;
+            _languageService = languageService;
+        }
+
         #region ISystemInfoService Members
+        [Time]
         public IEnumerable<SystemInfoElement> GetSystemInfo()
         {
+            Log.Debug("Retrieving system info");
+
+            var notAvailable = _languageService.GetString("SystemInfo_NotAvailable");
+               
             var items = new List<SystemInfoElement>();
 
-            var wmi = new ManagementObjectSearcher("select * from Win32_OperatingSystem")
-                .Get()
-                .Cast<ManagementObject>()
-                .First();
+            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_UserName"), Environment.UserName));
+            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_UserDomainName"), Environment.UserDomainName));
+            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_MachineName"), Environment.MachineName));
+            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_OsVersion"), Environment.OSVersion.ToString()));
+            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_Version"), Environment.Version.ToString()));
 
-            var cpu = new ManagementObjectSearcher("select * from Win32_Processor")
-                .Get()
-                .Cast<ManagementObject>()
-                .First();
+            try
+            {
+                var wmi = new ManagementObjectSearcher("select * from Win32_OperatingSystem")
+                    .Get()
+                    .Cast<ManagementObject>()
+                    .First();
 
-            items.Add(new SystemInfoElement("User name", Environment.UserName));
-            items.Add(new SystemInfoElement("User domain name", Environment.UserDomainName));
-            items.Add(new SystemInfoElement("Machine name", Environment.MachineName));
-            items.Add(new SystemInfoElement("OS version", Environment.OSVersion.ToString()));
-            items.Add(new SystemInfoElement("Version", Environment.Version.ToString()));
-
-            items.Add(new SystemInfoElement("OS name", GetObjectValue(wmi, "Caption")));
-            items.Add(new SystemInfoElement("Architecture", GetObjectValue(wmi, "OSArchitecture")));
-            items.Add(new SystemInfoElement("ProcessorId", GetObjectValue(wmi, "ProcessorId")));
-            items.Add(new SystemInfoElement("Build", GetObjectValue(wmi, "BuildNumber")));
-            items.Add(new SystemInfoElement("MaxProcessRAM", (GetLongObjectValue(wmi, "MaxProcessMemorySize")).ToReadableSize()));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_OsName"), wmi.GetValue("Caption", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_Architecture"), wmi.GetValue("OSArchitecture", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_ProcessorId"), wmi.GetValue("ProcessorId", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_Build"), wmi.GetValue("BuildNumber", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_MaxProcossRam"), (wmi.GetLongValue("MaxProcessMemorySize")).ToReadableSize()));
+            }
+            catch (Exception ex)
+            {
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_OsInfo"), "n/a, please contact support"));
+                Log.Warning(ex, "Failed to retrieve OS information");
+            }
 
             var memStatus = new Kernel32.MEMORYSTATUSEX();
             if (Kernel32.GlobalMemoryStatusEx(memStatus))
             {
-                items.Add(new SystemInfoElement("Total memory", memStatus.ullTotalPhys.ToReadableSize()));
-                items.Add(new SystemInfoElement("Available memory", memStatus.ullAvailPhys.ToReadableSize()));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_TotalMemory"), memStatus.ullTotalPhys.ToReadableSize()));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_AvailableMemory"), memStatus.ullAvailPhys.ToReadableSize()));
             }
 
-            items.Add(new SystemInfoElement("CPU name", GetObjectValue(cpu, "Name")));
-            items.Add(new SystemInfoElement("Description", GetObjectValue(cpu, "Caption")));
-            items.Add(new SystemInfoElement("Address width", GetObjectValue(cpu, "AddressWidth")));
-            items.Add(new SystemInfoElement("Data width", GetObjectValue(cpu, "DataWidth")));
-            items.Add(new SystemInfoElement("SpeedMHz", GetObjectValue(cpu, "MaxClockSpeed")));
-            items.Add(new SystemInfoElement("BusSpeedMHz", GetObjectValue(cpu, "ExtClock")));
-            items.Add(new SystemInfoElement("Number of cores", GetObjectValue(cpu, "NumberOfCores")));
-            items.Add(new SystemInfoElement("Number of logical processors", GetObjectValue(cpu, "NumberOfLogicalProcessors")));
+            try
+            {
+                var cpu = new ManagementObjectSearcher("select * from Win32_Processor")
+                    .Get()
+                    .Cast<ManagementObject>()
+                    .First();
 
-            items.Add(new SystemInfoElement("System up time", GetSystemUpTime().ToString()));
-            items.Add(new SystemInfoElement("Application up time", (DateTime.Now - Process.GetCurrentProcess().StartTime).ToString()));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_CpuName"), cpu.GetValue("Name", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_Description"), cpu.GetValue("Caption", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_AddressWidth"), cpu.GetValue("AddressWidth", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_DataWidth"), cpu.GetValue("DataWidth", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_ClockSpeedMHz"), cpu.GetValue("MaxClockSpeed", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_BusSpeedMHz"), cpu.GetValue("ExtClock", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_NumberOfCores"), cpu.GetValue("NumberOfCores", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_NumberOfLogicalProcessors"), cpu.GetValue("NumberOfLogicalProcessors", notAvailable)));
+            }
+            catch (Exception ex)
+            {
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_CpuInfo"), "n/a, please contact support"));
+                Log.Warning(ex, "Failed to retrieve CPU information");
+            }
 
-            items.Add(new SystemInfoElement("Current culture", CultureInfo.CurrentCulture.ToString()));
+            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_SystemUpTime"), GetSystemUpTime()));
+            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_ApplicationUpTime"), (DateTime.Now - Process.GetCurrentProcess().StartTime).ToString()));
 
-            items.Add(new SystemInfoElement(".Net Framework versions", string.Empty));
-            foreach (var pair in GetNetFrameworkVersions())
+            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_CurrentCulture"), CultureInfo.CurrentCulture.ToString()));
+
+            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_DotNetFrameworkVersions"), string.Empty));
+            foreach (var pair in _dotNetFrameworkService.GetInstalledFrameworks())
             {
                 items.Add(new SystemInfoElement(string.Empty, pair));
             }
+
+            Log.Debug("Retrieved system info");
 
             return items;
         }
         #endregion
 
         #region Methods
-        private static TimeSpan GetSystemUpTime()
+        private static string GetSystemUpTime()
         {
-            var upTime = new PerformanceCounter("System", "System Up Time");
-            upTime.NextValue();
-            return TimeSpan.FromSeconds(upTime.NextValue());
-        }
-
-        private static string GetObjectValue(ManagementObject obj, string key)
-        {
-            var finalValue = "n/a";
-
             try
             {
-                var value = obj[key];
-                if (value != null)
-                {
-                    finalValue = value.ToString();
-                }
-            }
-            catch (ManagementException)
-            {
+                var upTime = new PerformanceCounter("System", "System Up Time");
+                upTime.NextValue();
+                return TimeSpan.FromSeconds(upTime.NextValue()).ToString();
             }
             catch (Exception)
             {
-            }
-
-            return finalValue;
-        }
-
-        private static long GetLongObjectValue(ManagementObject obj, string key)
-        {
-            long finalValue = 0;
-
-            try
-            {
-                var value = obj[key];
-                if (value != null)
-                {
-                    finalValue = Convert.ToInt64(value);
-                }
-            }
-            catch (ManagementException)
-            {
-            }
-            catch (Exception)
-            {
-            }
-
-            return finalValue;
-        }
-
-        private static IEnumerable<string> GetNetFrameworkVersions()
-        {
-            using (var ndpKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, string.Empty)
-                .OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\"))
-            {
-                foreach (var versionKeyName in ndpKey.GetSubKeyNames().Where(x => x.StartsWith("v")))
-                {
-                    using (var versionKey = ndpKey.OpenSubKey(versionKeyName))
-                    {
-                        foreach (var fullName in BuildFrameworkNamesRecursively(versionKey, versionKeyName, topLevel: true))
-                        {
-                            if (!string.IsNullOrWhiteSpace(fullName))
-                            {
-                                yield return fullName;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private static IEnumerable<string> BuildFrameworkNamesRecursively(RegistryKey registryKey, string name, string topLevelSp = "0", bool topLevel = false)
-        {
-            Argument.IsNotNull(() => registryKey);
-            Argument.IsNotNullOrEmpty(() => name);
-            Argument.IsNotNullOrEmpty(() => topLevelSp);
-
-            if (registryKey == null)
-            {
-                yield break;
-            }
-
-            var fullVersion = string.Empty;
-
-            var version = (string)registryKey.GetValue("Version", string.Empty);
-            var sp = registryKey.GetValue("SP", "0").ToString();
-            var install = registryKey.GetValue("Install", string.Empty).ToString();
-
-            if (string.Equals(sp, "0"))
-            {
-                sp = topLevelSp;
-            }
-
-            if (!string.Equals(sp, "0") && string.Equals(install, "1"))
-            {
-                fullVersion = string.Format("{0} {1} SP{2}", name, version, sp);
-            }
-            else if (string.Equals(install, "1"))
-            {
-                fullVersion = string.Format("{0} {1}", name, version);
-            }
-
-            var topLevelInitialized = !topLevel || !string.IsNullOrEmpty(fullVersion);
-
-            var subnamesCount = 0;
-            foreach (var subKeyName in registryKey.GetSubKeyNames().Where(x => Regex.IsMatch(x, @"^\d{4}$|^Client$|^Full$")))
-            {
-                using (var subKey = registryKey.OpenSubKey(subKeyName))
-                {
-                    foreach (var subName in BuildFrameworkNamesRecursively(subKey, string.Format("{0} {1}", name, subKeyName), sp, !topLevelInitialized))
-                    {
-                        yield return subName;
-                        subnamesCount++;
-                    }
-                }
-            }
-
-            if (subnamesCount == 0)
-            {
-                yield return fullVersion;
+                return "n/a";
             }
         }
         #endregion

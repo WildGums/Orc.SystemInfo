@@ -1,19 +1,15 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MainViewModel.cs" company="Wild Gums">
+// <copyright file="IWmiService.cs" company="Wild Gums">
 //   Copyright (c) 2008 - 2015 Wild Gums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.SystemInfo.Example.ViewModels
+namespace Orc.SystemInfo
 {
-    using Catel.MVVM;
-
-    public class MainViewModel : ViewModelBase
+    public interface IWindowsManagementInformationService
     {
-        public MainViewModel()
-        {
-            Title = "Orc.SystemInfo example";
-        }
+        string GetIdentifier(string wmiClass, string wmiProperty);
+        string GetIdentifier(string wmiClass, string wmiProperty, string additionalWmiToCheck, string additionalWmiToCheckValue);
     }
 }

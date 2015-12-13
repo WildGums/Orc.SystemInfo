@@ -1,19 +1,16 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MainViewModel.cs" company="Wild Gums">
+// <copyright file="IDotNetFrameworkService.cs" company="Wild Gums">
 //   Copyright (c) 2008 - 2015 Wild Gums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Orc.SystemInfo.Example.ViewModels
+namespace Orc.SystemInfo
 {
-    using Catel.MVVM;
+    using System.Collections.Generic;
 
-    public class MainViewModel : ViewModelBase
+    public interface IDotNetFrameworkService
     {
-        public MainViewModel()
-        {
-            Title = "Orc.SystemInfo example";
-        }
+        IEnumerable<string> GetInstalledFrameworks();
     }
 }
