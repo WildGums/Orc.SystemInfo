@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ManagementObjectExtensions.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
+// <copyright file="ManagementBaseObjectExtensions.cs" company="WildGums">
+//   Copyright (c) 2008 - 2016 WildGums. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -9,9 +9,12 @@ namespace Orc.SystemInfo
 {
     using System;
     using System.Management;
+    using Catel.Logging;
 
     public static class ManagementBaseObjectExtensions
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         public static string GetValue(this ManagementBaseObject obj, string key, string defaultValue = null)
         {
             var finalValue = defaultValue;
@@ -24,11 +27,13 @@ namespace Orc.SystemInfo
                     finalValue = value.ToString();
                 }
             }
-            catch (ManagementException)
+            catch (ManagementException ex)
             {
+                Log.Warning(ex, $"Failed to get value by key '{key}' from ManagementBaseObject");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Error(ex, $"Failed to get value by key '{key}' from ManagementBaseObject");
             }
 
             return finalValue;
@@ -46,11 +51,13 @@ namespace Orc.SystemInfo
                     finalValue = Convert.ToInt64(value);
                 }
             }
-            catch (ManagementException)
+            catch (ManagementException ex)
             {
+                Log.Warning(ex, $"Failed to get long value by key '{key}' from ManagementBaseObject");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Error(ex, $"Failed to get long value by key '{key}' from ManagementBaseObject");
             }
 
             return finalValue;
