@@ -4,13 +4,14 @@
                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                    xmlns:catel="http://catel.codeplex.com"
+                   xmlns:orc="http://www.wildgums.net.au/orc"
                    mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
 
     <Grid>
         <Label Content="Working on it..." HorizontalAlignment="Center" VerticalAlignment="Center" 
                Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}}" />
 
-        <catel:StackGrid Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}, ConverterParameter=False}">
+        <orc:StackGrid Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}, ConverterParameter=False}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
@@ -42,6 +43,7 @@
 
             <Label Content="Motherboard ID" />
             <TextBox Text="{Binding MotherboardId}" IsReadOnly="True" />
-        </catel:StackGrid>
+        </orc:StackGrid>
     </Grid>
 </catel:UserControl>
+

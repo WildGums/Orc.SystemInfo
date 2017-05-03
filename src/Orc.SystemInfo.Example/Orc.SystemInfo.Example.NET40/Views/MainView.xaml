@@ -3,6 +3,7 @@
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
               xmlns:catel="http://catel.codeplex.com"
               xmlns:views="clr-namespace:Orc.SystemInfo.Example.Views"
+              xmlns:orc="http://www.wildgums.net.au/orc"
               Height="600" Width="800">
 
     <Grid>
@@ -11,7 +12,7 @@
             <RowDefinition Height="200" />
         </Grid.RowDefinitions>
 
-        <catel:TabControl  Grid.Row="0" LoadTabItems="LazyLoading">
+        <orc:TabControl  Grid.Row="0" LoadTabItems="LazyLoading">
             <TabItem Header="System info">
                 <views:SystemInfoView />
             </TabItem>
@@ -19,9 +20,10 @@
             <TabItem Header="System identification">
                 <views:SystemIdentificationView />
             </TabItem>
-        </catel:TabControl>
+        </orc:TabControl>
         
         <TextBox Grid.Row="1" x:Name="loggingTextBox" VerticalScrollBarVisibility="Auto" Margin="0,4,0,0" />
     </Grid>
     
 </catel:Window>
+

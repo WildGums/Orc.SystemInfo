@@ -12,6 +12,7 @@ namespace Orc.SystemInfo.Example
     using Catel.IoC;
     using Catel.Services;
     using Catel.Windows;
+    using Orchestra;
 
     /// <summary>
     /// Interaction logic for App.xaml
@@ -30,7 +31,7 @@ namespace Orc.SystemInfo.Example
 
             base.OnStartup(e);
 
-            StyleHelper.CreateStyleForwardersForDefaultStyles();
+            this.ApplyTheme();
         }
     }
 }
