@@ -17,6 +17,7 @@ public static class ModuleInitializer
 
         serviceLocator.RegisterType<IWindowsManagementInformationService, WindowsManagementInformationService>();
         serviceLocator.RegisterType<IDotNetFrameworkService, DotNetFrameworkService>();
+        serviceLocator.RegisterType<IDbProvidersService, DbProvidersService>();
         serviceLocator.RegisterType<ISystemInfoService, SystemInfoService>();
         serviceLocator.RegisterType<ISystemIdentificationService, SystemIdentificationService>();
 
