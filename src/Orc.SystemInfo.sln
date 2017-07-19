@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E426EAD0-F378-4A3D-9BCD-E42CED54EEC7}"
 EndProject
@@ -31,7 +31,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.SystemInfo.NET46", "Orc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.SystemInfo.Tests.NET46", "Orc.SystemInfo.Tests\Orc.SystemInfo.Tests.NET46\Orc.SystemInfo.Tests.NET46.csproj", "{EF401EEA-AB04-4017-9606-BAB10722DE64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.SystemInfo.Example.NET46", "Orc.SystemInfo.Example\Orc.SystemInfo.Example.NET46\Orc.SystemInfo.Example.NET46.csproj", "{2832C49C-CA0C-46DF-9EED-EDD53BC48541}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.SystemInfo.Example.NET47", "Orc.SystemInfo.Example\Orc.SystemInfo.Example.NET46\Orc.SystemInfo.Example.NET47.csproj", "{2832C49C-CA0C-46DF-9EED-EDD53BC48541}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orc.SystemInfo.NET47", "Orc.SystemInfo\Orc.SystemInfo.NET47\Orc.SystemInfo.NET47.csproj", "{31CE78CE-896E-43B5-AE7E-A6A4B9944AA4}"
 EndProject

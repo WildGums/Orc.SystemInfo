@@ -144,7 +144,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Orc.SystemInfo\Orc.SystemInfo.NET47\Orc.SystemInfo.NET47.csproj">
       <Project>{31ce78ce-896e-43b5-ae7e-a6a4b9944aa4}</Project>
-      <Name>Orc.SystemInfo.NET40</Name>
+      <Name>Orc.SystemInfo.NET47</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
