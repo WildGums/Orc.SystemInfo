@@ -1,6 +1,5 @@
 ﻿using Catel.IoC;
 using Catel.Services;
-using Catel.Services.Models;
 using Orc.SystemInfo;
 
 /// <summary>
@@ -17,6 +16,7 @@ public static class ModuleInitializer
 
         serviceLocator.RegisterType<IWindowsManagementInformationService, WindowsManagementInformationService>();
         serviceLocator.RegisterType<IDotNetFrameworkService, DotNetFrameworkService>();
+        serviceLocator.RegisterType<IDbProvidersService, DbProvidersService>();
         serviceLocator.RegisterType<ISystemInfoService, SystemInfoService>();
         serviceLocator.RegisterType<ISystemIdentificationService, SystemIdentificationService>();
 

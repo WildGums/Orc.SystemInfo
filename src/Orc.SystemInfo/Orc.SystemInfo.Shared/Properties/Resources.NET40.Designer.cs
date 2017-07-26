@@ -178,6 +178,15 @@ namespace Orc.SystemInfo.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Installed database providers.
+        /// </summary>
+        internal static string SystemInfo_InstalledDatabaseProviders {
+            get {
+                return ResourceManager.GetString("SystemInfo_InstalledDatabaseProviders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Machine name.
         /// </summary>
         internal static string SystemInfo_MachineName {

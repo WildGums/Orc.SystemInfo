@@ -156,6 +156,9 @@
   <data name="SystemInfo_DotNetFrameworkVersions" xml:space="preserve">
     <value>.NET Framework versions</value>
   </data>
+  <data name="SystemInfo_InstalledDatabaseProviders" xml:space="preserve">
+    <value>Installed database providers</value>
+  </data>
   <data name="SystemInfo_MachineName" xml:space="preserve">
     <value>Machine name</value>
   </data>

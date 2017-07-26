@@ -28,17 +28,20 @@ namespace Orc.SystemInfo
         private readonly IWindowsManagementInformationService _windowsManagementInformationService;
         private readonly IDotNetFrameworkService _dotNetFrameworkService;
         private readonly ILanguageService _languageService;
+        private readonly IDbProvidersService _dbProviderService;
 
         public SystemInfoService(IWindowsManagementInformationService windowsManagementInformationService,
-            IDotNetFrameworkService dotNetFrameworkService, ILanguageService languageService)
+            IDotNetFrameworkService dotNetFrameworkService, ILanguageService languageService, IDbProvidersService dbProviderService)
         {
             Argument.IsNotNull(() => windowsManagementInformationService);
             Argument.IsNotNull(() => dotNetFrameworkService);
             Argument.IsNotNull(() => languageService);
+            Argument.IsNotNull(() => dbProviderService);
 
             _windowsManagementInformationService = windowsManagementInformationService;
             _dotNetFrameworkService = dotNetFrameworkService;
             _languageService = languageService;
+            _dbProviderService = dbProviderService;
         }
 
         #region ISystemInfoService Members
@@ -114,6 +117,12 @@ namespace Orc.SystemInfo
             foreach (var pair in _dotNetFrameworkService.GetInstalledFrameworks())
             {
                 items.Add(new SystemInfoElement(string.Empty, pair));
+            }
+
+            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_InstalledDatabaseProviders"), string.Empty));
+            foreach (var dbProviderName in _dbProviderService.GetInstalledDbProviders())
+            {
+                items.Add(new SystemInfoElement(string.Empty, dbProviderName));
             }
 
             Log.Debug("Retrieved system info");

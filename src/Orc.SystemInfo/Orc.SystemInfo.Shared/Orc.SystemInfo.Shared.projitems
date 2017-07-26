@@ -10,13 +10,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\GlobalSuppressions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\LongExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ManagementBaseObjectExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MethodTimeLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\SystemInfoElement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\DbProvidersService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\DotNetFrameworkService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IDbProvidersService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IDotNetFrameworkService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ISystemIdentificationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ISystemInfoService.cs" />
