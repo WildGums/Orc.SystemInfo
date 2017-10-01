@@ -63,17 +63,11 @@ namespace Orc.SystemInfo
     {
         public SystemIdentificationService(Orc.SystemInfo.IWindowsManagementInformationService windowsManagementInformationService) { }
         protected static string CalculateMd5Hash(string input) { }
-        [MethodTimer.TimeAttribute()]
         public virtual string GetCpuId() { }
-        [MethodTimer.TimeAttribute()]
         public virtual string GetGpuId() { }
-        [MethodTimer.TimeAttribute()]
         public virtual string GetHardDriveId() { }
-        [MethodTimer.TimeAttribute()]
         public virtual string GetMachineId(string separator = "-", bool hashCombination = True) { }
-        [MethodTimer.TimeAttribute()]
         public virtual string GetMacId() { }
-        [MethodTimer.TimeAttribute()]
         public virtual string GetMotherboardId() { }
     }
     public class SystemInfoElement
@@ -87,7 +81,6 @@ namespace Orc.SystemInfo
     public class SystemInfoService : Orc.SystemInfo.ISystemInfoService
     {
         public SystemInfoService(Orc.SystemInfo.IWindowsManagementInformationService windowsManagementInformationService, Orc.SystemInfo.IDotNetFrameworkService dotNetFrameworkService, Catel.Services.ILanguageService languageService, Orc.SystemInfo.IDbProvidersService dbProviderService) { }
-        [MethodTimer.TimeAttribute()]
         public System.Collections.Generic.IEnumerable<Orc.SystemInfo.SystemInfoElement> GetSystemInfo() { }
     }
     public class WindowsManagementInformationService : Orc.SystemInfo.IWindowsManagementInformationService
