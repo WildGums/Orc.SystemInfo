@@ -1,15 +1,12 @@
 ﻿[assembly: System.Resources.NeutralResourcesLanguageAttribute("en-US")]
 [assembly: System.Runtime.InteropServices.ComVisibleAttribute(false)]
 [assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.7", FrameworkDisplayName=".NET Framework 4.7")]
-
-
 public class static ModuleInitializer
 {
     public static void Initialize() { }
 }
 namespace Orc.SystemInfo
 {
-    
     public class DbProvidersService : Orc.SystemInfo.IDbProvidersService
     {
         public DbProvidersService() { }
@@ -18,7 +15,6 @@ namespace Orc.SystemInfo
     public class DotNetFrameworkService : Orc.SystemInfo.IDotNetFrameworkService
     {
         public DotNetFrameworkService() { }
-        [System.Runtime.CompilerServices.IteratorStateMachineAttribute(typeof(Orc.SystemInfo.DotNetFrameworkService.<BuildFrameworkNamesRecursively>d__3))]
         protected System.Collections.Generic.IEnumerable<string> BuildFrameworkNamesRecursively(Microsoft.Win32.RegistryKey registryKey, string name, string topLevelSp = "0", bool topLevel = False) { }
         public virtual System.Collections.Generic.IEnumerable<string> GetInstalledFrameworks() { }
         protected System.Collections.Generic.IEnumerable<string> GetNetFrameworkVersions() { }
