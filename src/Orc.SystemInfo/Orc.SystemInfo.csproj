@@ -31,6 +31,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Update="NETStandard.Library" Version="2.0.1" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <Compile Include="..\*.cs" />
     <Compile Remove="Platforms\**\*.cs;Resources\**\*.cs" />
     <!-- This is here so that the conditionally included files below are all visible in VS -->
@@ -38,31 +42,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="NETStandard.Library" Version="2.0.1" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <Compile Include="Platforms\netstandard2.0\**\*.cs" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net46' ">
-    <Compile Include="Platforms\net\**\*.cs" />
-    
-    <Reference Include="System.Management">
-      <HintPath>..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6\System.Management.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net47' ">
-    <Compile Include="Platforms\net\**\*.cs" />
-    
-    <Reference Include="System.Management">
-      <HintPath>..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7\System.Management.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">
-    <Compile Include="Platforms\uap10.0\**\*.cs" />
+    <Folder Include="Platforms\net\" />
+    <Folder Include="Platforms\netstandard2.0\" />
+    <Folder Include="Platforms\uap10.0\" />
   </ItemGroup>
 
 
@@ -93,5 +75,49 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <!-- .NET Standard 2.0 -->
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <DefineConstants>NETSTANDARD;NETSTANDARD2_0;NS;NS20</DefineConstants>
+  </PropertyGroup>
+  
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <Compile Include="Platforms\netstandard2.0\**\*.cs" />
+  </ItemGroup>
+
+  <!-- .NET 4.6 -->
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net46' ">
+    <DefineConstants>NET;NET46</DefineConstants>
+  </PropertyGroup>
+  
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net46' ">
+    <Compile Include="Platforms\net\**\*.cs" />
+    
+    <Reference Include="System.Management">
+      <HintPath>..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6\System.Management.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <!-- .NET 4.7 -->
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net47' ">
+    <DefineConstants>NET;NET47</DefineConstants>
+  </PropertyGroup>
+  
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net47' ">
+    <Compile Include="Platforms\net\**\*.cs" />
+    
+    <Reference Include="System.Management">
+      <HintPath>..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7\System.Management.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  
+  <!-- UAP 10.0 -->
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">
+    <DefineConstants>AP;NETFX_CORE</DefineConstants>
+  </PropertyGroup>
+  
+  <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">
+    <Compile Include="Platforms\uap10.0\**\*.cs" />
+  </ItemGroup>
+  
   <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
 </Project>
