@@ -26,11 +26,11 @@ namespace Orc.SystemInfo
 
         protected IEnumerable<string> GetNetFrameworkVersions()
         {
-            var versions = new List<string>();
+            //var versions = new List<string>();
 
             throw Log.ErrorAndCreateException<PlatformNotSupportedException>(string.Empty);
 
-            return versions;
+            //return versions;
         }
     }
 }
