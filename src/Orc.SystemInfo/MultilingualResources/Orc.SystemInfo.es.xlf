@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en-US" target-language="es" original="ORC.SYSTEMINFO/PROPERTIES/RESOURCES.RESX" tool-id="MultilingualAppToolkit" product-name="n/a" product-version="n/a" build-num="n/a">
+    <header>
+      <tool tool-id="MultilingualAppToolkit" tool-name="Multilingual App Toolkit" tool-version="4.0.6900.0" tool-company="Microsoft" />
+    </header>
+    <body>
+      <group id="ORC.SYSTEMINFO/PROPERTIES/RESOURCES.RESX" datatype="resx">
+        <trans-unit id="SystemInfo_AddressWidth" translate="yes" xml:space="preserve">
+          <source>Address width</source>
+          <target state="needs-review-translation">Address width</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_ApplicationUpTime" translate="yes" xml:space="preserve">
+          <source>Application up time</source>
+          <target state="needs-review-translation">Application up time</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_Architecture" translate="yes" xml:space="preserve">
+          <source>Architecture</source>
+          <target state="needs-review-translation">Architecture</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_AvailableMemory" translate="yes" xml:space="preserve">
+          <source>Available memory</source>
+          <target state="needs-review-translation">Available memory</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_Build" translate="yes" xml:space="preserve">
+          <source>Build</source>
+          <target state="needs-review-translation">Build</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_BusSpeedMhz" translate="yes" xml:space="preserve">
+          <source>Bus speed (Mhz)</source>
+          <target state="needs-review-translation">Bus speed (Mhz)</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_ClockSpeedMhz" translate="yes" xml:space="preserve">
+          <source>Clock speed (Mhz)</source>
+          <target state="needs-review-translation">Clock speed (Mhz)</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_CpuInfo" translate="yes" xml:space="preserve">
+          <source>CPU info</source>
+          <target state="needs-review-translation">CPU info</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_CpuName" translate="yes" xml:space="preserve">
+          <source>CPU name</source>
+          <target state="needs-review-translation">CPU name</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_CurrentCulture" translate="yes" xml:space="preserve">
+          <source>Current culture</source>
+          <target state="needs-review-translation">Current culture</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_DataWidth" translate="yes" xml:space="preserve">
+          <source>Data width</source>
+          <target state="needs-review-translation">Data width</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_Description" translate="yes" xml:space="preserve">
+          <source>Description</source>
+          <target state="needs-review-translation">Description</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_DotNetFrameworkVersions" translate="yes" xml:space="preserve">
+          <source>.NET Framework versions</source>
+          <target state="needs-review-translation">.NET Framework versions</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_InstalledDatabaseProviders" translate="yes" xml:space="preserve">
+          <source>Installed database providers</source>
+          <target state="needs-review-translation">Installed database providers</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_MachineName" translate="yes" xml:space="preserve">
+          <source>Machine name</source>
+          <target state="needs-review-translation">Machine name</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_MaxProcessRam" translate="yes" xml:space="preserve">
+          <source>Max. process RAM</source>
+          <target state="needs-review-translation">Max. process RAM</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_NotAvailable" translate="yes" xml:space="preserve">
+          <source>n/a</source>
+          <target state="needs-review-translation">n/a</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_NumberOfCores" translate="yes" xml:space="preserve">
+          <source>Number of cores</source>
+          <target state="needs-review-translation">Number of cores</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_NumberOfLogicalProcessors" translate="yes" xml:space="preserve">
+          <source>Number of logical processors</source>
+          <target state="needs-review-translation">Number of logical processors</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_OsInfo" translate="yes" xml:space="preserve">
+          <source>OS info</source>
+          <target state="needs-review-translation">OS info</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_OsName" translate="yes" xml:space="preserve">
+          <source>OS name</source>
+          <target state="needs-review-translation">OS name</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_OsVersion" translate="yes" xml:space="preserve">
+          <source>OS version</source>
+          <target state="needs-review-translation">OS version</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_ProcessorId" translate="yes" xml:space="preserve">
+          <source>Processor ID</source>
+          <target state="needs-review-translation">Processor ID</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_SystemUpTime" translate="yes" xml:space="preserve">
+          <source>System up time</source>
+          <target state="needs-review-translation">System up time</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_TotalMemory" translate="yes" xml:space="preserve">
+          <source>Total memory</source>
+          <target state="needs-review-translation">Total memory</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_UserDomainName" translate="yes" xml:space="preserve">
+          <source>User domain name</source>
+          <target state="needs-review-translation">User domain name</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_UserName" translate="yes" xml:space="preserve">
+          <source>User name</source>
+          <target state="needs-review-translation">User name</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+        <trans-unit id="SystemInfo_Version" translate="yes" xml:space="preserve">
+          <source>Version</source>
+          <target state="needs-review-translation">Version</target>
+          <note from="MultilingualUpdate" priority="2">When the XLIFF file support was added via MAT, existing resources were found and auto-imported.  This source and target string contained the same value so the resource was marked as 'Needs review' to ensure the translation could be easily reviewed.</note>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+</xliff>
