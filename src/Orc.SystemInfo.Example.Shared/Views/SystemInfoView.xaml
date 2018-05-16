@@ -11,7 +11,7 @@
                Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}}" />
 
         <TextBox Text="{Binding SystemInfo}" VerticalScrollBarVisibility="Auto" IsReadOnly="True"
-                  Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}, ConverterParameter=False}" />
+                  Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}, ConverterParameter=True}" />
     </Grid>
 
 </catel:UserControl>

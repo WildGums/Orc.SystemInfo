@@ -11,7 +11,7 @@
         <Label Content="Working on it..." HorizontalAlignment="Center" VerticalAlignment="Center" 
                Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}}" />
 
-        <orccontrols:StackGrid Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}, ConverterParameter=False}">
+        <orccontrols:StackGrid Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}, ConverterParameter=True}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
