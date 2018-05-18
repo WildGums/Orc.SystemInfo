@@ -17,47 +17,33 @@ namespace Orc.SystemInfo
 
         public static string GetValue(this ManagementBaseObject obj, string key, string defaultValue = null)
         {
-            var finalValue = defaultValue;
-
-            try
-            {
-                var value = obj[key];
-                if (value != null)
-                {
-                    finalValue = value.ToString();
-                }
-            }
-            catch (ManagementException ex)
-            {
-                Log.Warning(ex, $"Failed to get value by key '{key}' from ManagementBaseObject");
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, $"Failed to get value by key '{key}' from ManagementBaseObject");
-            }
-
-            return finalValue;
+            return GetValue(obj, key, x => x.ToString()) ?? defaultValue;
         }
 
         public static long GetLongValue(this ManagementBaseObject obj, string key)
         {
-            long finalValue = 0;
+            return GetValue(obj, key, Convert.ToInt64);
+        }
+
+        private static T GetValue<T>(this ManagementBaseObject obj, string key, Func<object, T> valueRetrievalFunc)
+        {
+            T finalValue = default(T);
 
             try
             {
                 var value = obj[key];
                 if (value != null)
                 {
-                    finalValue = Convert.ToInt64(value);
+                    finalValue = valueRetrievalFunc(value);
                 }
             }
-            catch (ManagementException ex)
+            catch (ManagementException /*ex*/)
             {
-                Log.Warning(ex, $"Failed to get long value by key '{key}' from ManagementBaseObject");
+                //Log.Debug(ex, $"Failed to get long value by key '{key}' from ManagementBaseObject");
             }
-            catch (Exception ex)
+            catch (Exception /*ex*/)
             {
-                Log.Error(ex, $"Failed to get long value by key '{key}' from ManagementBaseObject");
+                //Log.Debug(ex, $"Failed to get long value by key '{key}' from ManagementBaseObject");
             }
 
             return finalValue;

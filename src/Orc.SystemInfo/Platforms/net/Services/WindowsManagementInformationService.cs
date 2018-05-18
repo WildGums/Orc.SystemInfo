@@ -53,8 +53,8 @@ namespace Orc.SystemInfo
                             var equals = string.Equals(wmiToCheckValue, wmiToCheckValueValue, StringComparison.OrdinalIgnoreCase);
                             if ((!equals && !invert) || (equals && invert))
                             {
-                                Log.Debug("Cannot use mgmt object '{0}', wmi property '{1}' is '{2}' but expected '{3}'", wmiClass,
-                                    additionalWmiToCheck, wmiToCheckValue, additionalWmiToCheckValue);
+                                //Log.Debug("Cannot use mgmt object '{0}', wmi property '{1}' is '{2}' but expected '{3}'", wmiClass,
+                                //    additionalWmiToCheck, wmiToCheckValue, additionalWmiToCheckValue);
                                 continue;
                             }
                         }
@@ -66,9 +66,9 @@ namespace Orc.SystemInfo
                             break;
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception /*ex*/)
                     {
-                        Log.Debug(ex, "Failed to retrieve object '{0}.{1}', additional wmi to check: {2}", wmiClass, wmiProperty, additionalWmiToCheck);
+                        //Log.Debug(ex, "Failed to retrieve object '{0}.{1}', additional wmi to check: {2}", wmiClass, wmiProperty, additionalWmiToCheck);
                     }
                 }
             }
