@@ -41,8 +41,6 @@ namespace Orc.SystemInfo
         {
             Log.Debug("Retrieving system info");
 
-            var notAvailable = _languageService.GetString("SystemInfo_NotAvailable");
-               
             var items = new List<SystemInfoElement>();
 
             items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_UserName"), Environment.UserName));

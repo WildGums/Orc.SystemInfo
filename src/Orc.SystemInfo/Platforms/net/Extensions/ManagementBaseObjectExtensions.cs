@@ -13,8 +13,6 @@ namespace Orc.SystemInfo
 
     public static class ManagementBaseObjectExtensions
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         public static string GetValue(this ManagementBaseObject obj, string key, string defaultValue = null)
         {
             return GetValue(obj, key, x => x.ToString()) ?? defaultValue;
@@ -37,13 +35,11 @@ namespace Orc.SystemInfo
                     finalValue = valueRetrievalFunc(value);
                 }
             }
-            catch (ManagementException /*ex*/)
+            catch (ManagementException)
             {
-                //Log.Debug(ex, $"Failed to get long value by key '{key}' from ManagementBaseObject");
             }
-            catch (Exception /*ex*/)
+            catch (Exception)
             {
-                //Log.Debug(ex, $"Failed to get long value by key '{key}' from ManagementBaseObject");
             }
 
             return finalValue;

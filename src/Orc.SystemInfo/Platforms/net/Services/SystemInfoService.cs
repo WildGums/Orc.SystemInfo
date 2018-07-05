@@ -25,20 +25,17 @@ namespace Orc.SystemInfo
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private readonly IWindowsManagementInformationService _windowsManagementInformationService;
         private readonly IDotNetFrameworkService _dotNetFrameworkService;
         private readonly ILanguageService _languageService;
         private readonly IDbProvidersService _dbProviderService;
 
-        public SystemInfoService(IWindowsManagementInformationService windowsManagementInformationService,
-            IDotNetFrameworkService dotNetFrameworkService, ILanguageService languageService, IDbProvidersService dbProviderService)
+        public SystemInfoService(IDotNetFrameworkService dotNetFrameworkService, ILanguageService languageService, 
+            IDbProvidersService dbProviderService)
         {
-            Argument.IsNotNull(() => windowsManagementInformationService);
             Argument.IsNotNull(() => dotNetFrameworkService);
             Argument.IsNotNull(() => languageService);
             Argument.IsNotNull(() => dbProviderService);
 
-            _windowsManagementInformationService = windowsManagementInformationService;
             _dotNetFrameworkService = dotNetFrameworkService;
             _languageService = languageService;
             _dbProviderService = dbProviderService;
@@ -79,7 +76,7 @@ namespace Orc.SystemInfo
                 Log.Warning(ex, "Failed to retrieve OS information");
             }
 
-            var memStatus = new Kernel32.MEMORYSTATUSEX();
+            var memStatus = new Kernel32.MemoryStatusEx();
             if (Kernel32.GlobalMemoryStatusEx(memStatus))
             {
                 items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_TotalMemory"), memStatus.ullTotalPhys.ToReadableSize()));

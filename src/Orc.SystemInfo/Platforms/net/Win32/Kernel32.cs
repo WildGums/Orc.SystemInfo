@@ -13,13 +13,13 @@ namespace Orc.SystemInfo.Win32
     {
         [return: MarshalAs(UnmanagedType.Bool)]
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern bool GlobalMemoryStatusEx([In, Out] MEMORYSTATUSEX lpBuffer);
+        public static extern bool GlobalMemoryStatusEx([In, Out] MemoryStatusEx lpBuffer);
 
         /// <summary>
         /// used to get memory available
         /// </summary>
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class MEMORYSTATUSEX
+        public class MemoryStatusEx
         {
             public uint dwLength;
             public uint dwMemoryLoad;
@@ -31,9 +31,9 @@ namespace Orc.SystemInfo.Win32
             public ulong ullAvailVirtual;
             public ulong ullAvailExtendedVirtual;
 
-            public MEMORYSTATUSEX()
+            public MemoryStatusEx()
             {
-                dwLength = (uint) Marshal.SizeOf(typeof (MEMORYSTATUSEX));
+                dwLength = (uint) Marshal.SizeOf(typeof (MemoryStatusEx));
             }
         }
     }

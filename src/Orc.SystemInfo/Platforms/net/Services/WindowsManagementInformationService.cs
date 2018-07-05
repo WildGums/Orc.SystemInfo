@@ -9,12 +9,9 @@ namespace Orc.SystemInfo
 {
     using System;
     using System.Management;
-    using Catel.Logging;
 
     public class WindowsManagementInformationService : IWindowsManagementInformationService
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         public string GetIdentifier(string wmiClass, string wmiProperty)
         {
             return GetIdentifier(wmiClass, wmiProperty, null, null);
@@ -29,47 +26,37 @@ namespace Orc.SystemInfo
             var wmiSearcher = new ManagementObjectSearcher(query);
             var managementObjectCollection = wmiSearcher.Get();
 
-            //var managementClass = new ManagementClass(wmiClass);
-            //var managementObjectCollection = managementClass.GetInstances();
-
             foreach (var managementObject in managementObjectCollection)
             {
-                // Only get the first one
-                if (string.IsNullOrEmpty(result))
+                try
                 {
-                    try
+                    if (!string.IsNullOrWhiteSpace(additionalWmiToCheck))
                     {
-                        if (!string.IsNullOrWhiteSpace(additionalWmiToCheck))
+                        var wmiToCheckValue = managementObject.GetValue(additionalWmiToCheck);
+
+                        var wmiToCheckValueValue = additionalWmiToCheckValue;
+                        var invert = additionalWmiToCheckValue.StartsWith("!");
+                        if (invert)
                         {
-                            var wmiToCheckValue = managementObject.GetValue(additionalWmiToCheck);
-
-                            var wmiToCheckValueValue = additionalWmiToCheckValue;
-                            var invert = additionalWmiToCheckValue.StartsWith("!");
-                            if (invert)
-                            {
-                                wmiToCheckValueValue = additionalWmiToCheckValue.Substring(1);
-                            }
-
-                            var equals = string.Equals(wmiToCheckValue, wmiToCheckValueValue, StringComparison.OrdinalIgnoreCase);
-                            if ((!equals && !invert) || (equals && invert))
-                            {
-                                //Log.Debug("Cannot use mgmt object '{0}', wmi property '{1}' is '{2}' but expected '{3}'", wmiClass,
-                                //    additionalWmiToCheck, wmiToCheckValue, additionalWmiToCheckValue);
-                                continue;
-                            }
+                            wmiToCheckValueValue = additionalWmiToCheckValue.Substring(1);
                         }
 
-                        var value = managementObject.GetValue(wmiProperty);
-                        if (value != null)
+                        var equals = string.Equals(wmiToCheckValue, wmiToCheckValueValue, StringComparison.OrdinalIgnoreCase);
+                        if ((!equals && !invert) || (equals && invert))
                         {
-                            result = value;
-                            break;
+                            continue;
                         }
                     }
-                    catch (Exception /*ex*/)
+
+                    var value = managementObject.GetValue(wmiProperty);
+                    if (value != null)
                     {
-                        //Log.Debug(ex, "Failed to retrieve object '{0}.{1}', additional wmi to check: {2}", wmiClass, wmiProperty, additionalWmiToCheck);
+                        result = value;
+                        break;
                     }
+                }
+                catch (Exception)
+                {
                 }
             }
 

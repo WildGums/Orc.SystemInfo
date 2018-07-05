@@ -76,7 +76,7 @@ namespace Orc.SystemInfo
     }
     public class SystemInfoService : Orc.SystemInfo.ISystemInfoService
     {
-        public SystemInfoService(Orc.SystemInfo.IWindowsManagementInformationService windowsManagementInformationService, Orc.SystemInfo.IDotNetFrameworkService dotNetFrameworkService, Catel.Services.ILanguageService languageService, Orc.SystemInfo.IDbProvidersService dbProviderService) { }
+        public SystemInfoService(Orc.SystemInfo.IDotNetFrameworkService dotNetFrameworkService, Catel.Services.ILanguageService languageService, Orc.SystemInfo.IDbProvidersService dbProviderService) { }
         public System.Collections.Generic.IEnumerable<Orc.SystemInfo.SystemInfoElement> GetSystemInfo() { }
     }
     public class WindowsManagementInformationService : Orc.SystemInfo.IWindowsManagementInformationService
