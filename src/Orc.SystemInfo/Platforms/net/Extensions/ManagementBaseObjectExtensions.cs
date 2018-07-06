@@ -37,9 +37,11 @@ namespace Orc.SystemInfo
             }
             catch (ManagementException)
             {
+                // Ignore
             }
             catch (Exception)
             {
+                // Ignore
             }
 
             return finalValue;

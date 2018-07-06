@@ -57,6 +57,7 @@ namespace Orc.SystemInfo
                 }
                 catch (Exception)
                 {
+                    // Ignore
                 }
             }
 
