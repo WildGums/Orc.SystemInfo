@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SystemInfo_AddressWidth" xml:space="preserve">
+    <value>Address width</value>
+  </data>
+  <data name="SystemInfo_ApplicationUpTime" xml:space="preserve">
+    <value>Application up time</value>
+  </data>
+  <data name="SystemInfo_Architecture" xml:space="preserve">
+    <value>Architecture</value>
+  </data>
+  <data name="SystemInfo_AvailableMemory" xml:space="preserve">
+    <value>Available memory</value>
+  </data>
+  <data name="SystemInfo_Build" xml:space="preserve">
+    <value>Build</value>
+  </data>
+  <data name="SystemInfo_BusSpeedMhz" xml:space="preserve">
+    <value>Bus speed (Mhz)</value>
+  </data>
+  <data name="SystemInfo_ClockSpeedMhz" xml:space="preserve">
+    <value>Clock speed (Mhz)</value>
+  </data>
+  <data name="SystemInfo_CpuInfo" xml:space="preserve">
+    <value>CPU info</value>
+  </data>
+  <data name="SystemInfo_CpuName" xml:space="preserve">
+    <value>CPU name</value>
+  </data>
+  <data name="SystemInfo_CurrentCulture" xml:space="preserve">
+    <value>Current culture</value>
+  </data>
+  <data name="SystemInfo_DataWidth" xml:space="preserve">
+    <value>Data width</value>
+  </data>
+  <data name="SystemInfo_Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="SystemInfo_DotNetFrameworkVersions" xml:space="preserve">
+    <value>.NET Framework versions</value>
+  </data>
+  <data name="SystemInfo_InstalledDatabaseProviders" xml:space="preserve">
+    <value>Installed database providers</value>
+  </data>
+  <data name="SystemInfo_MachineName" xml:space="preserve">
+    <value>Machine name</value>
+  </data>
+  <data name="SystemInfo_MaxProcessRam" xml:space="preserve">
+    <value>Max. process RAM</value>
+  </data>
+  <data name="SystemInfo_NotAvailable" xml:space="preserve">
+    <value>n/a</value>
+  </data>
+  <data name="SystemInfo_NumberOfCores" xml:space="preserve">
+    <value>Number of cores</value>
+  </data>
+  <data name="SystemInfo_NumberOfLogicalProcessors" xml:space="preserve">
+    <value>Number of logical processors</value>
+  </data>
+  <data name="SystemInfo_OsInfo" xml:space="preserve">
+    <value>OS info</value>
+  </data>
+  <data name="SystemInfo_OsName" xml:space="preserve">
+    <value>OS name</value>
+  </data>
+  <data name="SystemInfo_OsVersion" xml:space="preserve">
+    <value>OS version</value>
+  </data>
+  <data name="SystemInfo_ProcessorId" xml:space="preserve">
+    <value>Processor ID</value>
+  </data>
+  <data name="SystemInfo_SystemUpTime" xml:space="preserve">
+    <value>System up time</value>
+  </data>
+  <data name="SystemInfo_TotalMemory" xml:space="preserve">
+    <value>Total memory</value>
+  </data>
+  <data name="SystemInfo_UserDomainName" xml:space="preserve">
+    <value>User domain name</value>
+  </data>
+  <data name="SystemInfo_UserName" xml:space="preserve">
+    <value>User name</value>
+  </data>
+  <data name="SystemInfo_Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+</root>

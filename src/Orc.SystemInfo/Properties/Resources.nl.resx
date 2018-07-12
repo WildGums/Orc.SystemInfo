@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SystemInfo_AddressWidth" xml:space="preserve">
+    <value>Adres breedte</value>
+  </data>
+  <data name="SystemInfo_ApplicationUpTime" xml:space="preserve">
+    <value>Applicatie aan tijd</value>
+  </data>
+  <data name="SystemInfo_Architecture" xml:space="preserve">
+    <value>Architectuur</value>
+  </data>
+  <data name="SystemInfo_AvailableMemory" xml:space="preserve">
+    <value>Beschikbaar geheugen</value>
+  </data>
+  <data name="SystemInfo_Build" xml:space="preserve">
+    <value>Build</value>
+  </data>
+  <data name="SystemInfo_BusSpeedMhz" xml:space="preserve">
+    <value>Bus snelheid (Mhz)</value>
+  </data>
+  <data name="SystemInfo_ClockSpeedMhz" xml:space="preserve">
+    <value>Klok snelheid (Mhz)</value>
+  </data>
+  <data name="SystemInfo_CpuInfo" xml:space="preserve">
+    <value>CPU info</value>
+  </data>
+  <data name="SystemInfo_CpuName" xml:space="preserve">
+    <value>CPU naam</value>
+  </data>
+  <data name="SystemInfo_CurrentCulture" xml:space="preserve">
+    <value>Huidige cultuur</value>
+  </data>
+  <data name="SystemInfo_DataWidth" xml:space="preserve">
+    <value>Data breedte</value>
+  </data>
+  <data name="SystemInfo_Description" xml:space="preserve">
+    <value>Beschrijving</value>
+  </data>
+  <data name="SystemInfo_DotNetFrameworkVersions" xml:space="preserve">
+    <value>.NET Framework versies</value>
+  </data>
+  <data name="SystemInfo_InstalledDatabaseProviders" xml:space="preserve">
+    <value>Installed database providers</value>
+  </data>
+  <data name="SystemInfo_MachineName" xml:space="preserve">
+    <value>Machine naam</value>
+  </data>
+  <data name="SystemInfo_MaxProcessRam" xml:space="preserve">
+    <value>Max. proces RAM</value>
+  </data>
+  <data name="SystemInfo_NotAvailable" xml:space="preserve">
+    <value>n/b</value>
+  </data>
+  <data name="SystemInfo_NumberOfCores" xml:space="preserve">
+    <value>Aantal cores</value>
+  </data>
+  <data name="SystemInfo_NumberOfLogicalProcessors" xml:space="preserve">
+    <value>Aantal logische processoren</value>
+  </data>
+  <data name="SystemInfo_OsInfo" xml:space="preserve">
+    <value>OS info</value>
+  </data>
+  <data name="SystemInfo_OsName" xml:space="preserve">
+    <value>OS naam</value>
+  </data>
+  <data name="SystemInfo_OsVersion" xml:space="preserve">
+    <value>OS versie</value>
+  </data>
+  <data name="SystemInfo_ProcessorId" xml:space="preserve">
+    <value>Processor ID</value>
+  </data>
+  <data name="SystemInfo_SystemUpTime" xml:space="preserve">
+    <value>Systeem aan tijd</value>
+  </data>
+  <data name="SystemInfo_TotalMemory" xml:space="preserve">
+    <value>Totaal geheugen</value>
+  </data>
+  <data name="SystemInfo_UserDomainName" xml:space="preserve">
+    <value>Gebruiker domain naam</value>
+  </data>
+  <data name="SystemInfo_UserName" xml:space="preserve">
+    <value>Gebruiker naam</value>
+  </data>
+  <data name="SystemInfo_Version" xml:space="preserve">
+    <value>Versie</value>
+  </data>
+</root>
