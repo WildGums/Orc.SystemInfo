@@ -10,11 +10,14 @@ namespace Orc.SystemInfo.Example.ViewModels
     using System.Linq;
     using System.Threading.Tasks;
     using Catel;
+    using Catel.Logging;
     using Catel.MVVM;
     using Catel.Threading;
 
     public class SystemInfoViewModel : ViewModelBase
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         private readonly ISystemInfoService _systemInfoService;
 
         public SystemInfoViewModel(ISystemInfoService systemInfoService)
@@ -34,9 +37,16 @@ namespace Orc.SystemInfo.Example.ViewModels
 
             IsBusy = true;
 
-            var systemInfo = await TaskHelper.Run(() => _systemInfoService.GetSystemInfo(), true);
-            var systemInfoLines = systemInfo.Select(x => string.Format("{0} {1}", x.Name, x.Value));
-            SystemInfo = string.Join("\n", systemInfoLines);
+            try
+            {
+                var systemInfo = await TaskHelper.Run(() => _systemInfoService.GetSystemInfo(), true);
+                var systemInfoLines = systemInfo.Select(x => string.Format("{0} {1}", x.Name, x.Value));
+                SystemInfo = string.Join("\n", systemInfoLines);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to get system info");
+            }
 
             IsBusy = false;
         }

@@ -10,12 +10,15 @@ namespace Orc.SystemInfo.Example.ViewModels
     using System;
     using System.Threading.Tasks;
     using Catel;
+    using Catel.Logging;
     using Catel.MVVM;
     using Catel.Services;
     using Catel.Threading;
 
     public class SystemIdentificationViewModel : ViewModelBase
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         private readonly ISystemIdentificationService _systemIdentificationService;
         private readonly IDispatcherService _dispatcherService;
 
@@ -47,8 +50,10 @@ namespace Orc.SystemInfo.Example.ViewModels
 
             IsBusy = true;
 
-            await TaskShim.WhenAll(new []
+            try
             {
+                await TaskShim.WhenAll(new[]
+{
                 SetValueAsync(() => _systemIdentificationService.GetCpuId(), x => CpuId = x),
                 SetValueAsync(() => _systemIdentificationService.GetGpuId(), x => GpuId = x),
                 SetValueAsync(() => _systemIdentificationService.GetHardDriveId(), x => HardDriveId = x),
@@ -56,9 +61,14 @@ namespace Orc.SystemInfo.Example.ViewModels
                 SetValueAsync(() => _systemIdentificationService.GetMotherboardId(), x => MotherboardId = x)
             });
 
-            // Note: we calculate the machine id last because we don't want to cause "false timings" in our demo app (the machine id
-            // has to wait for all the others to finish so will take much longer then it actually does)
-            await TaskHelper.Run(() => SetValueAsync(() => _systemIdentificationService.GetMachineId(), x => MachineId = x), true);
+                // Note: we calculate the machine id last because we don't want to cause "false timings" in our demo app (the machine id
+                // has to wait for all the others to finish so will take much longer then it actually does)
+                await TaskHelper.Run(() => SetValueAsync(() => _systemIdentificationService.GetMachineId(), x => MachineId = x), true);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to get system identification");
+            }
 
             IsBusy = false;
         }
