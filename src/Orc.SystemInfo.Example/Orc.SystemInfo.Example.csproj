@@ -1,7 +1,7 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
-    <AssemblyName>Orc.SystemInfo.Example.NET</AssemblyName>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
+    <AssemblyName>Orc.SystemInfo.Example</AssemblyName>
     <RootNamespace>Orc.SystemInfo.Example</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
     <SonarQubeExclude>true</SonarQubeExclude>
@@ -37,22 +37,5 @@
     <ProjectReference Include="..\Orc.SystemInfo\Orc.SystemInfo.csproj" />
   </ItemGroup>
 
-  <Import Project="..\Orc.SystemInfo.Example.Shared\Orc.SystemInfo.Example.Shared.projitems" Label="Shared" />
-
-  <ItemGroup>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  
   <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.props')" />
 </Project>
