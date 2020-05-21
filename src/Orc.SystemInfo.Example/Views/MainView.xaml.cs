@@ -7,9 +7,6 @@
 
 namespace Orc.SystemInfo.Example.Views
 {
-    using Catel.Logging;
-    using Logging;
-
     /// <summary>
     /// Interaction logic for MainView.xaml
     /// </summary>
@@ -18,13 +15,6 @@ namespace Orc.SystemInfo.Example.Views
         public MainView()
         {
             InitializeComponent();
-
-            var logListener = new TextBoxLogListener(loggingTextBox)
-            {
-                IgnoreCatelLogging = true
-            };
-
-            LogManager.AddListener(logListener);
         }
     }
 }
