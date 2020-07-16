@@ -27,16 +27,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example", "Example", "{AA1F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.SystemInfo", "Orc.SystemInfo\Orc.SystemInfo.csproj", "{E80D4CAE-2E3A-42F8-9A39-5E883C7509DA}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Orc.SystemInfo.Example.Shared", "Orc.SystemInfo.Example.Shared\Orc.SystemInfo.Example.Shared.shproj", "{CC0A33E1-6BEF-4E55-9A16-68A212B5D191}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.SystemInfo.Example.NET", "Orc.SystemInfo.Example.NET\Orc.SystemInfo.Example.NET.csproj", "{D0815A07-7F10-462C-83B7-D5A5E7D67CAB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.SystemInfo.Example", "Orc.SystemInfo.Example\Orc.SystemInfo.Example.csproj", "{D0815A07-7F10-462C-83B7-D5A5E7D67CAB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orc.SystemInfo.Tests", "Orc.SystemInfo.Tests\Orc.SystemInfo.Tests.csproj", "{FE2A7C56-2CA4-4A06-B6CC-30D80C6EDC39}"
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Orc.SystemInfo.Example.Shared\Orc.SystemInfo.Example.Shared.projitems*{cc0a33e1-6bef-4e55-9a16-68a212b5d191}*SharedItemsImports = 13
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -63,7 +58,6 @@ Global
 		{EFD371A0-BDCD-42EA-9874-0E01FC3D456B} = {E426EAD0-F378-4A3D-9BCD-E42CED54EEC7}
 		{AA1FD81A-33B7-4561-AE49-E375A73C2037} = {E426EAD0-F378-4A3D-9BCD-E42CED54EEC7}
 		{E80D4CAE-2E3A-42F8-9A39-5E883C7509DA} = {E58A59BA-FFA8-4D75-A2B9-F6FEFD848E94}
-		{CC0A33E1-6BEF-4E55-9A16-68A212B5D191} = {AA1FD81A-33B7-4561-AE49-E375A73C2037}
 		{D0815A07-7F10-462C-83B7-D5A5E7D67CAB} = {AA1FD81A-33B7-4561-AE49-E375A73C2037}
 		{FE2A7C56-2CA4-4A06-B6CC-30D80C6EDC39} = {EFD371A0-BDCD-42EA-9874-0E01FC3D456B}
 	EndGlobalSection

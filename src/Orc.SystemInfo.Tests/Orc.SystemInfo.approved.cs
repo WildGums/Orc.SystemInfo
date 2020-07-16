@@ -1,7 +1,7 @@
-﻿[assembly: System.Resources.NeutralResourcesLanguageAttribute("en-US")]
-[assembly: System.Runtime.InteropServices.ComVisibleAttribute(false)]
-[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.6", FrameworkDisplayName=".NET Framework 4.6")]
-public class static ModuleInitializer
+﻿[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
+[assembly: System.Runtime.InteropServices.ComVisible(false)]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v3.1", FrameworkDisplayName="")]
+public static class ModuleInitializer
 {
     public static void Initialize() { }
 }
@@ -15,7 +15,7 @@ namespace Orc.SystemInfo
     public class DotNetFrameworkService : Orc.SystemInfo.IDotNetFrameworkService
     {
         public DotNetFrameworkService() { }
-        protected System.Collections.Generic.IEnumerable<string> BuildFrameworkNamesRecursively(Microsoft.Win32.RegistryKey registryKey, string name, string topLevelSp = "0", bool topLevel = False) { }
+        protected System.Collections.Generic.IEnumerable<string> BuildFrameworkNamesRecursively(Microsoft.Win32.RegistryKey registryKey, string name, string topLevelSp = "0", bool topLevel = false) { }
         public virtual System.Collections.Generic.IEnumerable<string> GetInstalledFrameworks() { }
         protected System.Collections.Generic.IEnumerable<string> GetNetFrameworkVersions() { }
     }
@@ -32,8 +32,8 @@ namespace Orc.SystemInfo
         string GetCpuId();
         string GetGpuId();
         string GetHardDriveId();
-        string GetMachineId(string separator = "-", bool hashCombination = True);
         string GetMacId();
+        string GetMachineId(string separator = "-", bool hashCombination = true);
         string GetMotherboardId();
     }
     public interface ISystemInfoService
@@ -45,12 +45,12 @@ namespace Orc.SystemInfo
         string GetIdentifier(string wmiClass, string wmiProperty);
         string GetIdentifier(string wmiClass, string wmiProperty, string additionalWmiToCheck, string additionalWmiToCheckValue);
     }
-    public class static LongExtensions
+    public static class LongExtensions
     {
-        public static string ToReadableSize(this ulong value) { }
         public static string ToReadableSize(this long value) { }
+        public static string ToReadableSize(this ulong value) { }
     }
-    public class static ManagementBaseObjectExtensions
+    public static class ManagementBaseObjectExtensions
     {
         public static long GetLongValue(this System.Management.ManagementBaseObject obj, string key) { }
         public static string GetValue(this System.Management.ManagementBaseObject obj, string key, string defaultValue = null) { }
@@ -58,13 +58,13 @@ namespace Orc.SystemInfo
     public class SystemIdentificationService : Orc.SystemInfo.ISystemIdentificationService
     {
         public SystemIdentificationService(Orc.SystemInfo.IWindowsManagementInformationService windowsManagementInformationService) { }
-        protected static string CalculateMd5Hash(string input) { }
         public virtual string GetCpuId() { }
         public virtual string GetGpuId() { }
         public virtual string GetHardDriveId() { }
-        public virtual string GetMachineId(string separator = "-", bool hashCombination = True) { }
         public virtual string GetMacId() { }
+        public virtual string GetMachineId(string separator = "-", bool hashCombination = true) { }
         public virtual string GetMotherboardId() { }
+        protected static string CalculateMd5Hash(string input) { }
     }
     public class SystemInfoElement
     {
