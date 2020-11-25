@@ -20,8 +20,9 @@ namespace Orc.SystemInfo
 
     public class SystemIdentificationService : ISystemIdentificationService
     {
-        private readonly IWindowsManagementInformationService _windowsManagementInformationService;
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        private readonly IWindowsManagementInformationService _windowsManagementInformationService;
 
         private readonly ICacheStorage<string, string> _cacheStorage = new CacheStorage<string, string>();
 

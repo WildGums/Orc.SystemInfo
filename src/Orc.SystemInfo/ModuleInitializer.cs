@@ -18,16 +18,9 @@ public static partial class ModuleInitializer
         serviceLocator.RegisterType<IDbProvidersService, DbProvidersService>();
         serviceLocator.RegisterType<ISystemInfoService, SystemInfoService>();
         serviceLocator.RegisterType<ISystemIdentificationService, SystemIdentificationService>();
+        serviceLocator.RegisterType<IWindowsManagementInformationService, WindowsManagementInformationService>();
 
         var languageService = serviceLocator.ResolveType<ILanguageService>();
         languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.SystemInfo", "Orc.SystemInfo.Properties", "Resources"));
-        
-        InitializeNet(serviceLocator);
-        InitializeNetStandard_2_0(serviceLocator);
-        InitializeUap_10_0(serviceLocator);
     }
-    
-    static partial void InitializeNet(IServiceLocator serviceLocator);
-    static partial void InitializeNetStandard_2_0(IServiceLocator serviceLocator);
-    static partial void InitializeUap_10_0(IServiceLocator serviceLocator);
 }

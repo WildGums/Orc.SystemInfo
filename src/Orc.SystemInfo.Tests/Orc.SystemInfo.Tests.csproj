@@ -1,6 +1,6 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net5.0-windows</TargetFrameworks>
     <AssemblyName>Orc.SystemInfo.Tests</AssemblyName>
     <RootNamespace>Orc.SystemInfo.Tests</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
