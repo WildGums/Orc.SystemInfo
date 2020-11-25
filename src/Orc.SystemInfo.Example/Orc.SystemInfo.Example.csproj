@@ -12,7 +12,7 @@
     <UseWpf>true</UseWpf>
     <OutputType>WinExe</OutputType>
     <StartupObject />
-    <NoWarn>SA1652</NoWarn>
+    <NoWarn>$(NoWarn);SA1652</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
