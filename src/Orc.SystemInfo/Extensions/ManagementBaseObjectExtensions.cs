@@ -30,7 +30,7 @@ namespace Orc.SystemInfo
             try
             {
                 var value = obj[key];
-                if (value != null)
+                if (value is not null)
                 {
                     finalValue = valueRetrievalFunc(value);
                 }

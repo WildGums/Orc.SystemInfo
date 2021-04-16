@@ -49,7 +49,7 @@ namespace Orc.SystemInfo
                     }
 
                     var value = managementObject.GetValue(wmiProperty);
-                    if (value != null)
+                    if (value is not null)
                     {
                         result = value;
                         break;

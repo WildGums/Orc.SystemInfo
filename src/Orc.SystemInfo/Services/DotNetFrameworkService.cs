@@ -62,7 +62,7 @@ namespace Orc.SystemInfo
             Argument.IsNotNullOrEmpty(() => name);
             Argument.IsNotNullOrEmpty(() => topLevelSp);
 
-            if (registryKey == null)
+            if (registryKey is null)
             {
                 yield break;
             }
