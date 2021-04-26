@@ -35,4 +35,12 @@
 
   <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props')" />
   <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.mat.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.mat.props')" />
+  <ItemGroup>
+    <None Remove="Resources\Dlls\x64\WbemShim.dll" />
+    <None Remove="Resources\Dlls\x86\WbemShim.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Dlls\x64\WbemShim.dll" />
+    <EmbeddedResource Include="Resources\Dlls\x86\WbemShim.dll" />
+  </ItemGroup>
 </Project>
