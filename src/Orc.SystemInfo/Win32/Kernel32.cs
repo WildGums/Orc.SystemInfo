@@ -28,6 +28,9 @@ namespace Orc.SystemInfo.Win32
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern IntPtr LoadLibrary(string fileName);
 
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern IntPtr LoadLibraryEx(string lpFileName, IntPtr hReservedNull, LoadLibraryFlags dwFlags);
+
         [DllImport("kernel32.dll")]
         public static extern IntPtr GetProcAddress(IntPtr hModule, string procname);
 
