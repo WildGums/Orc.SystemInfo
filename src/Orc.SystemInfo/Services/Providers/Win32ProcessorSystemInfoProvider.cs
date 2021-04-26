@@ -23,13 +23,15 @@
             {
                 var items = new List<SystemInfoElement>();
 
-                using (WmiConnection connection = new WmiConnection())
-                {
-                    foreach (WmiObject partition in connection.CreateQuery("SELECT * FROM Win32_DiskPartition"))
-                    {
-                        Log.Debug($"partition name - {partition["Name"]}");
-                    }
-                }
+                object o = WmiNetUtils.CoSetProxyBlanketForIWbemServices;
+
+                //using (WmiConnection connection = new WmiConnection())
+                //{
+                //    foreach (WmiObject partition in connection.CreateQuery("SELECT * FROM Win32_DiskPartition"))
+                //    {
+                //        Log.Debug($"partition name - {partition["Name"]}");
+                //    }
+                //}
 
                 return items;
             }
