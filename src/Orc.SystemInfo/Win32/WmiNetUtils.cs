@@ -49,12 +49,6 @@
         internal delegate HResult CoSetProxyBlanketForIWbemServicesFunction(
             [In, MarshalAs(UnmanagedType.Interface)]
             IWbemServices wbemServices,
-            //[In, MarshalAs(UnmanagedType.BStr)]
-            //string userName,
-            //[In, MarshalAs(UnmanagedType.BStr)]
-            //string password,
-            //[In, MarshalAs(UnmanagedType.BStr)]
-            //string authority,
             [In]
             ImpersonationLevel impersonationLevel,
             [In]
