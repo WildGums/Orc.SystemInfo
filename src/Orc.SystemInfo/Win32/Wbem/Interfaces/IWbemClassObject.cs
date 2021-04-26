@@ -47,7 +47,7 @@
         HResult SpawnInstance( [In] int flags, [Out] out IWbemClassObject newInstance);
 
         [PreserveSig] 
-        HResult CompareTo( [In] WbemClassObjectComparisonOption compareOption, [In] IWbemClassObject compareTo);
+        HResult CompareTo( [In] WbemClassObjectComparisonOptions compareOption, [In] IWbemClassObject compareTo);
 
         [PreserveSig]
         HResult GetPropertyOrigin( [In, MarshalAs(UnmanagedType.LPWStr)] string name, [Out, MarshalAs(UnmanagedType.BStr)] out string className);

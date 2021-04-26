@@ -6,7 +6,7 @@
 
     internal static class IWbemClassObjectExtensions
     {
-        internal static IEnumerable<string> GetNames(this IWbemClassObject wbemClassObject, WbemConditionFlag flags = WbemConditionFlag.WBEM_FLAG_NONSYSTEM_ONLY)
+        internal static IEnumerable<string> GetNames(this IWbemClassObject wbemClassObject, WbemConditionFlag flags = WbemConditionFlag.NonSystemOnly)
         {
             HResult hr = wbemClassObject.GetNames(null, flags, null, out string[] names);
 

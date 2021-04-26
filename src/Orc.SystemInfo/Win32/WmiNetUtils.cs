@@ -121,8 +121,8 @@
             [In, MarshalAs(UnmanagedType.Interface)]
             IWbemServices wbemServices,
             [In]
-            ImpersonationLevel impersonationLevel,
+            WbemImpersonationLevel impersonationLevel,
             [In]
-            AuthenticationLevel authenticationLevel);
+            WbemAuthenticationLevel authenticationLevel);
     }
 }

@@ -4,7 +4,7 @@
 
     internal static class IWbemServicesExtenions
     {
-        internal static void SetProxy(this IWbemServices wbemServices, ImpersonationLevel impersonationLevel, AuthenticationLevel authenticationLevel)
+        internal static void SetProxy(this IWbemServices wbemServices, WbemImpersonationLevel impersonationLevel, WbemAuthenticationLevel authenticationLevel)
         {
             HResult hr = WmiNetUtils.CoSetProxyBlanketForIWbemServices.Invoke(wbemServices, impersonationLevel, authenticationLevel);
             if (hr.Failed)
@@ -13,7 +13,7 @@
             }
         }
 
-        internal static IWbemClassObjectEnumerator ExecQuery(this IWbemServices wbemServices, string query, WbemClassObjectEnumeratorBehaviorOption enumeratorBehaviorOption, IWbemContext ctx)
+        internal static IWbemClassObjectEnumerator ExecQuery(this IWbemServices wbemServices, string query, WbemClassObjectEnumeratorBehaviorOptions enumeratorBehaviorOption, IWbemContext ctx)
         {
             HResult hr = wbemServices.ExecQuery("WQL", query, enumeratorBehaviorOption, ctx, out IWbemClassObjectEnumerator enumerator);
 
