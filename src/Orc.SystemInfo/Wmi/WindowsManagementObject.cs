@@ -10,7 +10,7 @@
     /// <summary>
     /// Represent object bound to wbem object
     /// </summary>
-    public class WmiObject : IDisposable
+    public class WindowsManagementObject : IDisposable
     {
         private const string ClassPropertyName = "__class";
         private const string DerivationPropertyName = "__derivation";
@@ -29,38 +29,38 @@
 
         private bool _disposed;
 
-        internal WmiObject(IWbemClassObject wmiObject)
+        internal WindowsManagementObject(IWbemClassObject wmiObject)
         {
             Argument.IsNotNull(() => wmiObject);
 
             _wbemClassObject = wmiObject;
         }
 
-        public string Class => (string)GetPropertyValue(WmiObject.ClassPropertyName);
+        public string Class => (string)GetValue(WindowsManagementObject.ClassPropertyName);
 
-        public string[] Derivation => (string[])GetPropertyValue(WmiObject.DerivationPropertyName);
+        public string[] Derivation => (string[])GetValue(WindowsManagementObject.DerivationPropertyName);
 
-        public string Dynasty => (string)GetPropertyValue(WmiObject.DynastyPropertyName);
+        public string Dynasty => (string)GetValue(WindowsManagementObject.DynastyPropertyName);
 
-        public WmiObjectGenus Genus => (WmiObjectGenus)GetPropertyValue(WmiObject.GenusPropertyName);
+        public WmiObjectGenus Genus => (WmiObjectGenus)GetValue(WindowsManagementObject.GenusPropertyName);
 
-        public string Namespace => (string)GetPropertyValue(WmiObject.NamespacePropertyName);
+        public string Namespace => (string)GetValue(WindowsManagementObject.NamespacePropertyName);
 
-        public string Path => (string)GetPropertyValue(WmiObject.PathPropertyName);
+        public string Path => (string)GetValue(WindowsManagementObject.PathPropertyName);
 
-        public int PropertyCount => (int)GetPropertyValue(WmiObject.PropertyCountPropertyName);
+        public int PropertyCount => (int)GetValue(WindowsManagementObject.PropertyCountPropertyName);
 
-        public string Relpath => (string)GetPropertyValue(WmiObject.RelpathPropertyName);
+        public string Relpath => (string)GetValue(WindowsManagementObject.RelpathPropertyName);
 
-        public string Server => (string)GetPropertyValue(WmiObject.ServerPropertyName);
+        public string Server => (string)GetValue(WindowsManagementObject.ServerPropertyName);
 
-        public string SuperClass => (string)GetPropertyValue(WmiObject.SuperClassPropertyName);
+        public string SuperClass => (string)GetValue(WindowsManagementObject.SuperClassPropertyName);
 
         public object this[string propertyName]
         {
             get
             {
-                return GetPropertyValue(propertyName);
+                return GetValue(propertyName);
             }
         }
 
@@ -79,15 +79,35 @@
             return _wbemClassObject.GetNames();
         }
 
-        public object GetPropertyValue(string propertyName)
+        public object GetValue(string propertyName)
         {
             ThrowIfDisposed();
             return _wbemClassObject.Get(propertyName);
         }
 
-        public TResult GetPropertyValue<TResult>(string propertyName)
+        public TResult GetValue<TResult>(string propertyName)
         {
-            return (TResult)GetPropertyValue(propertyName);
+            return (TResult)GetValue(propertyName);
+        }
+
+        public TResult GetValue<TResult>(string propertyName, Func<object, TResult> converterFunc)
+        {
+            TResult finalValue = default(TResult);
+
+            try
+            {
+                var value = GetValue(propertyName);
+                if (value is not null)
+                {
+                    finalValue = converterFunc(value);
+                }
+            }
+            catch (Exception)
+            {
+                // Ignore
+            }
+
+            return finalValue;
         }
 
         public override string ToString()
@@ -99,7 +119,7 @@
         {
             if (_disposed)
             {
-                throw Log.ErrorAndCreateException<ObjectDisposedException>(typeof(WmiObject).FullName);
+                throw Log.ErrorAndCreateException<ObjectDisposedException>(typeof(WindowsManagementObject).FullName);
             }
         }
     }

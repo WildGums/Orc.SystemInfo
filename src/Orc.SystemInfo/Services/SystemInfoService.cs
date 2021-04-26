@@ -29,7 +29,6 @@ namespace Orc.SystemInfo
         private readonly ILanguageService _languageService;
         private readonly IDbProvidersService _dbProviderService;
         private readonly ISystemInfoProvider _win32OperatingSystemSystemInfoProvider;
-        private readonly ISystemInfoProvider _win32ProcesorSystemInfoProvider;
         private readonly ISystemInfoProvider _wmiOperatingSystemSystemInfoProvider;
         private readonly ISystemInfoProvider _wmiProcesorSystemInfoProvider;
         public SystemInfoService(IDotNetFrameworkService dotNetFrameworkService, ILanguageService languageService, 
@@ -44,7 +43,6 @@ namespace Orc.SystemInfo
             _dbProviderService = dbProviderService;
 
             _win32OperatingSystemSystemInfoProvider = new Win32OperatingSystemSystemInfoProvider(languageService);
-            _win32ProcesorSystemInfoProvider = new Win32ProcessorSystemInfoProvider(languageService);
             _wmiOperatingSystemSystemInfoProvider = new WmiOperatingSystemSystemInfoProvider(languageService);
             _wmiProcesorSystemInfoProvider = new WmiProcessorSystemInfoProvider(languageService);
         }
@@ -80,7 +78,6 @@ namespace Orc.SystemInfo
 
             //________________________________________________________________________
 
-            items.AddRange(_win32ProcesorSystemInfoProvider.GetSystemInfoElements());
             items.AddRange(_wmiProcesorSystemInfoProvider.GetSystemInfoElements());
             //________________________________________________________________________
 

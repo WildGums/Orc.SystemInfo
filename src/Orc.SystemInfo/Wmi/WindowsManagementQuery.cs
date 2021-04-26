@@ -5,7 +5,7 @@
     using Catel;
     using Orc.SystemInfo.Win32;
 
-    public class WindowsManagementQuery : IEnumerable<WmiObject>
+    public class WindowsManagementQuery : IEnumerable<WindowsManagementObject>
     {
         private readonly string _wql;
         private readonly WindowsManagementConnection _connection;
@@ -27,7 +27,7 @@
 
         public WbemClassObjectEnumeratorBehaviorOptions EnumeratorBehaviorOption => _enumeratorBehaviorOptions;
 
-        public IEnumerator<WmiObject> GetEnumerator()
+        public IEnumerator<WindowsManagementObject> GetEnumerator()
         {
             return _connection.ExecuteQuery(this);
         }

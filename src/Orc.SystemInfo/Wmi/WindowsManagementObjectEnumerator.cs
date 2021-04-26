@@ -8,7 +8,7 @@
     using Catel.Logging;
     using Orc.SystemInfo.Win32;
 
-    public sealed class WindowsManagementObjectEnumerator : IEnumerator<WmiObject>
+    public sealed class WindowsManagementObjectEnumerator : IEnumerator<WindowsManagementObject>
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
@@ -25,7 +25,7 @@
             enumerator.Reset();
         }
 
-        public WmiObject Current { get; private set; }
+        public WindowsManagementObject Current { get; private set; }
 
         object IEnumerator.Current
         {
@@ -45,7 +45,7 @@
                 return false;
             }
 
-            Current = new WmiObject(currentWmiObject);
+            Current = new WindowsManagementObject(currentWmiObject);
             return true;
         }
 
