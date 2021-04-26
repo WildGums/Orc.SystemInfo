@@ -57,9 +57,9 @@
         ReturnImmediately = 0x00000010,
 
         /// <summary>
-        /// This flag causes a forward-only enumerator to be returned. 
+        /// This flag causes a forward-only enumerator to be returned.
         /// <para />
-        /// Forward-only enumerators are generally much faster and use less memory than conventional enumerators but do not allow calls to 
+        /// Forward-only enumerators are generally much faster and use less memory than conventional enumerators but do not allow calls to
         /// <see cref="IWbemClassObjectEnumerator.Clone"/> or <see cref="IWbemClassObjectEnumerator.Reset"/>.
         /// </summary>
         ForwardOnly = 0x00000020,
@@ -108,7 +108,7 @@
         OnlyIfFalse = unchecked(0x00000002),
 
         /// <summary>
-        /// Return only properties that have a qualifier of the name specified by the parameter <see name="IWbemClassObject.GetNames.qualifierName"/>, 
+        /// Return only properties that have a qualifier of the name specified by the parameter <see name="IWbemClassObject.GetNames.qualifierName"/>,
         /// and also have a value identical to the value specified by the <see name="IWbemClassObject.GetNames.qualifierValue"/> parameter. <para />
         /// </summary>
         OnlyIfIdentical = unchecked(0x00000003),
@@ -172,22 +172,22 @@
         IgnoreDefaultValues = 4,
 
         /// <summary>
-        /// Assume that the objects being compared are instances of the same class. 
+        /// Assume that the objects being compared are instances of the same class.
         /// Consequently, this option compares instance-related information only.
-        /// Use this flag to optimize performance. 
+        /// Use this flag to optimize performance.
         /// If the objects are not of the same class, the results are undefined.
         /// </summary>
         IgnoreClass = 8,
 
         /// <summary>
-        /// Compare string values in a case-insensitive manner. 
-        /// This applies both to strings and to qualifier values. 
+        /// Compare string values in a case-insensitive manner.
+        /// This applies both to strings and to qualifier values.
         /// Property and qualifier names are always compared in a case-insensitive manner whether this option is specified or not.
         /// </summary>
         IgnoreCase = 16,
 
         /// <summary>
-        /// Ignore qualifier flavors. 
+        /// Ignore qualifier flavors.
         /// This flag still takes qualifier values into account, but ignores flavor distinctions such as propagation rules and override restrictions (for more information, see <see url="http://msdn.microsoft.com/en-us/library/windows/desktop/aa392900(v=vs.85).aspx"/>).
         /// </summary>
         IgnoreFlavor = 32
@@ -271,7 +271,7 @@
         Impersonate = 3,
 
         /// <summary>
-        /// Delegate-level COM impersonation level that allows objects to permit other objects to use the credentials of the caller. 
+        /// Delegate-level COM impersonation level that allows objects to permit other objects to use the credentials of the caller.
         /// This level, which will work with WMI calls but may constitute an unnecessary security risk, is supported only under Windows 2000.
         /// </summary>
 
@@ -292,6 +292,82 @@
         /// Indicates instance. 
         /// </summary>
         Instance = 2
+    }
+
+    [System.Flags]
+    public enum LoadLibraryFlags : uint
+    {
+        None = 0,
+        DONT_RESOLVE_DLL_REFERENCES = 0x00000001,
+        LOAD_IGNORE_CODE_AUTHZ_LEVEL = 0x00000010,
+        LOAD_LIBRARY_AS_DATAFILE = 0x00000002,
+        LOAD_LIBRARY_AS_DATAFILE_EXCLUSIVE = 0x00000040,
+        LOAD_LIBRARY_AS_IMAGE_RESOURCE = 0x00000020,
+        LOAD_LIBRARY_SEARCH_APPLICATION_DIR = 0x00000200,
+        LOAD_LIBRARY_SEARCH_DEFAULT_DIRS = 0x00001000,
+        LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR = 0x00000100,
+        LOAD_LIBRARY_SEARCH_SYSTEM32 = 0x00000800,
+        LOAD_LIBRARY_SEARCH_USER_DIRS = 0x00000400,
+        LOAD_WITH_ALTERED_SEARCH_PATH = 0x00000008
+    }
+
+    [Flags]
+    public enum EnumeratorBehaviorOption
+    {
+        #region Description
+        /// <summary>
+        /// This option causes WMI to retain pointers to objects of the enumeration until the client releases the enumerator.
+        /// </summary>
+        #endregion
+        Bidirectional = WbemClassObjectEnumeratorBehaviorOption.Bidirectional,
+
+        #region Description
+        /// <summary>
+        /// This option is used for prototyping. It does not execute the query and instead returns an object that looks like a typical result object.
+        /// </summary>
+        #endregion
+        Prototype = WbemClassObjectEnumeratorBehaviorOption.Prototype,
+
+        #region Description
+        /// <summary>
+        /// This option causes this to be a semisynchronous call.
+        /// <para />
+        /// For more information, see <see url="http://msdn.microsoft.com/en-us/library/windows/desktop/aa384832(v=vs.85).aspx"/>.
+        /// </summary>
+        #endregion
+        ReturnImmediately = WbemClassObjectEnumeratorBehaviorOption.ReturnImmediately,
+
+        #region Description
+        /// <summary>
+        /// This flag causes a forward-only enumerator to be returned.
+        /// <para />
+        /// Forward-only enumerators are generally much faster and use less memory than conventional enumerators but do not allow calls to clone or reset the enumerator.
+        /// </summary>
+        #endregion
+        ForwardOnly = WbemClassObjectEnumeratorBehaviorOption.ForwardOnly,
+
+        #region Description
+        /// <summary>
+        /// This option causes direct access to the provider for the class specified without any regard to its parent class or subclasses.
+        /// </summary>
+        #endregion
+        DirectRead = WbemClassObjectEnumeratorBehaviorOption.DirectRead,
+
+        #region Description
+        /// <summary>
+        /// This option ensures that any returned objects have enough information in them so that the system properties, such as __PATH, __RELPATH, and __SERVER, are non-NULL.
+        /// </summary>
+        #endregion
+        EnsureLocatable = WbemClassObjectEnumeratorBehaviorOption.EnsureLocatable,
+
+        #region Description
+        /// <summary>
+        /// If this option is set, WMI retrieves the amended qualifiers stored in the localized namespace of the current connection's locale.
+        /// <para />
+        /// If not set, only the qualifiers stored in the immediate namespace are retrieved.
+        /// </summary>
+        #endregion
+        UseAmendedQualifiers = WbemClassObjectEnumeratorBehaviorOption.UseAmendedQualifiers
     }
 }
 
