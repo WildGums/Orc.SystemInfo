@@ -36,6 +36,10 @@ namespace Orc.SystemInfo
         string GetMachineId(string separator = "-", bool hashCombination = true);
         string GetMotherboardId();
     }
+    public interface ISystemInfoProvider
+    {
+        System.Collections.Generic.IEnumerable<Orc.SystemInfo.SystemInfoElement> GetSystemInfoElements();
+    }
     public interface ISystemInfoService
     {
         System.Collections.Generic.IEnumerable<Orc.SystemInfo.SystemInfoElement> GetSystemInfo();
@@ -47,8 +51,8 @@ namespace Orc.SystemInfo
     }
     public static class LongExtensions
     {
-        public static string ToReadableSize(this long value) { }
-        public static string ToReadableSize(this ulong value) { }
+        public static string ToReadableSize(this long value, int startUnitIndex = 0) { }
+        public static string ToReadableSize(this ulong value, int startUnitIndex = 0) { }
     }
     public static class ManagementBaseObjectExtensions
     {
@@ -79,10 +83,77 @@ namespace Orc.SystemInfo
         public SystemInfoService(Orc.SystemInfo.IDotNetFrameworkService dotNetFrameworkService, Catel.Services.ILanguageService languageService, Orc.SystemInfo.IDbProvidersService dbProviderService) { }
         public System.Collections.Generic.IEnumerable<Orc.SystemInfo.SystemInfoElement> GetSystemInfo() { }
     }
+    public class Win32OperatingSystemSystemInfoProvider : Orc.SystemInfo.ISystemInfoProvider
+    {
+        public Win32OperatingSystemSystemInfoProvider(Catel.Services.ILanguageService languageService) { }
+        public System.Collections.Generic.IEnumerable<Orc.SystemInfo.SystemInfoElement> GetSystemInfoElements() { }
+        public string ProcessorArchitectureString(ushort processorArchitecture) { }
+    }
+    public class Win32ProcessorSystemInfoProvider : Orc.SystemInfo.ISystemInfoProvider
+    {
+        public Win32ProcessorSystemInfoProvider(Catel.Services.ILanguageService languageService) { }
+        public System.Collections.Generic.IEnumerable<Orc.SystemInfo.SystemInfoElement> GetSystemInfoElements() { }
+    }
     public class WindowsManagementInformationService : Orc.SystemInfo.IWindowsManagementInformationService
     {
         public WindowsManagementInformationService() { }
         public string GetIdentifier(string wmiClass, string wmiProperty) { }
         public string GetIdentifier(string wmiClass, string wmiProperty, string additionalWmiToCheck, string additionalWmiToCheckValue) { }
+    }
+    public class WmiOperatingSystemSystemInfoProvider : Orc.SystemInfo.ISystemInfoProvider
+    {
+        public WmiOperatingSystemSystemInfoProvider(Catel.Services.ILanguageService languageService) { }
+        public System.Collections.Generic.IEnumerable<Orc.SystemInfo.SystemInfoElement> GetSystemInfoElements() { }
+    }
+    public class WmiProcessorSystemInfoProvider : Orc.SystemInfo.ISystemInfoProvider
+    {
+        public WmiProcessorSystemInfoProvider(Catel.Services.ILanguageService languageService) { }
+        public System.Collections.Generic.IEnumerable<Orc.SystemInfo.SystemInfoElement> GetSystemInfoElements() { }
+    }
+}
+namespace Orc.SystemInfo.Win32
+{
+    [System.Flags]
+    public enum EnumeratorBehaviorOption
+    {
+        Bidirectional = 0,
+        Prototype = 2,
+        ReturnImmediately = 16,
+        ForwardOnly = 32,
+        DirectRead = 512,
+        EnsureLocatable = 256,
+        UseAmendedQualifiers = 131072,
+    }
+    public static class IWbemClassObjectEnumeratorExtensions { }
+    [System.Flags]
+    public enum LoadLibraryFlags : uint
+    {
+        None = 0u,
+        DONT_RESOLVE_DLL_REFERENCES = 1u,
+        LOAD_IGNORE_CODE_AUTHZ_LEVEL = 16u,
+        LOAD_LIBRARY_AS_DATAFILE = 2u,
+        LOAD_LIBRARY_AS_DATAFILE_EXCLUSIVE = 64u,
+        LOAD_LIBRARY_AS_IMAGE_RESOURCE = 32u,
+        LOAD_LIBRARY_SEARCH_APPLICATION_DIR = 512u,
+        LOAD_LIBRARY_SEARCH_DEFAULT_DIRS = 4096u,
+        LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR = 256u,
+        LOAD_LIBRARY_SEARCH_SYSTEM32 = 2048u,
+        LOAD_LIBRARY_SEARCH_USER_DIRS = 1024u,
+        LOAD_WITH_ALTERED_SEARCH_PATH = 8u,
+    }
+    public class ProductTypeWindows
+    {
+        public System.Collections.Generic.Dictionary<int, string> ProductType;
+        public ProductTypeWindows() { }
+    }
+    public enum WbemConnectOption
+    {
+        None = 0,
+        UseMaxWait = 128,
+    }
+    public enum WmiObjectGenus
+    {
+        Class = 1,
+        Instance = 2,
     }
 }
