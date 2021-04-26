@@ -87,7 +87,7 @@
 
         public TResult GetValue<TResult>(string propertyName)
         {
-            return (TResult)GetValue(propertyName);
+             return (TResult)GetValue(propertyName);
         }
 
         public TResult GetValue<TResult>(string propertyName, Func<object, TResult> converterFunc)
