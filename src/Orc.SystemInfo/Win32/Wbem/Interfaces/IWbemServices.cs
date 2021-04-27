@@ -195,7 +195,7 @@
             [In, MarshalAs(UnmanagedType.BStr)]
             string query,
             [In]
-            WbemClassObjectEnumeratorBehaviorOption behaviorOption,
+            WbemClassObjectEnumeratorBehaviorOptions behaviorOption,
             [In]
             IWbemContext ctx,
             [Out]
@@ -208,7 +208,7 @@
             [In, MarshalAs(UnmanagedType.BStr)]
             string query,
             [In]
-            WbemClassObjectEnumeratorBehaviorOption behaviorOption,
+            WbemClassObjectEnumeratorBehaviorOptions behaviorOption,
             [In]
             IWbemContext ctx,
             [In]
@@ -221,7 +221,7 @@
             [In, MarshalAs(UnmanagedType.BStr)]
             string query,
             [In]
-            WbemClassObjectEnumeratorBehaviorOption behaviorOption,
+            WbemClassObjectEnumeratorBehaviorOptions behaviorOption,
             [In]
             IWbemContext ctx,
             [Out]
@@ -234,7 +234,7 @@
             [In, MarshalAs(UnmanagedType.BStr)]
             string query,
             [In]
-            WbemClassObjectEnumeratorBehaviorOption behaviorOption,
+            WbemClassObjectEnumeratorBehaviorOptions behaviorOption,
             [In]
             IWbemContext ctx,
             [In]

@@ -6,9 +6,9 @@
 
     internal static class IWbemClassObjectExtensions
     {
-        internal static IEnumerable<string> GetNames(this IWbemClassObject wbemClassObject, WbemConditionFlag flags = WbemConditionFlag.WBEM_FLAG_NONSYSTEM_ONLY)
+        internal static IEnumerable<string> GetNames(this IWbemClassObject wbemClassObject, WbemConditionFlag flags = WbemConditionFlag.NonSystemOnly)
         {
-            HResult hr = wbemClassObject.GetNames(null, flags, null, out string[] names);
+            var hr = wbemClassObject.GetNames(null, flags, null, out var names);
 
             if (hr.Failed)
             {
@@ -20,7 +20,7 @@
 
         internal static object Get(this IWbemClassObject wbemClassObjecthis, string propertyName)
         {
-            HResult hresult = wbemClassObjecthis.Get(propertyName, 0, out object value, out CimType type, out int flavor);
+            var hresult = wbemClassObjecthis.Get(propertyName, 0, out var value, out var type, out var flavor);
 
             if (hresult.Failed)
             {

@@ -10,119 +10,33 @@
 
     internal enum CimType
     {
-
-        /// <summary>
-        /// Invalid Type.
-        /// </summary>
-
-        None = 0,
-
-        /// <summary>
-        /// A signed 16-bit integer.
-        /// </summary>
-
-        SInt16 = 2,
-
-        /// <summary>
-        /// A signed 32-bit integer.
-        /// </summary>
-
-        SInt32 = 3,
-
-        /// <summary>
-        /// A floating-point 32-bit number.
-        /// </summary>
-
-        Real32 = 4,
-
-        /// <summary>
-        /// A floating point 64-bit number.
-        /// </summary>
-
-        Real64 = 5,
-
-        /// <summary>
-        /// A string.
-        /// </summary>
-
-        String = 8,
-
-        /// <summary>
-        /// A boolean.
-        /// </summary>
-
-        Boolean = 11,
-
-        /// <summary>
-        /// An embedded object.
-        /// <para />
-        /// Note that embedded objects differ from references in that the embedded object doesn't have a path and its lifetime is identical to the lifetime of the containing object.
-        /// </summary>
-
-        Object = 13,
-
-        /// <summary>
-        /// A signed 8-bit integer.
-        /// </summary>
-
-        SInt8 = 16,
-
-        /// <summary>
-        /// An unsigned 8-bit integer.
-        /// </summary>
-
-        UInt8 = 17,
-
-        /// <summary>
-        /// An unsigned 16-bit integer.
-        /// </summary>
-
-        UInt16 = 18,
-
-        /// <summary>
-        /// An unsigned 32-bit integer.
-        /// </summary>
-
-        UInt32 = 19,
-
-        /// <summary>
-        /// A signed 64-bit integer.
-        /// </summary>
-
-        SInt64 = 20,
-
-        /// <summary>
-        /// An unsigned 64-bit integer.
-        /// </summary>
-
-        UInt64 = 21,
-
-        /// <summary>
-        /// A date or time value, represented in a string in DMTF date/time format: yyyymmddHHMMSS.mmmmmmsUUU
-        /// <para>where:</para>
-        /// <para>yyyymmdd - is the date in year/month/day</para>
-        /// <para>HHMMSS - is the time in hours/minutes/seconds</para>
-        /// <para>mmmmmm - is the number of microseconds in 6 digits</para>
-        /// <para>sUUU - is a sign (+ or -) and a 3-digit UTC offset</para>
-        /// </summary>
-
-        DateTime = 101,
-
-        /// <summary>
-        /// A reference to another object. This is represented by a string containing the path to the referenced object.
-        /// </summary>
-
-        Reference = 102,
-
-        /// <summary>
-        /// A 16-bit character.
-        /// </summary>
-
-        Char16 = 103,
+        Illegal = 4095,    // 0xFFF
+        Empty = 0,    // 0x0
+        SInt8 = 16,    // 0x10
+        UInt8 = 17,    // 0x11
+        SInt16 = 2,    // 0x2
+        UInt16 = 18,    // 0x12
+        SInt32 = 3,    // 0x3
+        UInt32 = 19,    // 0x13
+        SInt64 = 20,    // 0x14
+        UInt64 = 21,    // 0x15
+        Real32 = 4,    // 0x4
+        Real64 = 5,    // 0x5
+        Boolean = 11,    // 0xB
+        String = 8,    // 0x8
+        Datetime = 101,    // 0x65
+        Reference = 102,    // 0x66
+        Char16 = 103,    // 0x67
+        Object = 13,    // 0xD
+        FlagArray = 8192    // 0x2000
     }
 
+    /// <summary>
+    /// Behavior of <see cref="IWbemServices"/> methods which in use of <see cref="IWbemClassObjectEnumerator"/>.
+    /// For more information, see <see url="https://docs.microsoft.com/en-us/windows/win32/api/wbemcli/nf-wbemcli-iwbemservices-execquery"/>
+    /// </summary>
     [Flags]
-    internal enum WbemClassObjectEnumeratorBehaviorOption : int
+    public enum WbemClassObjectEnumeratorBehaviorOptions : int
     {
 
         /// <summary>
@@ -169,259 +83,218 @@
     }
 
     /// <summary>
-    /// Describes the possible CIM types for properties, qualifiers, or method parameters.
+    /// Enumeration to specify a condition for the <see cref="IWbemClassObject.GetNames"/>() method. 
+    /// For more information, see <see url="https://docs.microsoft.com/en-us/windows/win32/api/wbemcli/nf-wbemcli-iwbemclassobject-getnames"/>
     /// </summary>
-    /// <summary>
-    /// Enumeration to specify a condition for the <see cref="IWbemClassObject.GetNames"/>() method.
-    /// </summary>
+    [Flags]
     internal enum WbemConditionFlag
     {
-
         /// <summary>
         /// Return all property names. <para />
         /// The <see name="IWbemClassObject.GetNames.qualifierName"/> and <see name="IWbemClassObject.GetNames.qualifierValue"/> parameters are not used.
         /// </summary>
-
-        WBEM_FLAG_ALWAYS = unchecked((int)0x00000000),
+        Always = unchecked(0x00000000),
 
         /// <summary>
         /// Return only properties that have a qualifier of the name specified by the parameter <see name="IWbemClassObject.GetNames.qualifierName"/>. <para />
         /// If this flag is used, you must specify <see name="IWbemClassObject.GetNames.qualifierName"/>.
         /// </summary>
-
-        WBEM_FLAG_ONLY_IF_TRUE = unchecked((int)0x00000001),
+        OnlyIfTrue = unchecked(0x00000001),
 
         /// <summary>
         /// Return only properties that do not have a qualifier of the name specified by the parameter <see name="IWbemClassObject.GetNames.qualifierName"/>. <para />
         /// If this flag is used, you must specify <see name="IWbemClassObject.GetNames.qualifierName"/>.
         /// </summary>
-
-        WBEM_FLAG_ONLY_IF_FALSE = unchecked((int)0x00000002),
+        OnlyIfFalse = unchecked(0x00000002),
 
         /// <summary>
         /// Return only properties that have a qualifier of the name specified by the parameter <see name="IWbemClassObject.GetNames.qualifierName"/>,
         /// and also have a value identical to the value specified by the <see name="IWbemClassObject.GetNames.qualifierValue"/> parameter. <para />
         /// </summary>
-
-        WBEM_FLAG_ONLY_IF_IDENTICAL = unchecked((int)0x00000003),
-
-        /// <summary>
-        /// Return only property names that are object references.
-        /// </summary>
-
-        WBEM_FLAG_KEYS_ONLY = unchecked((int)0x00000004),
+        OnlyIfIdentical = unchecked(0x00000003),
 
         /// <summary>
         /// Return only property names that are object references.
         /// </summary>
+        KeysOnly = unchecked(0x00000004),
 
-        WBEM_FLAG_REFS_ONLY = unchecked((int)0x00000008),
+        /// <summary>
+        /// Return only property names that are object references.
+        /// </summary>
+        RefsOnly = unchecked(0x00000008),
 
         /// <summary>
         /// Return only property names that belong to the derived-most class. Exclude properties from the parent class or parent classes.
         /// </summary>
-
-        WBEM_FLAG_LOCAL_ONLY = unchecked((int)0x00000010),
+        LocalOnly = unchecked(0x00000010),
 
         /// <summary>
         /// Return only property names that belong to the parent class or parent classes.
         /// </summary>
-
-        WBEM_FLAG_PROPAGATED_ONLY = unchecked((int)0x00000020),
+        PropagnatedOnly = unchecked(0x00000020),
 
         /// <summary>
         /// Return only system properties.
         /// </summary>
-
-        WBEM_FLAG_SYSTEM_ONLY = unchecked((int)0x00000030),
+        SystemOnly = unchecked(0x00000030),
 
         /// <summary>
         /// Return only property names that are not system properties.
         /// </summary>
-
-        WBEM_FLAG_NONSYSTEM_ONLY = unchecked((int)0x00000040),
-
+        NonSystemOnly = unchecked(0x00000040),
     }
 
-    #region Description
     /// <summary>
     /// Options for <see cref="IWbemClassObject"/> object comparison.
+    /// For more information, see <see url="https://docs.microsoft.com/en-us/windows/win32/api/wbemcli/ne-wbemcli-wbem_comparison_flag"/>
     /// </summary>
-    #endregion
     [Flags]
-    internal enum WbemClassObjectComparisonOption
+    internal enum WbemClassObjectComparisonOptions
     {
-        #region Description
         /// <summary>
         /// Considered all features.
         /// </summary>
-        #endregion
         IncludeAll = 0,
-        #region Description
+
         /// <summary>
         /// Ignore all qualifiers (including Key and Dynamic) in comparison.
         /// </summary>
-        #endregion
         IgnoreQualifiers = 1,
-        #region Description
+
         /// <summary>
         /// Ignore the source of the objects, namely the server and the namespace they came from, in comparison to other objects.
         /// </summary>
-        #endregion
         IgnoreObjectSource = 2,
-        #region Description
+
         /// <summary>
         /// Ignore default values of properties. This option is only meaningful when comparing classes.
         /// </summary>
-        #endregion
         IgnoreDefaultValues = 4,
-        #region Description
+
         /// <summary>
         /// Assume that the objects being compared are instances of the same class.
         /// Consequently, this option compares instance-related information only.
         /// Use this flag to optimize performance.
         /// If the objects are not of the same class, the results are undefined.
         /// </summary>
-        #endregion
         IgnoreClass = 8,
-        #region Description
+
         /// <summary>
         /// Compare string values in a case-insensitive manner.
         /// This applies both to strings and to qualifier values.
         /// Property and qualifier names are always compared in a case-insensitive manner whether this option is specified or not.
         /// </summary>
-        #endregion
         IgnoreCase = 16,
-        #region Description
+
         /// <summary>
         /// Ignore qualifier flavors.
         /// This flag still takes qualifier values into account, but ignores flavor distinctions such as propagation rules and override restrictions (for more information, see <see url="http://msdn.microsoft.com/en-us/library/windows/desktop/aa392900(v=vs.85).aspx"/>).
         /// </summary>
-        #endregion
         IgnoreFlavor = 32
     }
 
-    #region Description
     /// <summary>
     /// Describes the authentication level to be used to connect to WMI. This is used for the COM connection to WMI.
     /// </summary>
-    #endregion
-    // RPC AuthenticationLevel
-    internal enum AuthenticationLevel : int
+    internal enum WbemAuthenticationLevel : int
     {
-        #region Description
+
         /// <summary>
         /// The default COM authentication level. WMI uses the default Windows Authentication setting.
         /// </summary>
-        #endregion
         Default = 0,
-        #region Description
+
         /// <summary>
         /// No COM authentication.
         /// </summary>
-        #endregion
         None = 1,
-        #region Description
+
         /// <summary>
         /// Connect-level COM authentication.
         /// </summary>
-        #endregion
         Connect = 2,
-        #region Description
+
         /// <summary>
         /// Call-level COM authentication.
         /// </summary>
-        #endregion
         Call = 3,
-        #region Description
+
         /// <summary>
         /// Packet-level COM authentication.
         /// </summary>
-        #endregion
         Packet = 4,
-        #region Description
+
         /// <summary>
         /// Packet Integrity-level COM authentication.
         /// </summary>
-        #endregion
         PacketIntegrity = 5,
-        #region Description
+
         /// <summary>
         /// Packet Privacy-level COM authentication.
         /// </summary>
-        #endregion
         PacketPrivacy = 6,
-        #region Description
+
         /// <summary>
         /// The default COM authentication level. WMI uses the default Windows Authentication setting.
         /// </summary>
-        #endregion
         Unchanged = -1
     }
 
-    #region Description
     /// <summary>
     /// Describes the impersonation level to be used to connect to WMI.
     /// </summary>
-    #endregion
-    internal enum ImpersonationLevel : int
+    internal enum WbemImpersonationLevel : int
     {
-        #region Description
+
         /// <summary>
         /// Default impersonation.
         /// </summary>
-        #endregion
+
         Default = 0,
-        #region Description
+
         /// <summary>
         /// Anonymous COM impersonation level that hides the identity of the caller. Calls to WMI may fail with this impersonation level.
         /// </summary>
-        #endregion
+
         Anonymous = 1,
-        #region Description
+
         /// <summary>
         /// Identify-level COM impersonation level that allows objects to query the credentials of the caller. Calls to WMI may fail with this impersonation level.
         /// </summary>
-        #endregion
+
         Identify = 2,
-        #region Description
+
         /// <summary>
         /// Impersonate-level COM impersonation level that allows objects to use the credentials of the caller. This is the recommended impersonation level for WMI calls.
         /// </summary>
-        #endregion
+
         Impersonate = 3,
-        #region Description
+
         /// <summary>
         /// Delegate-level COM impersonation level that allows objects to permit other objects to use the credentials of the caller.
         /// This level, which will work with WMI calls but may constitute an unnecessary security risk, is supported only under Windows 2000.
         /// </summary>
-        #endregion
+
         Delegate = 4
     }
 
-    #region Description
     /// <summary>
-    /// Enumeration that is used to distinguish <see cref="WmiObjectGenus"/>s between classes and instances.
+    /// Contains constants used to distinguish between classes and instances.
     /// </summary>
-    #endregion
     public enum WmiObjectGenus
     {
-        #region Description
         /// <summary>
-        /// Indicates that the <see cref="WmiObjectGenus"/> is an class.
+        /// Indicates class. 
         /// </summary>
-        #endregion
         Class = 1,
 
-        #region Description
         /// <summary>
-        /// Indicates that the <see cref="WmiObjectGenus"/> is an instance or an event.
+        /// Indicates instance. 
         /// </summary>
-        #endregion
         Instance = 2
     }
 
-    [System.Flags]
+    [Flags]
     public enum LoadLibraryFlags : uint
     {
         None = 0,
@@ -436,65 +309,6 @@
         LOAD_LIBRARY_SEARCH_SYSTEM32 = 0x00000800,
         LOAD_LIBRARY_SEARCH_USER_DIRS = 0x00000400,
         LOAD_WITH_ALTERED_SEARCH_PATH = 0x00000008
-    }
-
-    [Flags]
-    public enum EnumeratorBehaviorOption
-    {
-        #region Description
-        /// <summary>
-        /// This option causes WMI to retain pointers to objects of the enumeration until the client releases the enumerator.
-        /// </summary>
-        #endregion
-        Bidirectional = WbemClassObjectEnumeratorBehaviorOption.Bidirectional,
-
-        #region Description
-        /// <summary>
-        /// This option is used for prototyping. It does not execute the query and instead returns an object that looks like a typical result object.
-        /// </summary>
-        #endregion
-        Prototype = WbemClassObjectEnumeratorBehaviorOption.Prototype,
-
-        #region Description
-        /// <summary>
-        /// This option causes this to be a semisynchronous call.
-        /// <para />
-        /// For more information, see <see url="http://msdn.microsoft.com/en-us/library/windows/desktop/aa384832(v=vs.85).aspx"/>.
-        /// </summary>
-        #endregion
-        ReturnImmediately = WbemClassObjectEnumeratorBehaviorOption.ReturnImmediately,
-
-        #region Description
-        /// <summary>
-        /// This flag causes a forward-only enumerator to be returned.
-        /// <para />
-        /// Forward-only enumerators are generally much faster and use less memory than conventional enumerators but do not allow calls to clone or reset the enumerator.
-        /// </summary>
-        #endregion
-        ForwardOnly = WbemClassObjectEnumeratorBehaviorOption.ForwardOnly,
-
-        #region Description
-        /// <summary>
-        /// This option causes direct access to the provider for the class specified without any regard to its parent class or subclasses.
-        /// </summary>
-        #endregion
-        DirectRead = WbemClassObjectEnumeratorBehaviorOption.DirectRead,
-
-        #region Description
-        /// <summary>
-        /// This option ensures that any returned objects have enough information in them so that the system properties, such as __PATH, __RELPATH, and __SERVER, are non-NULL.
-        /// </summary>
-        #endregion
-        EnsureLocatable = WbemClassObjectEnumeratorBehaviorOption.EnsureLocatable,
-
-        #region Description
-        /// <summary>
-        /// If this option is set, WMI retrieves the amended qualifiers stored in the localized namespace of the current connection's locale.
-        /// <para />
-        /// If not set, only the qualifiers stored in the immediate namespace are retrieved.
-        /// </summary>
-        #endregion
-        UseAmendedQualifiers = WbemClassObjectEnumeratorBehaviorOption.UseAmendedQualifiers
     }
 }
 

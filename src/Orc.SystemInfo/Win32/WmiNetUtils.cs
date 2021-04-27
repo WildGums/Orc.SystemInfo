@@ -24,11 +24,11 @@
 
         static WmiNetUtils()
         {
-            IntPtr loadLibrary = LoadDlls();
+            var loadLibrary = LoadDlls();
 
             if (loadLibrary != IntPtr.Zero)
             {
-                IntPtr procAddr = Kernel32.GetProcAddress(loadLibrary, "BlessIWbemServices");
+                var procAddr = Kernel32.GetProcAddress(loadLibrary, "BlessIWbemServices");
 
                 CoSetProxyBlanketForIWbemServices = (CoSetProxyBlanketForIWbemServicesFunction)Marshal.GetDelegateForFunctionPointer(procAddr, typeof(CoSetProxyBlanketForIWbemServicesFunction));
             }
@@ -84,7 +84,7 @@
                     var buf = new byte[sz];
                     while (true)
                     {
-                        int nRead = readStream.Read(buf, 0, sz);
+                        var nRead = readStream.Read(buf, 0, sz);
                         if (nRead < 1)
                             break;
                         writeStream.Write(buf, 0, nRead);
@@ -121,8 +121,8 @@
             [In, MarshalAs(UnmanagedType.Interface)]
             IWbemServices wbemServices,
             [In]
-            ImpersonationLevel impersonationLevel,
+            WbemImpersonationLevel impersonationLevel,
             [In]
-            AuthenticationLevel authenticationLevel);
+            WbemAuthenticationLevel authenticationLevel);
     }
 }

@@ -16,7 +16,7 @@
         /// <returns></returns>
         internal static IWbemServices ConnectServer(this IWbemLocator wbemLocator, string resource, IWbemContext ctx)
         {
-            HResult hr = wbemLocator.ConnectServer(resource, null, null, null, WbemConnectOption.None, null, ctx, out IWbemServices services);
+            var hr = wbemLocator.ConnectServer(resource, null, null, null, WbemConnectOption.None, null, ctx, out var services);
 
             if (hr.Failed)
             {

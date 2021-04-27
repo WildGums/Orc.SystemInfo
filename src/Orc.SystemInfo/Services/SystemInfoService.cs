@@ -11,14 +11,11 @@ namespace Orc.SystemInfo
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Globalization;
-    using System.Linq;
-    using System.Management;
-    using System.Text.RegularExpressions;
     using Catel;
+    using Catel.IoC;
     using Catel.Logging;
     using Catel.Services;
     using MethodTimer;
-    using Microsoft.Win32;
     using Win32;
 
     public class SystemInfoService : ISystemInfoService
@@ -28,25 +25,23 @@ namespace Orc.SystemInfo
         private readonly IDotNetFrameworkService _dotNetFrameworkService;
         private readonly ILanguageService _languageService;
         private readonly IDbProvidersService _dbProviderService;
-        private readonly ISystemInfoProvider _win32OperatingSystemSystemInfoProvider;
-        private readonly ISystemInfoProvider _win32ProcesorSystemInfoProvider;
         private readonly ISystemInfoProvider _wmiOperatingSystemSystemInfoProvider;
         private readonly ISystemInfoProvider _wmiProcesorSystemInfoProvider;
-        public SystemInfoService(IDotNetFrameworkService dotNetFrameworkService, ILanguageService languageService, 
-            IDbProvidersService dbProviderService)
+
+        public SystemInfoService(IDotNetFrameworkService dotNetFrameworkService, ILanguageService languageService,
+            IDbProvidersService dbProviderService, IServiceLocator serviceLocator)
         {
             Argument.IsNotNull(() => dotNetFrameworkService);
             Argument.IsNotNull(() => languageService);
             Argument.IsNotNull(() => dbProviderService);
+            Argument.IsNotNull(() => serviceLocator);
 
             _dotNetFrameworkService = dotNetFrameworkService;
             _languageService = languageService;
             _dbProviderService = dbProviderService;
 
-            _win32OperatingSystemSystemInfoProvider = new Win32OperatingSystemSystemInfoProvider(languageService);
-            _win32ProcesorSystemInfoProvider = new Win32ProcessorSystemInfoProvider(languageService);
-            _wmiOperatingSystemSystemInfoProvider = new WmiOperatingSystemSystemInfoProvider(languageService);
-            _wmiProcesorSystemInfoProvider = new WmiProcessorSystemInfoProvider(languageService);
+            _wmiOperatingSystemSystemInfoProvider = serviceLocator.ResolveType<ISystemInfoProvider>(Constants.CimNamespaces.OperatingSystem);
+            _wmiProcesorSystemInfoProvider = serviceLocator.ResolveType<ISystemInfoProvider>(Constants.CimNamespaces.Processor);
         }
 
         #region ISystemInfoService Members
@@ -56,8 +51,6 @@ namespace Orc.SystemInfo
         {
             Log.Debug("Retrieving system info");
 
-            var notAvailable = _languageService.GetString("SystemInfo_NotAvailable");
-               
             var items = new List<SystemInfoElement>();
 
             items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_UserName"), Environment.UserName));
@@ -65,11 +58,8 @@ namespace Orc.SystemInfo
             items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_MachineName"), Environment.MachineName));
             items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_OsVersion"), Environment.OSVersion.ToString()));
             items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_Version"), Environment.Version.ToString()));
-            
-            //________________________________________________________________________
-            items.AddRange(_win32OperatingSystemSystemInfoProvider.GetSystemInfoElements());
+
             items.AddRange(_wmiOperatingSystemSystemInfoProvider.GetSystemInfoElements());
-            //________________________________________________________________________
 
             var memStatus = new Kernel32.MemoryStatusEx();
             if (Kernel32.GlobalMemoryStatusEx(memStatus))
@@ -78,11 +68,7 @@ namespace Orc.SystemInfo
                 items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_AvailableMemory"), memStatus.ullAvailPhys.ToReadableSize()));
             }
 
-            //________________________________________________________________________
-
-            items.AddRange(_win32ProcesorSystemInfoProvider.GetSystemInfoElements());
             items.AddRange(_wmiProcesorSystemInfoProvider.GetSystemInfoElements());
-            //________________________________________________________________________
 
             items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_SystemUpTime"), GetSystemUpTime()));
             items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_ApplicationUpTime"), (DateTime.Now - Process.GetCurrentProcess().StartTime).ToString()));
