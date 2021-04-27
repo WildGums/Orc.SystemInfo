@@ -25,6 +25,9 @@ SOFTWARE.
 Additional licenses / components
 --------------------------------
 
+Parts of the imported code come from MSDN Examples or are a 
+stripped down version of the actual .NET implementation (MIT License)
+
 Some parts are based on other open-source components. Each component that is based 
 on another component has a reference to the original component including the original 
 license the code was delivered upon. Below is a list of other components / licenses.
