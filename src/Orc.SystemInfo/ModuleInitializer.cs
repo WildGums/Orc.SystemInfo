@@ -19,6 +19,8 @@ public static partial class ModuleInitializer
         serviceLocator.RegisterType<ISystemInfoService, SystemInfoService>();
         serviceLocator.RegisterType<ISystemIdentificationService, SystemIdentificationService>();
         serviceLocator.RegisterType<IWindowsManagementInformationService, WindowsManagementInformationService>();
+        serviceLocator.RegisterTypeWithTag<ISystemInfoProvider, WmiOperatingSystemSystemInfoProvider>("Win32_OperatingSystem");
+        serviceLocator.RegisterTypeWithTag<ISystemInfoProvider, WmiProcessorSystemInfoProvider>("Win32_Processor");
 
         var languageService = serviceLocator.ResolveType<ILanguageService>();
         languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.SystemInfo", "Orc.SystemInfo.Properties", "Resources"));

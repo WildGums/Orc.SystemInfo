@@ -12,6 +12,7 @@ namespace Orc.SystemInfo
     using System.Diagnostics;
     using System.Globalization;
     using Catel;
+    using Catel.IoC;
     using Catel.Logging;
     using Catel.Services;
     using MethodTimer;
@@ -28,18 +29,19 @@ namespace Orc.SystemInfo
         private readonly ISystemInfoProvider _wmiProcesorSystemInfoProvider;
 
         public SystemInfoService(IDotNetFrameworkService dotNetFrameworkService, ILanguageService languageService,
-            IDbProvidersService dbProviderService)
+            IDbProvidersService dbProviderService, IServiceLocator serviceLocator)
         {
             Argument.IsNotNull(() => dotNetFrameworkService);
             Argument.IsNotNull(() => languageService);
             Argument.IsNotNull(() => dbProviderService);
+            Argument.IsNotNull(() => serviceLocator);
 
             _dotNetFrameworkService = dotNetFrameworkService;
             _languageService = languageService;
             _dbProviderService = dbProviderService;
 
-            _wmiOperatingSystemSystemInfoProvider = new WmiOperatingSystemSystemInfoProvider(languageService);
-            _wmiProcesorSystemInfoProvider = new WmiProcessorSystemInfoProvider(languageService);
+            _wmiOperatingSystemSystemInfoProvider = serviceLocator.ResolveType<ISystemInfoProvider>("Win32_OperatingSystem");
+            _wmiProcesorSystemInfoProvider = serviceLocator.ResolveType<ISystemInfoProvider>("Win32_Processor");
         }
 
         #region ISystemInfoService Members
@@ -48,8 +50,6 @@ namespace Orc.SystemInfo
         public IEnumerable<SystemInfoElement> GetSystemInfo()
         {
             Log.Debug("Retrieving system info");
-
-            var notAvailable = _languageService.GetString("SystemInfo_NotAvailable");
 
             var items = new List<SystemInfoElement>();
 
@@ -67,7 +67,6 @@ namespace Orc.SystemInfo
                 items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_TotalMemory"), memStatus.ullTotalPhys.ToReadableSize()));
                 items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_AvailableMemory"), memStatus.ullAvailPhys.ToReadableSize()));
             }
-
 
             items.AddRange(_wmiProcesorSystemInfoProvider.GetSystemInfoElements());
 
