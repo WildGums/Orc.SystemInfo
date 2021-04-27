@@ -8,7 +8,7 @@
         internal static IWbemClassObject Next(this IWbemClassObjectEnumerator wbemClassObjectEnumerator)
         {
             uint count = 1;
-            HResult hresult = wbemClassObjectEnumerator.Next(Timeout.Infinite, count, out IWbemClassObject current, out _);
+            var hresult = wbemClassObjectEnumerator.Next(Timeout.Infinite, count, out var current, out _);
 
             if (hresult.Failed)
             {

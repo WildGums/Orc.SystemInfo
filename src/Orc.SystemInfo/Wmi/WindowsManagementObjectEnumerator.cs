@@ -39,7 +39,7 @@
         {
             ThrowIfDisposed();
 
-            IWbemClassObject currentWmiObject = _wbemClassObjectEnumerator.Next();
+            var currentWmiObject = _wbemClassObjectEnumerator.Next();
             if (currentWmiObject is null)
             {
                 return false;
@@ -53,7 +53,7 @@
         {
             ThrowIfDisposed();
 
-            HResult hresult = _wbemClassObjectEnumerator.Reset();
+            var hresult = _wbemClassObjectEnumerator.Reset();
             if (hresult.Failed)
             {
                 throw (Exception)hresult;

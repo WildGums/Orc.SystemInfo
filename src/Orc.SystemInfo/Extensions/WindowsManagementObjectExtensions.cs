@@ -19,12 +19,12 @@
             }
         }
 
-        public static string GetValue<TResult>(this WindowsManagementObject obj, string key, string defaultValue = null)
+        public static string GetValue<TValue>(this WindowsManagementObject obj, string key, string defaultValue = null)
         {
             try
             {
-                var result = obj.GetValue<TResult>(key);
-                if (EqualityComparer<TResult>.Default.Equals(result, default(TResult)))
+                var result = obj.GetValue<TValue>(key);
+                if (EqualityComparer<TValue>.Default.Equals(result, default(TValue)))
                 {
                     return defaultValue;
                 }

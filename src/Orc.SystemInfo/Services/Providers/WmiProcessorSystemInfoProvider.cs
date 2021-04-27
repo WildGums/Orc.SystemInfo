@@ -31,7 +31,7 @@
                 WindowsManagementObject cpu = null;
                 var wql = "SELECT * FROM Win32_Processor";
 
-                using (WindowsManagementConnection connection = new WindowsManagementConnection())
+                using (var connection = new WindowsManagementConnection())
                 {
                     cpu = connection.CreateQuery(wql).FirstOrDefault();
                 }

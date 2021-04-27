@@ -85,14 +85,14 @@
             return _wbemClassObject.Get(propertyName);
         }
 
-        public TResult GetValue<TResult>(string propertyName)
+        public TValue GetValue<TValue>(string propertyName)
         {
-             return (TResult)GetValue(propertyName);
+             return (TValue)GetValue(propertyName);
         }
 
-        public TResult GetValue<TResult>(string propertyName, Func<object, TResult> converterFunc)
+        public TValue GetValue<TValue>(string propertyName, Func<object, TValue> converterFunc)
         {
-            TResult finalValue = default(TResult);
+            var finalValue = default(TValue);
 
             try
             {

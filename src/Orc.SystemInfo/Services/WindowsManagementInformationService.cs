@@ -24,7 +24,7 @@ namespace Orc.SystemInfo
             var query = string.Format("SELECT {0}{1} FROM {2}", wmiProperty,
                 string.IsNullOrWhiteSpace(additionalWmiToCheck) ? string.Empty : string.Format(", {0}", additionalWmiToCheck), wmiClass);
 
-            using (WindowsManagementConnection connection = new WindowsManagementConnection())
+            using (var connection = new WindowsManagementConnection())
             {
                 foreach (var managementObject in connection.CreateQuery(query))
                 {

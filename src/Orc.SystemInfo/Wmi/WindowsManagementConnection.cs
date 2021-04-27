@@ -33,7 +33,7 @@
                     {
                         if (!_connected)
                         {
-                            WbemAuthenticationLevel authLevel = WbemAuthenticationLevel.PacketIntegrity;
+                            var authLevel = WbemAuthenticationLevel.PacketIntegrity;
 
                             _wbemServices = locator.ConnectServer(DefaultLocalRootPath, _context);
                             _wbemServices.SetProxy(WbemImpersonationLevel.Impersonate, authLevel);
@@ -90,7 +90,7 @@
             ThrowIfDisposed();
             Open();
 
-            IWbemClassObjectEnumerator enumerator = _wbemServices.ExecQuery(query.Wql, query.EnumeratorBehaviorOption, _context);
+            var enumerator = _wbemServices.ExecQuery(query.Wql, query.EnumeratorBehaviorOption, _context);
             return enumerator;
         }
 

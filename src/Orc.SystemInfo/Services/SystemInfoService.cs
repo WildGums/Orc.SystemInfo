@@ -40,8 +40,8 @@ namespace Orc.SystemInfo
             _languageService = languageService;
             _dbProviderService = dbProviderService;
 
-            _wmiOperatingSystemSystemInfoProvider = serviceLocator.ResolveType<ISystemInfoProvider>("Win32_OperatingSystem");
-            _wmiProcesorSystemInfoProvider = serviceLocator.ResolveType<ISystemInfoProvider>("Win32_Processor");
+            _wmiOperatingSystemSystemInfoProvider = serviceLocator.ResolveType<ISystemInfoProvider>(Constants.CimNamespaces.OperatingSystem);
+            _wmiProcesorSystemInfoProvider = serviceLocator.ResolveType<ISystemInfoProvider>(Constants.CimNamespaces.Processor);
         }
 
         #region ISystemInfoService Members

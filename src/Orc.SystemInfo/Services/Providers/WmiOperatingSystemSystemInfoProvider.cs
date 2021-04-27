@@ -28,7 +28,7 @@
                 WindowsManagementObject wmi = null;
                 var wql = "SELECT * FROM Win32_OperatingSystem";
 
-                using (WindowsManagementConnection connection = new WindowsManagementConnection())
+                using (var connection = new WindowsManagementConnection())
                 {
                     wmi = connection.CreateQuery(wql).FirstOrDefault();
                 }
