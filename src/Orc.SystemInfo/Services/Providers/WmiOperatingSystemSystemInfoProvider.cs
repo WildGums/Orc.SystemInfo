@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Management;
     using Catel.Logging;
     using Catel.Services;
     using Orc.SystemInfo.Wmi;
@@ -42,8 +41,6 @@
                 items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_OsName"), wmi.GetValue("Caption", notAvailable)));
                 // Note: can be retrieved from SystemInfo.wProcessorAchitecture
                 items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_Architecture"), wmi.GetValue("OSArchitecture", notAvailable)));
-                // __cpuid, see: https://docs.microsoft.com/ru-ru/cpp/intrinsics/cpuid-cpuidex?view=msvc-160;
-                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_ProcessorId"), wmi.GetValue("ProcessorId", notAvailable)));
                 items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_Build"), wmi.GetValue("BuildNumber", notAvailable)));
                 // Note: can be count from lpMaximumApplicationAddress (Kernel32.SystemInfo);
                 items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_MaxProcossRam"), (wmi.GetValue("MaxProcessMemorySize", Convert.ToInt64)).ToReadableSize(1))); // KB

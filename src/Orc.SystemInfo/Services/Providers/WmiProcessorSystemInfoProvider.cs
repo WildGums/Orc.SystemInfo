@@ -41,6 +41,8 @@
                     throw Log.ErrorAndCreateException<InvalidOperationException>($"Unexpected result from query: {wql}");
                 }
 
+                // __cpuid, see: https://docs.microsoft.com/ru-ru/cpp/intrinsics/cpuid-cpuidex?view=msvc-160;
+                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_ProcessorId"), cpu.GetValue("ProcessorId", notAvailable)));
                 items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_CpuName"), cpu.GetValue("Name", notAvailable)));
                 items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_Description"), cpu.GetValue("Caption", notAvailable)));
                 items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_AddressWidth"), cpu.GetValue<int>("AddressWidth", notAvailable)));
