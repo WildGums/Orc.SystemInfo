@@ -54,11 +54,6 @@ namespace Orc.SystemInfo
         public static string ToReadableSize(this long value, int startUnitIndex = 0) { }
         public static string ToReadableSize(this ulong value, int startUnitIndex = 0) { }
     }
-    public static class ManagementBaseObjectExtensions
-    {
-        public static long GetLongValue(this System.Management.ManagementBaseObject obj, string key) { }
-        public static string GetValue(this System.Management.ManagementBaseObject obj, string key, string defaultValue = null) { }
-    }
     public class SystemIdentificationService : Orc.SystemInfo.ISystemIdentificationService
     {
         public SystemIdentificationService(Orc.SystemInfo.IWindowsManagementInformationService windowsManagementInformationService) { }
@@ -80,25 +75,19 @@ namespace Orc.SystemInfo
     }
     public class SystemInfoService : Orc.SystemInfo.ISystemInfoService
     {
-        public SystemInfoService(Orc.SystemInfo.IDotNetFrameworkService dotNetFrameworkService, Catel.Services.ILanguageService languageService, Orc.SystemInfo.IDbProvidersService dbProviderService) { }
+        public SystemInfoService(Orc.SystemInfo.IDotNetFrameworkService dotNetFrameworkService, Catel.Services.ILanguageService languageService, Orc.SystemInfo.IDbProvidersService dbProviderService, Catel.IoC.IServiceLocator serviceLocator) { }
         public System.Collections.Generic.IEnumerable<Orc.SystemInfo.SystemInfoElement> GetSystemInfo() { }
-    }
-    public class Win32OperatingSystemSystemInfoProvider : Orc.SystemInfo.ISystemInfoProvider
-    {
-        public Win32OperatingSystemSystemInfoProvider(Catel.Services.ILanguageService languageService) { }
-        public System.Collections.Generic.IEnumerable<Orc.SystemInfo.SystemInfoElement> GetSystemInfoElements() { }
-        public string ProcessorArchitectureString(ushort processorArchitecture) { }
-    }
-    public class Win32ProcessorSystemInfoProvider : Orc.SystemInfo.ISystemInfoProvider
-    {
-        public Win32ProcessorSystemInfoProvider(Catel.Services.ILanguageService languageService) { }
-        public System.Collections.Generic.IEnumerable<Orc.SystemInfo.SystemInfoElement> GetSystemInfoElements() { }
     }
     public class WindowsManagementInformationService : Orc.SystemInfo.IWindowsManagementInformationService
     {
         public WindowsManagementInformationService() { }
         public string GetIdentifier(string wmiClass, string wmiProperty) { }
         public string GetIdentifier(string wmiClass, string wmiProperty, string additionalWmiToCheck, string additionalWmiToCheckValue) { }
+    }
+    public static class WindowsManagementObjectExtensions
+    {
+        public static string GetValue(this Orc.SystemInfo.Wmi.WindowsManagementObject obj, string key, string defaultValue = null) { }
+        public static string GetValue<TValue>(this Orc.SystemInfo.Wmi.WindowsManagementObject obj, string key, string defaultValue = null) { }
     }
     public class WmiOperatingSystemSystemInfoProvider : Orc.SystemInfo.ISystemInfoProvider
     {
@@ -113,17 +102,6 @@ namespace Orc.SystemInfo
 }
 namespace Orc.SystemInfo.Win32
 {
-    [System.Flags]
-    public enum EnumeratorBehaviorOption
-    {
-        Bidirectional = 0,
-        Prototype = 2,
-        ReturnImmediately = 16,
-        ForwardOnly = 32,
-        DirectRead = 512,
-        EnsureLocatable = 256,
-        UseAmendedQualifiers = 131072,
-    }
     public static class IWbemClassObjectEnumeratorExtensions { }
     [System.Flags]
     public enum LoadLibraryFlags : uint
@@ -141,10 +119,16 @@ namespace Orc.SystemInfo.Win32
         LOAD_LIBRARY_SEARCH_USER_DIRS = 1024u,
         LOAD_WITH_ALTERED_SEARCH_PATH = 8u,
     }
-    public class ProductTypeWindows
+    [System.Flags]
+    public enum WbemClassObjectEnumeratorBehaviorOptions
     {
-        public System.Collections.Generic.Dictionary<int, string> ProductType;
-        public ProductTypeWindows() { }
+        Bidirectional = 0,
+        Prototype = 2,
+        ReturnImmediately = 16,
+        ForwardOnly = 32,
+        DirectRead = 512,
+        EnsureLocatable = 256,
+        UseAmendedQualifiers = 131072,
     }
     public enum WbemConnectOption
     {
@@ -155,5 +139,51 @@ namespace Orc.SystemInfo.Win32
     {
         Class = 1,
         Instance = 2,
+    }
+}
+namespace Orc.SystemInfo.Wmi
+{
+    public sealed class WindowsManagementConnection : System.IDisposable
+    {
+        public WindowsManagementConnection() { }
+        public Orc.SystemInfo.Wmi.WindowsManagementQuery CreateQuery(string wql) { }
+        public void Dispose() { }
+        public Orc.SystemInfo.Wmi.WindowsManagementObjectEnumerator ExecuteQuery(Orc.SystemInfo.Wmi.WindowsManagementQuery query) { }
+        public void Open() { }
+    }
+    public class WindowsManagementObject : System.IDisposable
+    {
+        public string Class { get; }
+        public string[] Derivation { get; }
+        public string Dynasty { get; }
+        public Orc.SystemInfo.Win32.WmiObjectGenus Genus { get; }
+        public object this[string propertyName] { get; }
+        public string Namespace { get; }
+        public string Path { get; }
+        public int PropertyCount { get; }
+        public string Relpath { get; }
+        public string Server { get; }
+        public string SuperClass { get; }
+        public void Dispose() { }
+        public System.Collections.Generic.IEnumerable<string> GetPropertyNames() { }
+        public object GetValue(string propertyName) { }
+        public TValue GetValue<TValue>(string propertyName) { }
+        public TValue GetValue<TValue>(string propertyName, System.Func<object, TValue> converterFunc) { }
+        public override string ToString() { }
+    }
+    public sealed class WindowsManagementObjectEnumerator : System.Collections.Generic.IEnumerator<Orc.SystemInfo.Wmi.WindowsManagementObject>, System.Collections.IEnumerator, System.IDisposable
+    {
+        public Orc.SystemInfo.Wmi.WindowsManagementObject Current { get; }
+        public void Dispose() { }
+        public bool MoveNext() { }
+        public void Reset() { }
+    }
+    public class WindowsManagementQuery : System.Collections.Generic.IEnumerable<Orc.SystemInfo.Wmi.WindowsManagementObject>, System.Collections.IEnumerable
+    {
+        public WindowsManagementQuery(Orc.SystemInfo.Wmi.WindowsManagementConnection connection, string wql, Orc.SystemInfo.Win32.WbemClassObjectEnumeratorBehaviorOptions enumeratorBehaviorOptions = 16) { }
+        public Orc.SystemInfo.Wmi.WindowsManagementConnection Connection { get; }
+        public Orc.SystemInfo.Win32.WbemClassObjectEnumeratorBehaviorOptions EnumeratorBehaviorOption { get; }
+        public string Wql { get; }
+        public System.Collections.Generic.IEnumerator<Orc.SystemInfo.Wmi.WindowsManagementObject> GetEnumerator() { }
     }
 }
