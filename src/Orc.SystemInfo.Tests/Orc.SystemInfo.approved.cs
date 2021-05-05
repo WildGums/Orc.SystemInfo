@@ -143,15 +143,15 @@ namespace Orc.SystemInfo.Win32
 }
 namespace Orc.SystemInfo.Wmi
 {
-    public sealed class WindowsManagementConnection : System.IDisposable
+    public sealed class WindowsManagementConnection : Catel.Disposable
     {
         public WindowsManagementConnection() { }
         public Orc.SystemInfo.Wmi.WindowsManagementQuery CreateQuery(string wql) { }
-        public void Dispose() { }
+        protected override void DisposeUnmanaged() { }
         public Orc.SystemInfo.Wmi.WindowsManagementObjectEnumerator ExecuteQuery(Orc.SystemInfo.Wmi.WindowsManagementQuery query) { }
         public void Open() { }
     }
-    public class WindowsManagementObject : System.IDisposable
+    public class WindowsManagementObject : Catel.Disposable
     {
         public string Class { get; }
         public string[] Derivation { get; }
@@ -164,7 +164,7 @@ namespace Orc.SystemInfo.Wmi
         public string Relpath { get; }
         public string Server { get; }
         public string SuperClass { get; }
-        public void Dispose() { }
+        protected override void DisposeUnmanaged() { }
         public System.Collections.Generic.IEnumerable<string> GetPropertyNames() { }
         public object GetValue(string propertyName) { }
         public TValue GetValue<TValue>(string propertyName) { }
