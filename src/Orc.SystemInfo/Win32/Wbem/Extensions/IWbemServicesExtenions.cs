@@ -6,7 +6,7 @@
     {
         internal static void SetProxy(this IWbemServices wbemServices, WbemImpersonationLevel impersonationLevel, WbemAuthenticationLevel authenticationLevel)
         {
-            var hr = WmiNetUtils.CoSetProxyBlanketForIWbemServices.Invoke(wbemServices, impersonationLevel, authenticationLevel);
+            var hr = WmiNetUtils.BlessIWbemServices(wbemServices, impersonationLevel, authenticationLevel);
             if (hr.Failed)
             {
                 throw (Exception)hr;

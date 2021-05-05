@@ -10,7 +10,7 @@
     /// <summary>
     /// Represent object bound to wbem object
     /// </summary>
-    public class WindowsManagementObject : IDisposable
+    public class WindowsManagementObject : Disposable
     {
         private const string ClassPropertyName = "__class";
         private const string DerivationPropertyName = "__derivation";
@@ -23,11 +23,7 @@
         private const string ServerPropertyName = "__server";
         private const string SuperClassPropertyName = "__superclass";
 
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        
         private readonly IWbemClassObject _wbemClassObject;
-
-        private bool _disposed;
 
         internal WindowsManagementObject(IWbemClassObject wmiObject)
         {
@@ -64,30 +60,30 @@
             }
         }
 
-        public void Dispose()
+        protected override void DisposeUnmanaged()
         {
-            if (!_disposed)
+            base.DisposeUnmanaged();
+            if (_wbemClassObject is not null)
             {
                 Marshal.ReleaseComObject(_wbemClassObject);
-                _disposed = true;
             }
         }
 
         public IEnumerable<string> GetPropertyNames()
         {
-            ThrowIfDisposed();
+            CheckDisposed();
             return _wbemClassObject.GetNames();
         }
 
         public object GetValue(string propertyName)
         {
-            ThrowIfDisposed();
+            CheckDisposed();
             return _wbemClassObject.Get(propertyName);
         }
 
         public TValue GetValue<TValue>(string propertyName)
         {
-             return (TValue)GetValue(propertyName);
+            return (TValue)GetValue(propertyName);
         }
 
         public TValue GetValue<TValue>(string propertyName, Func<object, TValue> converterFunc)
@@ -113,14 +109,6 @@
         public override string ToString()
         {
             return Path ?? Class ?? string.Empty;
-        }
-
-        private void ThrowIfDisposed()
-        {
-            if (_disposed)
-            {
-                throw Log.ErrorAndCreateException<ObjectDisposedException>(typeof(WindowsManagementObject).FullName);
-            }
         }
     }
 }

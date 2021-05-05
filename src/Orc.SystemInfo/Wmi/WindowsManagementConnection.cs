@@ -6,15 +6,14 @@
     using Catel.Logging;
     using Orc.SystemInfo.Win32;
 
-    public sealed class WindowsManagementConnection : IDisposable
+    public sealed class WindowsManagementConnection : Disposable
     {
         private const string DefaultLocalRootPath = @"\\.\root\cimv2";
 
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private readonly object _lock = new object();
+        private readonly object _lock = new();
 
-        private bool _disposed;
         private bool _connected;
         private IWbemServices _wbemServices;
         private IWbemContext _context = null;
@@ -23,7 +22,7 @@
         {
             try
             {
-                ThrowIfDisposed();
+                CheckDisposed();
 
                 if (!_connected)
                 {
@@ -46,29 +45,24 @@
             catch (Exception ex)
             {
                 _context = null;
-                Dispose();
                 Log.Error(ex);
             }
         }
 
-        public void Dispose()
+        protected override void DisposeUnmanaged()
         {
-            ThrowIfDisposed();
+            base.DisposeUnmanaged();
 
-            if (_connected)
+            lock (_lock)
             {
-                lock (_lock)
+                if (_wbemServices is not null)
                 {
-                    if (_wbemServices is not null)
-                    {
-                        Marshal.ReleaseComObject(_wbemServices);
-                        _wbemServices = null;
-                    }
-                    _connected = false;
+                    Marshal.ReleaseComObject(_wbemServices);
+                    _wbemServices = null;
                 }
-            }
 
-            _disposed = true;
+                _connected = false;
+            }
         }
 
         public WindowsManagementQuery CreateQuery(string wql)
@@ -87,19 +81,11 @@
 
         internal IWbemClassObjectEnumerator InternalExecuteQuery(WindowsManagementQuery query)
         {
-            ThrowIfDisposed();
+            CheckDisposed();
             Open();
 
             var enumerator = _wbemServices.ExecQuery(query.Wql, query.EnumeratorBehaviorOption, _context);
             return enumerator;
-        }
-
-        private void ThrowIfDisposed()
-        {
-            if (_disposed)
-            {
-                throw Log.ErrorAndCreateException<ObjectDisposedException>(typeof(WindowsManagementConnection).FullName);
-            }
         }
     }
 }

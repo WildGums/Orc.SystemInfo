@@ -74,7 +74,7 @@ namespace Orc.SystemInfo.Win32
 
             public MemoryStatusEx()
             {
-                dwLength = (uint) Marshal.SizeOf(typeof (MemoryStatusEx));
+                dwLength = (uint)Marshal.SizeOf(typeof(MemoryStatusEx));
             }
         }
 
