@@ -10,7 +10,7 @@
     /// <summary>
     /// Represent object bound to wbem object
     /// </summary>
-    public class WindowsManagementObject : Catel.Disposable
+    public class WindowsManagementObject : Disposable
     {
         private const string ClassPropertyName = "__class";
         private const string DerivationPropertyName = "__derivation";
@@ -23,8 +23,6 @@
         private const string ServerPropertyName = "__server";
         private const string SuperClassPropertyName = "__superclass";
 
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        
         private readonly IWbemClassObject _wbemClassObject;
 
         internal WindowsManagementObject(IWbemClassObject wmiObject)
@@ -65,7 +63,7 @@
         protected override void DisposeUnmanaged()
         {
             base.DisposeUnmanaged();
-            if(_wbemClassObject is not null)
+            if (_wbemClassObject is not null)
             {
                 Marshal.ReleaseComObject(_wbemClassObject);
             }
@@ -85,7 +83,7 @@
 
         public TValue GetValue<TValue>(string propertyName)
         {
-             return (TValue)GetValue(propertyName);
+            return (TValue)GetValue(propertyName);
         }
 
         public TValue GetValue<TValue>(string propertyName, Func<object, TValue> converterFunc)

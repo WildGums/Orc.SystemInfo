@@ -11,11 +11,11 @@ namespace Orc.SystemInfo
 
     public static class LongExtensions
     {
-        private static readonly string[] SizeSuffixes = {"bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
+        private static readonly string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
 
         public static string ToReadableSize(this ulong value, int startUnitIndex = 0)
         {
-            return ToReadableSize((long) value, startUnitIndex);
+            return ToReadableSize((long)value, startUnitIndex);
         }
 
         public static string ToReadableSize(this long value, int startUnitIndex = 0)
@@ -27,9 +27,9 @@ namespace Orc.SystemInfo
 
             var i = startUnitIndex;
 
-            var finalValue = (decimal) value;
+            var finalValue = (decimal)value;
 
-            while (Math.Round(finalValue/1024) >= 1)
+            while (Math.Round(finalValue / 1024) >= 1)
             {
                 finalValue /= 1024;
                 i++;

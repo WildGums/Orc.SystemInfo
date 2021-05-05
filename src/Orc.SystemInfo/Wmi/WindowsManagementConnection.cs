@@ -6,13 +6,13 @@
     using Catel.Logging;
     using Orc.SystemInfo.Win32;
 
-    public sealed class WindowsManagementConnection : Catel.Disposable
+    public sealed class WindowsManagementConnection : Disposable
     {
         private const string DefaultLocalRootPath = @"\\.\root\cimv2";
 
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private readonly object _lock = new object();
+        private readonly object _lock = new();
 
         private bool _connected;
         private IWbemServices _wbemServices;
