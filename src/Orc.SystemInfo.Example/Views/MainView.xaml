@@ -16,7 +16,7 @@
 
         <orctheming:ThemeSwitcherView />
 
-        <orccontrols:TabControl LoadTabItems="LazyLoading">
+        <TabControl>
             <TabItem Header="System info">
                 <views:SystemInfoView />
             </TabItem>
@@ -24,7 +24,7 @@
             <TabItem Header="System identification">
                 <views:SystemIdentificationView />
             </TabItem>
-        </orccontrols:TabControl>
+        </TabControl>
 
         <orccontrols:LogViewerControl />
     </orccontrols:StackGrid>

@@ -3,4 +3,17 @@
   <MethodTimer />
   <Catel />
   <ModuleInit />
+  <Costura>
+    <IncludeAssemblies>
+    </IncludeAssemblies>
+    <IncludeRuntimeAssemblies>
+    </IncludeRuntimeAssemblies>
+    <Unmanaged32Assemblies>
+      WbemShim
+    </Unmanaged32Assemblies>
+    <Unmanaged64Assemblies>
+      WbemShim
+    </Unmanaged64Assemblies>
+  </Costura>
+  <Obsolete />
 </Weavers>
