@@ -11,7 +11,6 @@ namespace Orc.SystemInfo
     using System.Collections.Generic;
     using System.Security.Cryptography;
     using System.Text;
-
     using Catel;
     using Catel.Caching;
     using Catel.Logging;
