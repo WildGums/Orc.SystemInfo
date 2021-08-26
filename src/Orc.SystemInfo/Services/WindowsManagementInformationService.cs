@@ -8,6 +8,7 @@
 namespace Orc.SystemInfo
 {
     using System;
+    using System.Runtime.InteropServices;
     using Orc.SystemInfo.Wmi;
 
     public class WindowsManagementInformationService : IWindowsManagementInformationService
@@ -19,50 +20,57 @@ namespace Orc.SystemInfo
 
         public string GetIdentifier(string wmiClass, string wmiProperty, string additionalWmiToCheck, string additionalWmiToCheckValue)
         {
-            var result = string.Empty;
-
-            var query = string.Format("SELECT {0}{1} FROM {2}", wmiProperty,
-                string.IsNullOrWhiteSpace(additionalWmiToCheck) ? string.Empty : string.Format(", {0}", additionalWmiToCheck), wmiClass);
-
-            using (var connection = new WindowsManagementConnection())
+            try
             {
-                foreach (var managementObject in connection.CreateQuery(query))
+                var result = string.Empty;
+
+                var query = string.Format("SELECT {0}{1} FROM {2}", wmiProperty,
+                    string.IsNullOrWhiteSpace(additionalWmiToCheck) ? string.Empty : string.Format(", {0}", additionalWmiToCheck), wmiClass);
+
+                using (var connection = new WindowsManagementConnection())
                 {
-                    try
+                    foreach (var managementObject in connection.CreateQuery(query))
                     {
-                        if (!string.IsNullOrWhiteSpace(additionalWmiToCheck))
+                        try
                         {
-                            var wmiToCheckValue = managementObject.GetValue(additionalWmiToCheck, Convert.ToString);
-
-                            var wmiToCheckValueValue = additionalWmiToCheckValue;
-                            var invert = additionalWmiToCheckValue.StartsWith("!");
-                            if (invert)
+                            if (!string.IsNullOrWhiteSpace(additionalWmiToCheck))
                             {
-                                wmiToCheckValueValue = additionalWmiToCheckValue.Substring(1);
+                                var wmiToCheckValue = managementObject.GetValue(additionalWmiToCheck, Convert.ToString);
+
+                                var wmiToCheckValueValue = additionalWmiToCheckValue;
+                                var invert = additionalWmiToCheckValue.StartsWith("!");
+                                if (invert)
+                                {
+                                    wmiToCheckValueValue = additionalWmiToCheckValue.Substring(1);
+                                }
+
+                                var equals = string.Equals(wmiToCheckValue, wmiToCheckValueValue, StringComparison.OrdinalIgnoreCase);
+                                if ((!equals && !invert) || (equals && invert))
+                                {
+                                    continue;
+                                }
                             }
 
-                            var equals = string.Equals(wmiToCheckValue, wmiToCheckValueValue, StringComparison.OrdinalIgnoreCase);
-                            if ((!equals && !invert) || (equals && invert))
+                            var value = managementObject.GetValue(wmiProperty, Convert.ToString);
+                            if (value is not null)
                             {
-                                continue;
+                                result = value;
+                                break;
                             }
                         }
-
-                        var value = managementObject.GetValue(wmiProperty, Convert.ToString);
-                        if (value is not null)
+                        catch (Exception)
                         {
-                            result = value;
-                            break;
+                            return result;
                         }
-                    }
-                    catch (Exception)
-                    {
-                        // Ignore
                     }
                 }
-            }
 
-            return result;
+                return result;
+            }
+            catch (COMException)
+            {
+                return string.Empty;
+            }
         }
     }
 }
