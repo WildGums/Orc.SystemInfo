@@ -18,7 +18,7 @@
   <ItemGroup>
     <PackageReference Include="Catel.Core" Version="5.12.18" />
     <PackageReference Include="Catel.Fody" Version="4.7.0" PrivateAssets="all" />
-    <PackageReference Include="Costura.Fody" Version="5.5.0">
+    <PackageReference Include="Costura.Fody" Version="5.6.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
