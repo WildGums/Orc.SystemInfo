@@ -98,9 +98,11 @@ namespace Orc.SystemInfo
         {
             try
             {
-                var upTime = new PerformanceCounter("System", "System Up Time");
-                upTime.NextValue();
-                return TimeSpan.FromSeconds(upTime.NextValue()).ToString();
+                using (var upTime = new PerformanceCounter("System", "System Up Time"))
+                {
+                    upTime.NextValue();
+                    return TimeSpan.FromSeconds(upTime.NextValue()).ToString();
+                }
             }
             catch (Exception)
             {

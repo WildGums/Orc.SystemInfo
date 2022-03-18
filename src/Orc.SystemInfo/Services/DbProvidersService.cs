@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DbProvidersService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.SystemInfo
+﻿namespace Orc.SystemInfo
 {
     using System.Collections.Generic;
     using System.Data;
@@ -16,9 +9,12 @@ namespace Orc.SystemInfo
     {
         public IEnumerable<string> GetInstalledDbProviders()
         {
-            return DbProviderFactories.GetFactoryClasses().Rows.OfType<DataRow>()
-                .Select(x => x["InvariantName"]?.ToString())
-                .OrderBy(x => x);
+            using (var datatable = DbProviderFactories.GetFactoryClasses())
+            {
+                return datatable.Rows.OfType<DataRow>()
+                    .Select(x => x["InvariantName"]?.ToString())
+                    .OrderBy(x => x);
+            }
         }
     }
 }
