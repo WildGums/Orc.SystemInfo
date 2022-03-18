@@ -25,7 +25,9 @@
             enumerator.Reset();
         }
 
+#pragma warning disable IDISP002 // Dispose member
         public WindowsManagementObject Current { get; private set; }
+#pragma warning restore IDISP002 // Dispose member
 
         object IEnumerator.Current
         {
@@ -45,7 +47,9 @@
                 return false;
             }
 
+#pragma warning disable IDISP003 // Dispose previous before re-assigning
             Current = new WindowsManagementObject(currentWmiObject);
+#pragma warning restore IDISP003 // Dispose previous before re-assigning
             return true;
         }
 
