@@ -14,7 +14,7 @@
 
         public bool Failed => _value < 0;
 
-        public static implicit operator Exception(HResult hr)
+        public static implicit operator Exception?(HResult hr)
         {
             if (hr.Failed)
             {
@@ -59,7 +59,7 @@
             return _value.GetHashCode();
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is null)
             {
@@ -84,6 +84,15 @@
         public bool Equals(HResult hr)
         {
             return _value == hr._value;
+        }
+
+        public void ThrowIfFailed()
+        {
+            var ex = (Exception?)this;
+            if (ex is not null)
+            {
+                throw ex;
+            }
         }
     }
 }

@@ -1,19 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IdentificationViewModel.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.SystemInfo.Example.ViewModels
+﻿namespace Orc.SystemInfo.Example.ViewModels
 {
     using System;
     using System.Threading.Tasks;
-    using Catel;
     using Catel.Logging;
     using Catel.MVVM;
     using Catel.Services;
-    using Catel.Threading;
 
     public class SystemIdentificationViewModel : ViewModelBase
     {
@@ -24,7 +15,7 @@ namespace Orc.SystemInfo.Example.ViewModels
 
         public SystemIdentificationViewModel(ISystemIdentificationService systemIdentificationService, IDispatcherService dispatcherService)
         {
-            Argument.IsNotNull(() => systemIdentificationService);
+            ArgumentNullException.ThrowIfNull(systemIdentificationService);
 
             _systemIdentificationService = systemIdentificationService;
             _dispatcherService = dispatcherService;
@@ -32,17 +23,17 @@ namespace Orc.SystemInfo.Example.ViewModels
 
         public bool IsBusy { get; private set; }
 
-        public string MachineId { get; set; }
+        public string? MachineId { get; set; }
 
-        public string CpuId { get; set; }
+        public string? CpuId { get; set; }
 
-        public string GpuId { get; set; }
+        public string? GpuId { get; set; }
 
-        public string HardDriveId { get; set; }
+        public string? HardDriveId { get; set; }
 
-        public string MacId { get; set; }
+        public string? MacId { get; set; }
 
-        public string MotherboardId { get; set; }
+        public string? MotherboardId { get; set; }
 
         protected override async Task InitializeAsync()
         {
@@ -52,7 +43,7 @@ namespace Orc.SystemInfo.Example.ViewModels
 
             try
             {
-                await TaskShim.WhenAll(new[]
+                await Task.WhenAll(new[]
 {
                 SetValueAsync(() => _systemIdentificationService.GetCpuId(), x => CpuId = x),
                 SetValueAsync(() => _systemIdentificationService.GetGpuId(), x => GpuId = x),
@@ -63,7 +54,7 @@ namespace Orc.SystemInfo.Example.ViewModels
 
                 // Note: we calculate the machine id last because we don't want to cause "false timings" in our demo app (the machine id
                 // has to wait for all the others to finish so will take much longer then it actually does)
-                await TaskHelper.Run(() => SetValueAsync(() => _systemIdentificationService.GetMachineId(), x => MachineId = x), true);
+                await Task.Run(() => SetValueAsync(() => _systemIdentificationService.GetMachineId(), x => MachineId = x));
             }
             catch (Exception ex)
             {
@@ -77,7 +68,7 @@ namespace Orc.SystemInfo.Example.ViewModels
         {
             var value = string.Empty;
 
-            await TaskHelper.Run(() => value = retrievalFunc(), true);
+            await Task.Run(() => value = retrievalFunc());
 
             _dispatcherService.BeginInvokeIfRequired(() => setter(value));
         }

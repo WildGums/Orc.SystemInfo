@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Kernel32.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.SystemInfo.Win32
+﻿namespace Orc.SystemInfo.Win32
 {
     using System;
     using System.Runtime.InteropServices;
@@ -43,7 +36,7 @@ namespace Orc.SystemInfo.Win32
             public uint dwBuildNumber;
             public uint dwPlatformId;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
-            public string szCSDVersion;
+            public string? szCSDVersion;
             public UInt16 wServicePackMajor;
             public UInt16 wServicePackMinor;
             public UInt16 wSuiteMask;

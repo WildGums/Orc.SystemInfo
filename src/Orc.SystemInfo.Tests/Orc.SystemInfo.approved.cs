@@ -1,4 +1,5 @@
 ﻿[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Orc.SystemInfo.Tests")]
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
 [assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v6.0", FrameworkDisplayName="")]
 public static class ModuleInitializer
@@ -47,7 +48,7 @@ namespace Orc.SystemInfo
     public interface IWindowsManagementInformationService
     {
         string GetIdentifier(string wmiClass, string wmiProperty);
-        string GetIdentifier(string wmiClass, string wmiProperty, string additionalWmiToCheck, string additionalWmiToCheckValue);
+        string GetIdentifier(string wmiClass, string wmiProperty, string? additionalWmiToCheck, string? additionalWmiToCheckValue);
     }
     public static class LongExtensions
     {
@@ -57,13 +58,13 @@ namespace Orc.SystemInfo
     public class SystemIdentificationService : Orc.SystemInfo.ISystemIdentificationService
     {
         public SystemIdentificationService(Orc.SystemInfo.IWindowsManagementInformationService windowsManagementInformationService) { }
+        protected virtual string CalculateHash(string input) { }
         public virtual string GetCpuId() { }
         public virtual string GetGpuId() { }
         public virtual string GetHardDriveId() { }
         public virtual string GetMacId() { }
         public virtual string GetMachineId(string separator = "-", bool hashCombination = true) { }
         public virtual string GetMotherboardId() { }
-        protected static string CalculateMd5Hash(string input) { }
     }
     public class SystemInfoElement
     {
@@ -82,12 +83,14 @@ namespace Orc.SystemInfo
     {
         public WindowsManagementInformationService() { }
         public string GetIdentifier(string wmiClass, string wmiProperty) { }
-        public string GetIdentifier(string wmiClass, string wmiProperty, string additionalWmiToCheck, string additionalWmiToCheckValue) { }
+        public string GetIdentifier(string wmiClass, string wmiProperty, string? additionalWmiToCheck, string? additionalWmiToCheckValue) { }
     }
     public static class WindowsManagementObjectExtensions
     {
-        public static string GetValue(this Orc.SystemInfo.Wmi.WindowsManagementObject obj, string key, string defaultValue = null) { }
-        public static string GetValue<TValue>(this Orc.SystemInfo.Wmi.WindowsManagementObject obj, string key, string defaultValue = null) { }
+        public static string GetRequiredValue(this Orc.SystemInfo.Wmi.WindowsManagementObject obj, string key, string defaultValue = "") { }
+        public static string GetRequiredValue<TValue>(this Orc.SystemInfo.Wmi.WindowsManagementObject obj, string key, string defaultValue = "") { }
+        public static string? GetValue(this Orc.SystemInfo.Wmi.WindowsManagementObject obj, string key, string? defaultValue = null) { }
+        public static string? GetValue<TValue>(this Orc.SystemInfo.Wmi.WindowsManagementObject obj, string key, string? defaultValue = null) { }
     }
     public class WmiOperatingSystemSystemInfoProvider : Orc.SystemInfo.ISystemInfoProvider
     {
@@ -153,37 +156,37 @@ namespace Orc.SystemInfo.Wmi
     }
     public class WindowsManagementObject : Catel.Disposable
     {
-        public string Class { get; }
-        public string[] Derivation { get; }
-        public string Dynasty { get; }
-        public Orc.SystemInfo.Win32.WmiObjectGenus Genus { get; }
-        public object this[string propertyName] { get; }
-        public string Namespace { get; }
-        public string Path { get; }
-        public int PropertyCount { get; }
-        public string Relpath { get; }
-        public string Server { get; }
-        public string SuperClass { get; }
+        public string? Class { get; }
+        public string[]? Derivation { get; }
+        public string? Dynasty { get; }
+        public Orc.SystemInfo.Win32.WmiObjectGenus? Genus { get; }
+        public object? this[string propertyName] { get; }
+        public string? Namespace { get; }
+        public string? Path { get; }
+        public int? PropertyCount { get; }
+        public string? Relpath { get; }
+        public string? Server { get; }
+        public string? SuperClass { get; }
         protected override void DisposeUnmanaged() { }
         public System.Collections.Generic.IEnumerable<string> GetPropertyNames() { }
-        public object GetValue(string propertyName) { }
-        public TValue GetValue<TValue>(string propertyName) { }
-        public TValue GetValue<TValue>(string propertyName, System.Func<object, TValue> converterFunc) { }
+        public object? GetValue(string propertyName) { }
+        public TValue? GetValue<TValue>(string propertyName) { }
+        public TValue? GetValue<TValue>(string propertyName, System.Func<object, TValue> converterFunc) { }
         public override string ToString() { }
     }
-    public sealed class WindowsManagementObjectEnumerator : System.Collections.Generic.IEnumerator<Orc.SystemInfo.Wmi.WindowsManagementObject>, System.Collections.IEnumerator, System.IDisposable
+    public sealed class WindowsManagementObjectEnumerator : System.Collections.Generic.IEnumerator<Orc.SystemInfo.Wmi.WindowsManagementObject?>, System.Collections.IEnumerator, System.IDisposable
     {
-        public Orc.SystemInfo.Wmi.WindowsManagementObject Current { get; }
+        public Orc.SystemInfo.Wmi.WindowsManagementObject? Current { get; }
         public void Dispose() { }
         public bool MoveNext() { }
         public void Reset() { }
     }
-    public class WindowsManagementQuery : System.Collections.Generic.IEnumerable<Orc.SystemInfo.Wmi.WindowsManagementObject>, System.Collections.IEnumerable
+    public class WindowsManagementQuery : System.Collections.Generic.IEnumerable<Orc.SystemInfo.Wmi.WindowsManagementObject?>, System.Collections.IEnumerable
     {
         public WindowsManagementQuery(Orc.SystemInfo.Wmi.WindowsManagementConnection connection, string wql, Orc.SystemInfo.Win32.WbemClassObjectEnumeratorBehaviorOptions enumeratorBehaviorOptions = 16) { }
         public Orc.SystemInfo.Wmi.WindowsManagementConnection Connection { get; }
         public Orc.SystemInfo.Win32.WbemClassObjectEnumeratorBehaviorOptions EnumeratorBehaviorOption { get; }
         public string Wql { get; }
-        public System.Collections.Generic.IEnumerator<Orc.SystemInfo.Wmi.WindowsManagementObject> GetEnumerator() { }
+        public System.Collections.Generic.IEnumerator<Orc.SystemInfo.Wmi.WindowsManagementObject?> GetEnumerator() { }
     }
 }

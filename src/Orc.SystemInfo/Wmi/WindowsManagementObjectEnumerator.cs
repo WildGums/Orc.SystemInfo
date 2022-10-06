@@ -6,9 +6,10 @@
     using System.Runtime.InteropServices;
     using Catel;
     using Catel.Logging;
+    using Catel.Reflection;
     using Orc.SystemInfo.Win32;
 
-    public sealed class WindowsManagementObjectEnumerator : IEnumerator<WindowsManagementObject>
+    public sealed class WindowsManagementObjectEnumerator : IEnumerator<WindowsManagementObject?>
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
@@ -18,7 +19,7 @@
 
         internal WindowsManagementObjectEnumerator(IWbemClassObjectEnumerator enumerator)
         {
-            Argument.IsNotNull(() => enumerator);
+            ArgumentNullException.ThrowIfNull(enumerator);
 
             _wbemClassObjectEnumerator = enumerator;
 
@@ -26,10 +27,10 @@
         }
 
 #pragma warning disable IDISP002 // Dispose member
-        public WindowsManagementObject Current { get; private set; }
+        public WindowsManagementObject? Current { get; private set; }
 #pragma warning restore IDISP002 // Dispose member
 
-        object IEnumerator.Current
+        object? IEnumerator.Current
         {
             get
             {
@@ -60,7 +61,7 @@
             var hresult = _wbemClassObjectEnumerator.Reset();
             if (hresult.Failed)
             {
-                throw (Exception)hresult;
+                hresult.ThrowIfFailed();
             }
         }
 
@@ -81,7 +82,7 @@
         {
             if (_disposed)
             {
-                throw Log.ErrorAndCreateException<ObjectDisposedException>(typeof(WindowsManagementObjectEnumerator).FullName);
+                throw Log.ErrorAndCreateException<ObjectDisposedException>(typeof(WindowsManagementObjectEnumerator).GetSafeFullName());
             }
         }
     }

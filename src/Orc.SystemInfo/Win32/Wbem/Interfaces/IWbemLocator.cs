@@ -11,17 +11,17 @@
         [PreserveSig]
         HResult ConnectServer(
             [In, MarshalAs(UnmanagedType.BStr)]
-            string networkResource,
+            string? networkResource,
             [In, MarshalAs(UnmanagedType.BStr)]
-            string userName,
+            string? userName,
             [In, MarshalAs(UnmanagedType.BStr)]
-            string userPassword,
+            string? userPassword,
             [In, MarshalAs(UnmanagedType.BStr)]
-            string locale,
+            string? locale,
             [In]
             WbemConnectOption wbemConnectOption,
             [In, MarshalAs(UnmanagedType.BStr)]
-            string authority,
+            string? authority,
             [In, MarshalAs(UnmanagedType.Interface)]
             IWbemContext ctx,
             [Out, MarshalAs(UnmanagedType.Interface)]

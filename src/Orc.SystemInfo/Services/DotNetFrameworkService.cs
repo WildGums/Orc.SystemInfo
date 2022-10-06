@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DotNetFrameworkService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.SystemInfo
+﻿namespace Orc.SystemInfo
 {
     using System;
     using System.Collections.Generic;
@@ -33,15 +26,21 @@ namespace Orc.SystemInfo
                 using (var ndpKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, string.Empty)
                     .OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\"))
                 {
-                    foreach (var versionKeyName in ndpKey.GetSubKeyNames().Where(x => x.StartsWith("v")))
+                    if (ndpKey is not null)
                     {
-                        using (var versionKey = ndpKey.OpenSubKey(versionKeyName))
+                        foreach (var versionKeyName in ndpKey.GetSubKeyNames().Where(x => x.StartsWith("v")))
                         {
-                            foreach (var fullName in BuildFrameworkNamesRecursively(versionKey, versionKeyName, topLevel: true))
+                            using (var versionKey = ndpKey.OpenSubKey(versionKeyName))
                             {
-                                if (!string.IsNullOrWhiteSpace(fullName))
+                                if (versionKey is not null)
                                 {
-                                    versions.Add(fullName);
+                                    foreach (var fullName in BuildFrameworkNamesRecursively(versionKey, versionKeyName, topLevel: true))
+                                    {
+                                        if (!string.IsNullOrWhiteSpace(fullName))
+                                        {
+                                            versions.Add(fullName);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -58,7 +57,7 @@ namespace Orc.SystemInfo
 
         protected IEnumerable<string> BuildFrameworkNamesRecursively(RegistryKey registryKey, string name, string topLevelSp = "0", bool topLevel = false)
         {
-            Argument.IsNotNull(() => registryKey);
+            ArgumentNullException.ThrowIfNull(registryKey);
             Argument.IsNotNullOrEmpty(() => name);
             Argument.IsNotNullOrEmpty(() => topLevelSp);
 
@@ -69,9 +68,9 @@ namespace Orc.SystemInfo
 
             var fullVersion = string.Empty;
 
-            var version = (string)registryKey.GetValue("Version", string.Empty);
-            var sp = registryKey.GetValue("SP", "0").ToString();
-            var install = registryKey.GetValue("Install", string.Empty).ToString();
+            var version = (string?)registryKey.GetValue("Version", string.Empty);
+            var sp = registryKey.GetValue("SP", "0")?.ToString();
+            var install = registryKey.GetValue("Install", string.Empty)?.ToString();
 
             if (string.Equals(sp, "0"))
             {
@@ -90,14 +89,21 @@ namespace Orc.SystemInfo
             var topLevelInitialized = !topLevel || !string.IsNullOrEmpty(fullVersion);
 
             var subnamesCount = 0;
-            foreach (var subKeyName in registryKey.GetSubKeyNames().Where(x => Regex.IsMatch(x, @"^\d{4}$|^Client$|^Full$")))
+
+            if (sp is not null)
             {
-                using (var subKey = registryKey.OpenSubKey(subKeyName))
+                foreach (var subKeyName in registryKey.GetSubKeyNames().Where(x => Regex.IsMatch(x, @"^\d{4}$|^Client$|^Full$")))
                 {
-                    foreach (var subName in BuildFrameworkNamesRecursively(subKey, string.Format("{0} {1}", name, subKeyName), sp, !topLevelInitialized))
+                    using (var subKey = registryKey.OpenSubKey(subKeyName))
                     {
-                        yield return subName;
-                        subnamesCount++;
+                        if (subKey is not null)
+                        {
+                            foreach (var subName in BuildFrameworkNamesRecursively(subKey, string.Format("{0} {1}", name, subKeyName), sp, !topLevelInitialized))
+                            {
+                                yield return subName;
+                                subnamesCount++;
+                            }
+                        }
                     }
                 }
             }

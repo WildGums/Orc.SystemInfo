@@ -22,7 +22,7 @@ public static partial class ModuleInitializer
         serviceLocator.RegisterTypeWithTag<ISystemInfoProvider, WmiOperatingSystemSystemInfoProvider>(Constants.CimNamespaces.OperatingSystem);
         serviceLocator.RegisterTypeWithTag<ISystemInfoProvider, WmiProcessorSystemInfoProvider>(Constants.CimNamespaces.Processor);
 
-        var languageService = serviceLocator.ResolveType<ILanguageService>();
+        var languageService = serviceLocator.ResolveRequiredType<ILanguageService>();
         languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.SystemInfo", "Orc.SystemInfo.Properties", "Resources"));
     }
 }
