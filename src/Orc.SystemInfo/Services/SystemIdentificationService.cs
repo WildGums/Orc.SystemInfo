@@ -7,14 +7,13 @@
 
 namespace Orc.SystemInfo
 {
-    using System;
     using System.Collections.Generic;
     using System.Security.Cryptography;
     using System.Text;
+    using System.Threading.Tasks;
     using Catel;
     using Catel.Caching;
     using Catel.Logging;
-    using Catel.Threading;
     using MethodTimer;
 
     public class SystemIdentificationService : ISystemIdentificationService
@@ -47,14 +46,16 @@ namespace Orc.SystemInfo
                 var hddId = string.Empty;
                 var gpuId = string.Empty;
 
-                TaskHelper.RunAndWait(new Action[]
+                var tasks = new List<Task>
                 {
-                    () => cpuId = "CPU >> " + GetCpuId(),
-                    () => motherboardId = "BASE >> " + GetMotherboardId(),
-                    () => hddId = "HDD >> " + GetHardDriveId(),
-                    () => gpuId = "GPU >> " + GetGpuId(),
-                    //() => gpuId = "MAC >> " + _systemIdentificationService.GetMacId(),
-                });
+                    Task.Run(() => cpuId = "CPU >> " + GetCpuId()),
+                    Task.Run(() => motherboardId = "BASE >> " + GetMotherboardId()),
+                    Task.Run(() => hddId = "HDD >> " + GetHardDriveId()),
+                    Task.Run(() => gpuId = "GPU >> " + GetGpuId()),
+                    // Task.Run(() => gpuId = "MAC >> " + _systemIdentificationService.GetMacId())
+                };
+
+                Task.WaitAll(tasks.ToArray());
 
                 var values = new List<string>(new[]
                 {
