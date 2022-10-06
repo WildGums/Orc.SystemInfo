@@ -85,5 +85,14 @@
         {
             return _value == hr._value;
         }
+
+        public void ThrowIfFailed()
+        {
+            var ex = (Exception?)this;
+            if (ex is not null)
+            {
+                throw ex;
+            }
+        }
     }
 }

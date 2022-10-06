@@ -10,6 +10,6 @@
     {
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-        public virtual extern HResult ConnectServer(string networkResource, string userName, string userPassword, string locale, WbemConnectOption wbemConnectOption, string authority, IWbemContext ctx, out IWbemServices wbemServices);
+        public virtual extern HResult ConnectServer(string? networkResource, string? userName, string? userPassword, string? locale, WbemConnectOption wbemConnectOption, string? authority, IWbemContext ctx, out IWbemServices wbemServices);
     }
 }

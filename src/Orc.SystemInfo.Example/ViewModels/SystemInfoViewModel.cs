@@ -1,19 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SystemInfoViewModel.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.SystemInfo.Example.ViewModels
+﻿namespace Orc.SystemInfo.Example.ViewModels
 {
     using System;
     using System.Linq;
     using System.Threading.Tasks;
-    using Catel;
     using Catel.Logging;
     using Catel.MVVM;
-    using Catel.Threading;
 
     public class SystemInfoViewModel : ViewModelBase
     {
@@ -23,14 +14,14 @@ namespace Orc.SystemInfo.Example.ViewModels
 
         public SystemInfoViewModel(ISystemInfoService systemInfoService)
         {
-            Argument.IsNotNull(() => systemInfoService);
+            ArgumentNullException.ThrowIfNull(systemInfoService);
 
             _systemInfoService = systemInfoService;
         }
 
         public bool IsBusy { get; private set; }
 
-        public string SystemInfo { get; set; }
+        public string? SystemInfo { get; set; }
 
         protected override async Task InitializeAsync()
         {
@@ -40,7 +31,7 @@ namespace Orc.SystemInfo.Example.ViewModels
 
             try
             {
-                var systemInfo = await TaskHelper.Run(() => _systemInfoService.GetSystemInfo(), true);
+                var systemInfo = await Task.Run(() => _systemInfoService.GetSystemInfo());
                 var systemInfoLines = systemInfo.Select(x => string.Format("{0} {1}", x.Name, x.Value));
                 SystemInfo = string.Join("\n", systemInfoLines);
             }

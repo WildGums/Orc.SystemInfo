@@ -15,8 +15,8 @@
         private readonly object _lock = new();
 
         private bool _connected;
-        private IWbemServices _wbemServices;
-        private IWbemContext _context = null;
+        private IWbemServices? _wbemServices;
+        private IWbemContext? _context = null;
 
         public void Open()
         {
@@ -26,7 +26,7 @@
 
                 if (!_connected)
                 {
-                    IWbemLocator locator = new WbemLocator();
+                    var locator = new WbemLocator();
 
                     lock (_lock)
                     {
@@ -34,7 +34,13 @@
                         {
                             var authLevel = WbemAuthenticationLevel.PacketIntegrity;
 
-                            _wbemServices = locator.ConnectServer(DefaultLocalRootPath, _context);
+                            var context = _context;
+                            if (context is null)
+                            {
+                                throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot open connection without context");
+                            }
+
+                            _wbemServices = locator.ConnectServer(DefaultLocalRootPath, context);
                             _wbemServices.SetProxy(WbemImpersonationLevel.Impersonate, authLevel);
 
                             _connected = true;
@@ -67,14 +73,14 @@
 
         public WindowsManagementQuery CreateQuery(string wql)
         {
-            Argument.IsNotNull(() => wql);
+            ArgumentNullException.ThrowIfNull(wql);
 
             return new WindowsManagementQuery(this, wql);
         }
 
         public WindowsManagementObjectEnumerator ExecuteQuery(WindowsManagementQuery query)
         {
-            Argument.IsNotNull(() => query);
+            ArgumentNullException.ThrowIfNull(query);
 
             return new WindowsManagementObjectEnumerator(InternalExecuteQuery(query));
         }
@@ -84,7 +90,19 @@
             CheckDisposed();
             Open();
 
-            var enumerator = _wbemServices.ExecQuery(query.Wql, query.EnumeratorBehaviorOption, _context);
+            var wbemServices = _wbemServices;
+            if (wbemServices is null)
+            {
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot execute query without services");
+            }
+
+            var context = _context;
+            if (context is null)
+            {
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot execute query without context");
+            }
+
+            var enumerator = wbemServices.ExecQuery(query.Wql, query.EnumeratorBehaviorOption, context);
             return enumerator;
         }
     }

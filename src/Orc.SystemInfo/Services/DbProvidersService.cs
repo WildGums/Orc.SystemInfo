@@ -11,9 +11,14 @@
         {
             using (var datatable = DbProviderFactories.GetFactoryClasses())
             {
-                return datatable.Rows.OfType<DataRow>()
+                var values = datatable.Rows.OfType<DataRow>()
                     .Select(x => x["InvariantName"]?.ToString())
-                    .OrderBy(x => x);
+                    .Where(x => x is not null)
+                    .Cast<string>()
+                    .OrderBy(x => x)
+                    .ToList();
+
+                return values;
             }
         }
     }

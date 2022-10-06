@@ -1,17 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SystemIdentificationService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.SystemInfo
+﻿namespace Orc.SystemInfo
 {
+    using System;
     using System.Collections.Generic;
     using System.Security.Cryptography;
     using System.Text;
     using System.Threading.Tasks;
-    using Catel;
     using Catel.Caching;
     using Catel.Logging;
     using MethodTimer;
@@ -26,7 +19,7 @@ namespace Orc.SystemInfo
 
         public SystemIdentificationService(IWindowsManagementInformationService windowsManagementInformationService)
         {
-            Argument.IsNotNull(() => windowsManagementInformationService);
+            ArgumentNullException.ThrowIfNull(windowsManagementInformationService);
 
             _windowsManagementInformationService = windowsManagementInformationService;
         }
@@ -34,7 +27,7 @@ namespace Orc.SystemInfo
         [Time]
         public virtual string GetMachineId(string separator = "-", bool hashCombination = true)
         {
-            Argument.IsNotNull(() => separator);
+            ArgumentNullException.ThrowIfNull(separator);
 
             var key = string.Format("machineid_{0}_{1}", separator, hashCombination);
             return _cacheStorage.GetFromCacheOrFetch(key, () =>
@@ -69,7 +62,7 @@ namespace Orc.SystemInfo
 
                 foreach (var value in values)
                 {
-                    var hashedValue = CalculateMd5Hash(value);
+                    var hashedValue = CalculateHash(value);
                     hashedValues.Add(hashedValue);
 
                     Log.Debug("* {0} => {1}", value, hashedValue);
@@ -81,7 +74,7 @@ namespace Orc.SystemInfo
 
                 if (hashCombination)
                 {
-                    machineId = CalculateMd5Hash(machineId);
+                    machineId = CalculateHash(machineId);
                 }
 
                 return machineId;
@@ -187,7 +180,7 @@ namespace Orc.SystemInfo
             });
         }
 
-        protected static string CalculateMd5Hash(string input)
+        protected virtual string CalculateHash(string input)
         {
             using (var md5 = MD5.Create())
             {

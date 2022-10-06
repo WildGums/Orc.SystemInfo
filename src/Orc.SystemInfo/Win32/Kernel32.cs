@@ -36,7 +36,7 @@
             public uint dwBuildNumber;
             public uint dwPlatformId;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
-            public string szCSDVersion;
+            public string? szCSDVersion;
             public UInt16 wServicePackMajor;
             public UInt16 wServicePackMinor;
             public UInt16 wSuiteMask;

@@ -10,10 +10,7 @@
             uint count = 1;
             var hresult = wbemClassObjectEnumerator.Next(Timeout.Infinite, count, out var current, out _);
 
-            if (hresult.Failed)
-            {
-                throw (Exception)hresult;
-            }
+            hresult.ThrowIfFailed();
 
             return current;
         }

@@ -27,32 +27,32 @@
 
         internal WindowsManagementObject(IWbemClassObject wmiObject)
         {
-            Argument.IsNotNull(() => wmiObject);
+            ArgumentNullException.ThrowIfNull(wmiObject);
 
             _wbemClassObject = wmiObject;
         }
 
-        public string Class => (string)GetValue(WindowsManagementObject.ClassPropertyName);
+        public string? Class => (string?)GetValue(WindowsManagementObject.ClassPropertyName);
 
-        public string[] Derivation => (string[])GetValue(WindowsManagementObject.DerivationPropertyName);
+        public string[]? Derivation => (string[]?)GetValue(WindowsManagementObject.DerivationPropertyName);
 
-        public string Dynasty => (string)GetValue(WindowsManagementObject.DynastyPropertyName);
+        public string? Dynasty => (string?)GetValue(WindowsManagementObject.DynastyPropertyName);
 
-        public WmiObjectGenus Genus => (WmiObjectGenus)GetValue(WindowsManagementObject.GenusPropertyName);
+        public WmiObjectGenus? Genus => (WmiObjectGenus?)GetValue(WindowsManagementObject.GenusPropertyName);
 
-        public string Namespace => (string)GetValue(WindowsManagementObject.NamespacePropertyName);
+        public string? Namespace => (string?)GetValue(WindowsManagementObject.NamespacePropertyName);
 
-        public string Path => (string)GetValue(WindowsManagementObject.PathPropertyName);
+        public string? Path => (string?)GetValue(WindowsManagementObject.PathPropertyName);
 
-        public int PropertyCount => (int)GetValue(WindowsManagementObject.PropertyCountPropertyName);
+        public int? PropertyCount => (int?)GetValue(WindowsManagementObject.PropertyCountPropertyName);
 
-        public string Relpath => (string)GetValue(WindowsManagementObject.RelpathPropertyName);
+        public string? Relpath => (string?)GetValue(WindowsManagementObject.RelpathPropertyName);
 
-        public string Server => (string)GetValue(WindowsManagementObject.ServerPropertyName);
+        public string? Server => (string?)GetValue(WindowsManagementObject.ServerPropertyName);
 
-        public string SuperClass => (string)GetValue(WindowsManagementObject.SuperClassPropertyName);
+        public string? SuperClass => (string?)GetValue(WindowsManagementObject.SuperClassPropertyName);
 
-        public object this[string propertyName]
+        public object? this[string propertyName]
         {
             get
             {
@@ -75,20 +75,20 @@
             return _wbemClassObject.GetNames();
         }
 
-        public object GetValue(string propertyName)
+        public object? GetValue(string propertyName)
         {
             CheckDisposed();
             return _wbemClassObject.Get(propertyName);
         }
 
-        public TValue GetValue<TValue>(string propertyName)
+        public TValue? GetValue<TValue>(string propertyName)
         {
-            return (TValue)GetValue(propertyName);
+            return (TValue?)GetValue(propertyName);
         }
 
-        public TValue GetValue<TValue>(string propertyName, Func<object, TValue> converterFunc)
+        public TValue? GetValue<TValue>(string propertyName, Func<object, TValue> converterFunc)
         {
-            var finalValue = default(TValue);
+            var finalValue = default(TValue?);
 
             try
             {

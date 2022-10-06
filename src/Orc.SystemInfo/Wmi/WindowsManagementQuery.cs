@@ -1,20 +1,21 @@
 ﻿namespace Orc.SystemInfo.Wmi
 {
+    using System;
     using System.Collections;
     using System.Collections.Generic;
-    using Catel;
     using Orc.SystemInfo.Win32;
 
-    public class WindowsManagementQuery : IEnumerable<WindowsManagementObject>
+    public class WindowsManagementQuery : IEnumerable<WindowsManagementObject?>
     {
         private readonly string _wql;
         private readonly WindowsManagementConnection _connection;
         private readonly WbemClassObjectEnumeratorBehaviorOptions _enumeratorBehaviorOptions;
 
-        public WindowsManagementQuery(WindowsManagementConnection connection, string wql, WbemClassObjectEnumeratorBehaviorOptions enumeratorBehaviorOptions = WbemClassObjectEnumeratorBehaviorOptions.ReturnImmediately)
+        public WindowsManagementQuery(WindowsManagementConnection connection, string wql, 
+            WbemClassObjectEnumeratorBehaviorOptions enumeratorBehaviorOptions = WbemClassObjectEnumeratorBehaviorOptions.ReturnImmediately)
         {
-            Argument.IsNotNull(() => connection);
-            Argument.IsNotNull(() => wql);
+            ArgumentNullException.ThrowIfNull(connection);
+            ArgumentNullException.ThrowIfNull(wql);
 
             _wql = wql;
             _connection = connection;
@@ -27,9 +28,10 @@
 
         public WbemClassObjectEnumeratorBehaviorOptions EnumeratorBehaviorOption => _enumeratorBehaviorOptions;
 
-        public IEnumerator<WindowsManagementObject> GetEnumerator()
+        public IEnumerator<WindowsManagementObject?> GetEnumerator()
         {
-            return _connection.ExecuteQuery(this);
+            var enumerator = _connection.ExecuteQuery(this);
+            return enumerator;
         }
 
         IEnumerator IEnumerable.GetEnumerator()

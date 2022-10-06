@@ -11,23 +11,23 @@
         HResult GetQualifierSet([Out] out IWbemQualifierSet qualifierSet);
 
         [PreserveSig]
-        HResult Get([In, MarshalAs(UnmanagedType.LPWStr)] string propertyName, [In] int flags, [Out] out object value, [Out] out CimType type, [Out] out int flavor);
+        HResult Get([In, MarshalAs(UnmanagedType.LPWStr)] string propertyName, [In] int flags, [Out] out object? value, [Out] out CimType type, [Out] out int flavor);
 
         [PreserveSig]
-        HResult Put([In, MarshalAs(UnmanagedType.LPWStr)] string propertyName, [In] int flags, [In] object value, [In] CimType type);
+        HResult Put([In, MarshalAs(UnmanagedType.LPWStr)] string propertyName, [In] int flags, [In] object? value, [In] CimType type);
 
         [PreserveSig]
         HResult Delete([In, MarshalAs(UnmanagedType.LPWStr)] string propertyName);
 
         [PreserveSig]
-        HResult GetNames([In, MarshalAs(UnmanagedType.LPWStr)] string qualifierName, [In] WbemConditionFlag flags,
-            [In] ref object qualifierValue, [Out, MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_BSTR)] out string[] names);
+        HResult GetNames([In, MarshalAs(UnmanagedType.LPWStr)] string? qualifierName, [In] WbemConditionFlag flags,
+            [In] ref object? qualifierValue, [Out, MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_BSTR)] out string[] names);
 
         [PreserveSig]
         HResult BeginEnumeration([In] int enumFlags);
 
         [PreserveSig]
-        HResult Next([In] int flags, [Out, MarshalAs(UnmanagedType.BStr)] string strName, [Out] out object value, [Out] out CimType type, [Out] out int flavor);
+        HResult Next([In] int flags, [Out, MarshalAs(UnmanagedType.BStr)] string strName, [Out] out object? value, [Out] out CimType type, [Out] out int flavor);
 
         HResult EndEnumeration();
 

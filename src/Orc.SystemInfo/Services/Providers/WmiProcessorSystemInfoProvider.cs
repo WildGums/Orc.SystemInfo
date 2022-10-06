@@ -15,6 +15,8 @@
 
         public WmiProcessorSystemInfoProvider(ILanguageService languageService)
         {
+            ArgumentNullException.ThrowIfNull(languageService);
+
             _languageService = languageService;
         }
 
@@ -22,13 +24,13 @@
         {
             Log.Debug("Retrieving system info");
 
-            var notAvailable = _languageService.GetString("SystemInfo_NotAvailable");
+            var notAvailable = _languageService.GetRequiredString("SystemInfo_NotAvailable");
 
             var items = new List<SystemInfoElement>();
 
             try
             {
-                WindowsManagementObject cpu = null;
+                WindowsManagementObject? cpu = null;
                 var wql = "SELECT * FROM Win32_Processor";
 
                 using (var connection = new WindowsManagementConnection())
@@ -42,19 +44,19 @@
                 }
 
                 // __cpuid, see: https://docs.microsoft.com/ru-ru/cpp/intrinsics/cpuid-cpuidex?view=msvc-160;
-                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_ProcessorId"), cpu.GetValue("ProcessorId", notAvailable)));
-                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_CpuName"), cpu.GetValue("Name", notAvailable)));
-                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_Description"), cpu.GetValue("Caption", notAvailable)));
-                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_AddressWidth"), cpu.GetValue<int>("AddressWidth", notAvailable)));
-                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_DataWidth"), cpu.GetValue<int>("DataWidth", notAvailable)));
-                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_ClockSpeedMHz"), cpu.GetValue<int>("MaxClockSpeed", notAvailable)));
-                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_BusSpeedMHz"), cpu.GetValue<int>("ExtClock", notAvailable)));
-                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_NumberOfCores"), cpu.GetValue<int>("NumberOfCores", notAvailable)));
-                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_NumberOfLogicalProcessors"), cpu.GetValue<int>("NumberOfLogicalProcessors", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_ProcessorId"), cpu.GetRequiredValue("ProcessorId", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_CpuName"), cpu.GetRequiredValue("Name", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_Description"), cpu.GetRequiredValue("Caption", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_AddressWidth"), cpu.GetRequiredValue<int>("AddressWidth", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_DataWidth"), cpu.GetRequiredValue<int>("DataWidth", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_ClockSpeedMHz"), cpu.GetRequiredValue<int>("MaxClockSpeed", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_BusSpeedMHz"), cpu.GetRequiredValue<int>("ExtClock", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_NumberOfCores"), cpu.GetRequiredValue<int>("NumberOfCores", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_NumberOfLogicalProcessors"), cpu.GetRequiredValue<int>("NumberOfLogicalProcessors", notAvailable)));
             }
             catch (Exception ex)
             {
-                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_CpuInfo"), "n/a, please contact support"));
+                items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_CpuInfo"), "n/a, please contact support"));
                 Log.Warning(ex, "Failed to retrieve CPU information");
             }
 

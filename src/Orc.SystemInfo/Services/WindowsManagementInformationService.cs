@@ -1,24 +1,20 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WmiService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Orc.SystemInfo
+﻿namespace Orc.SystemInfo
 {
     using System;
     using System.Runtime.InteropServices;
+    using Catel.Logging;
     using Orc.SystemInfo.Wmi;
 
     public class WindowsManagementInformationService : IWindowsManagementInformationService
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         public string GetIdentifier(string wmiClass, string wmiProperty)
         {
             return GetIdentifier(wmiClass, wmiProperty, null, null);
         }
 
-        public string GetIdentifier(string wmiClass, string wmiProperty, string additionalWmiToCheck, string additionalWmiToCheckValue)
+        public string GetIdentifier(string wmiClass, string wmiProperty, string? additionalWmiToCheck, string? additionalWmiToCheckValue)
         {
             try
             {
@@ -31,9 +27,15 @@ namespace Orc.SystemInfo
                 {
                     foreach (var managementObject in connection.CreateQuery(query))
                     {
+                        if (managementObject is null)
+                        {
+                            continue;
+                        }
+
                         try
                         {
-                            if (!string.IsNullOrWhiteSpace(additionalWmiToCheck))
+                            if (!string.IsNullOrWhiteSpace(additionalWmiToCheck) && 
+                                !string.IsNullOrWhiteSpace(additionalWmiToCheckValue))
                             {
                                 var wmiToCheckValue = managementObject.GetValue(additionalWmiToCheck, Convert.ToString);
 
