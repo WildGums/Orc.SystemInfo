@@ -49,8 +49,8 @@
                 items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_Description"), cpu.GetRequiredValue("Caption", notAvailable)));
                 items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_AddressWidth"), cpu.GetRequiredValue<int>("AddressWidth", notAvailable)));
                 items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_DataWidth"), cpu.GetRequiredValue<int>("DataWidth", notAvailable)));
-                items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_ClockSpeedMHz"), cpu.GetRequiredValue<int>("MaxClockSpeed", notAvailable)));
-                items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_BusSpeedMHz"), cpu.GetRequiredValue<int>("ExtClock", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_ClockSpeedMhz"), cpu.GetRequiredValue<int>("MaxClockSpeed", notAvailable)));
+                items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_BusSpeedMhz"), cpu.GetRequiredValue<int>("ExtClock", notAvailable)));
                 items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_NumberOfCores"), cpu.GetRequiredValue<int>("NumberOfCores", notAvailable)));
                 items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_NumberOfLogicalProcessors"), cpu.GetRequiredValue<int>("NumberOfLogicalProcessors", notAvailable)));
             }

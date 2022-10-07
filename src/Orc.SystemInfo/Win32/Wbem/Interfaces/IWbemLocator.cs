@@ -23,7 +23,7 @@
             [In, MarshalAs(UnmanagedType.BStr)]
             string? authority,
             [In, MarshalAs(UnmanagedType.Interface)]
-            IWbemContext ctx,
+            IWbemContext? ctx,
             [Out, MarshalAs(UnmanagedType.Interface)]
             out IWbemServices wbemServices);
     }

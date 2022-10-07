@@ -9,7 +9,7 @@
             hr.ThrowIfFailed();
         }
 
-        internal static IWbemClassObjectEnumerator ExecQuery(this IWbemServices wbemServices, string query, WbemClassObjectEnumeratorBehaviorOptions enumeratorBehaviorOption, IWbemContext ctx)
+        internal static IWbemClassObjectEnumerator ExecQuery(this IWbemServices wbemServices, string query, WbemClassObjectEnumeratorBehaviorOptions enumeratorBehaviorOption, IWbemContext? ctx)
         {
             var hr = wbemServices.ExecQuery("WQL", query, enumeratorBehaviorOption, ctx, out var enumerator);
 

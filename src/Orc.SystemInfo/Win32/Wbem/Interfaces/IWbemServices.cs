@@ -197,7 +197,7 @@
             [In]
             WbemClassObjectEnumeratorBehaviorOptions behaviorOption,
             [In]
-            IWbemContext ctx,
+            IWbemContext? ctx,
             [Out]
             out IWbemClassObjectEnumerator enumerator);
 

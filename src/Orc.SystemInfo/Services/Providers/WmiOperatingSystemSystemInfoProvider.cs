@@ -47,7 +47,7 @@
                 items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_Architecture"), wmi.GetRequiredValue("OSArchitecture", notAvailable)));
                 items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_Build"), wmi.GetRequiredValue("BuildNumber", notAvailable)));
                 // Note: can be count from lpMaximumApplicationAddress (Kernel32.SystemInfo);
-                items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_MaxProcossRam"), (wmi.GetValue("MaxProcessMemorySize", Convert.ToInt64)).ToReadableSize(1))); // KB
+                items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_MaxProcessRam"), (wmi.GetValue("MaxProcessMemorySize", Convert.ToInt64)).ToReadableSize(1))); // KB
             }
             catch (Exception ex)
             {

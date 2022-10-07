@@ -1,7 +1,5 @@
 ﻿namespace Orc.SystemInfo.Win32
 {
-    using Catel.Logging;
-
     internal static class IWbemLocatorExtensions
     {
         /// <summary>
@@ -11,7 +9,7 @@
         /// <param name="resource"></param>
         /// <param name="ctx"></param>
         /// <returns></returns>
-        internal static IWbemServices ConnectServer(this IWbemLocator wbemLocator, string resource, IWbemContext ctx)
+        internal static IWbemServices ConnectServer(this IWbemLocator wbemLocator, string resource, IWbemContext? ctx)
         {
             var hr = wbemLocator.ConnectServer(resource, null, null, null, WbemConnectOption.None, null, ctx, out var services);
 

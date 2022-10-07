@@ -34,13 +34,7 @@
                         {
                             var authLevel = WbemAuthenticationLevel.PacketIntegrity;
 
-                            var context = _context;
-                            if (context is null)
-                            {
-                                throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot open connection without context");
-                            }
-
-                            _wbemServices = locator.ConnectServer(DefaultLocalRootPath, context);
+                            _wbemServices = locator.ConnectServer(DefaultLocalRootPath, _context);
                             _wbemServices.SetProxy(WbemImpersonationLevel.Impersonate, authLevel);
 
                             _connected = true;
@@ -96,13 +90,7 @@
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot execute query without services");
             }
 
-            var context = _context;
-            if (context is null)
-            {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot execute query without context");
-            }
-
-            var enumerator = wbemServices.ExecQuery(query.Wql, query.EnumeratorBehaviorOption, context);
+            var enumerator = wbemServices.ExecQuery(query.Wql, query.EnumeratorBehaviorOption, _context);
             return enumerator;
         }
     }
