@@ -92,7 +92,7 @@
 
             if (sp is not null)
             {
-                foreach (var subKeyName in registryKey.GetSubKeyNames().Where(x => Regex.IsMatch(x, @"^\d{4}$|^Client$|^Full$")))
+                foreach (var subKeyName in registryKey.GetSubKeyNames().Where(x => Regex.IsMatch(x, @"^\d{4}$|^Client$|^Full$", RegexOptions.None, TimeSpan.FromSeconds(1))))
                 {
                     using (var subKey = registryKey.OpenSubKey(subKeyName))
                     {
