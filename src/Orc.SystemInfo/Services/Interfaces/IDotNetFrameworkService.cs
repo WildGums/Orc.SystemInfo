@@ -1,9 +1,8 @@
-﻿namespace Orc.SystemInfo
-{
-    using System.Collections.Generic;
+﻿namespace Orc.SystemInfo;
 
-    public interface IDotNetFrameworkService
-    {
-        IEnumerable<string> GetInstalledFrameworks();
-    }
+using System.Collections.Generic;
+
+public interface IDotNetFrameworkService
+{
+    IEnumerable<string> GetInstalledFrameworks();
 }

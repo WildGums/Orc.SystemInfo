@@ -1,21 +1,20 @@
-﻿namespace Orc.SystemInfo.Win32
+﻿namespace Orc.SystemInfo.Win32;
+
+using System.Runtime.InteropServices;
+
+[ComImport]
+[Guid("44aca675-e8fc-11d0-a07c-00c04fb68820")]
+[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+internal interface IWbemCallResult
 {
-    using System.Runtime.InteropServices;
+    [PreserveSig]
+    HResult GetResultObject([In] int timeout, [Out] out IWbemClassObject resultObject);
 
-    [ComImport]
-    [Guid("44aca675-e8fc-11d0-a07c-00c04fb68820")]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    internal interface IWbemCallResult
-    {
-        [PreserveSig]
-        HResult GetResultObject([In] int timeout, [Out] out IWbemClassObject resultObject);
+    HResult GetResultString([In] int timeout, [Out, MarshalAs(UnmanagedType.BStr)] out string resultString);
 
-        HResult GetResultString([In] int timeout, [Out, MarshalAs(UnmanagedType.BStr)] out string resultString);
+    [PreserveSig]
+    HResult GetResultServices([In] int timeout, [Out] out IWbemServices services);
 
-        [PreserveSig]
-        HResult GetResultServices([In] int timeout, [Out] out IWbemServices services);
-
-        [PreserveSig]
-        HResult GetCallStatus([In] int timeout, [Out] out HResult status);
-    }
+    [PreserveSig]
+    HResult GetCallStatus([In] int timeout, [Out] out HResult status);
 }

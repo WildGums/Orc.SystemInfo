@@ -1,98 +1,97 @@
-﻿namespace Orc.SystemInfo.Win32
+﻿namespace Orc.SystemInfo.Win32;
+
+using System;
+using System.Runtime.InteropServices;
+
+internal struct HResult : IEquatable<HResult>
 {
-    using System;
-    using System.Runtime.InteropServices;
+    private readonly int _value;
 
-    internal struct HResult : IEquatable<HResult>
+    public HResult(int value)
     {
-        private readonly int _value;
+        _value = value;
+    }
 
-        public HResult(int value)
+    public bool Failed => _value < 0;
+
+    public static implicit operator Exception?(HResult hr)
+    {
+        if (hr.Failed)
         {
-            _value = value;
+            return Marshal.GetExceptionForHR(hr._value) ?? new COMException("Unknown exception", hr._value);
         }
 
-        public bool Failed => _value < 0;
+        return null;
+    }
 
-        public static implicit operator Exception?(HResult hr)
+    public static implicit operator int(HResult hr)
+    {
+        return hr._value;
+    }
+
+    public static implicit operator HResult(int intValue)
+    {
+        return new HResult(intValue);
+    }
+
+    public static bool operator ==(HResult x, HResult y)
+    {
+        return x.Equals(y);
+    }
+
+    public static bool operator !=(HResult x, HResult y)
+    {
+        return !x.Equals(y);
+    }
+
+    public static bool operator ==(HResult x, Enum y)
+    {
+        return x.Equals(y);
+    }
+
+    public static bool operator !=(HResult x, Enum y)
+    {
+        return !x.Equals(y);
+    }
+
+    public override int GetHashCode()
+    {
+        return _value.GetHashCode();
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is null)
         {
-            if (hr.Failed)
+            return false;
+        }
+
+        if (obj is not HResult result)
+        {
+            if (obj is int intVal)
             {
-                return Marshal.GetExceptionForHR(hr._value) ?? new COMException("Unknown exception", hr._value);
+                result = intVal;
             }
-
-            return null;
-        }
-
-        public static implicit operator int(HResult hr)
-        {
-            return hr._value;
-        }
-
-        public static implicit operator HResult(int intValue)
-        {
-            return new HResult(intValue);
-        }
-
-        public static bool operator ==(HResult x, HResult y)
-        {
-            return x.Equals(y);
-        }
-
-        public static bool operator !=(HResult x, HResult y)
-        {
-            return !x.Equals(y);
-        }
-
-        public static bool operator ==(HResult x, Enum y)
-        {
-            return x.Equals(y);
-        }
-
-        public static bool operator !=(HResult x, Enum y)
-        {
-            return !x.Equals(y);
-        }
-
-        public override int GetHashCode()
-        {
-            return _value.GetHashCode();
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (obj is null)
+            else
             {
                 return false;
             }
-
-            if (obj is not HResult result)
-            {
-                if (obj is int intVal)
-                {
-                    result = intVal;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            return Equals(result);
         }
 
-        public bool Equals(HResult hr)
-        {
-            return _value == hr._value;
-        }
+        return Equals(result);
+    }
 
-        public void ThrowIfFailed()
+    public bool Equals(HResult hr)
+    {
+        return _value == hr._value;
+    }
+
+    public void ThrowIfFailed()
+    {
+        var ex = (Exception?)this;
+        if (ex is not null)
         {
-            var ex = (Exception?)this;
-            if (ex is not null)
-            {
-                throw ex;
-            }
+            throw ex;
         }
     }
 }
