@@ -1,18 +1,17 @@
-﻿namespace Orc.SystemInfo.Win32
+﻿namespace Orc.SystemInfo.Win32;
+
+using System;
+using System.Threading;
+
+public static class IWbemClassObjectEnumeratorExtensions
 {
-    using System;
-    using System.Threading;
-
-    public static class IWbemClassObjectEnumeratorExtensions
+    internal static IWbemClassObject Next(this IWbemClassObjectEnumerator wbemClassObjectEnumerator)
     {
-        internal static IWbemClassObject Next(this IWbemClassObjectEnumerator wbemClassObjectEnumerator)
-        {
-            uint count = 1;
-            var hresult = wbemClassObjectEnumerator.Next(Timeout.Infinite, count, out var current, out _);
+        const uint count = 1;
+        var hresult = wbemClassObjectEnumerator.Next(Timeout.Infinite, count, out var current, out _);
 
-            hresult.ThrowIfFailed();
+        hresult.ThrowIfFailed();
 
-            return current;
-        }
+        return current;
     }
 }

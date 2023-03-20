@@ -1,9 +1,8 @@
-﻿namespace Orc.SystemInfo
-{
-    using System.Collections.Generic;
+﻿namespace Orc.SystemInfo;
 
-    public interface ISystemInfoService
-    {
-        IEnumerable<SystemInfoElement> GetSystemInfo();
-    }
+using System.Collections.Generic;
+
+public interface ISystemInfoService
+{
+    IEnumerable<SystemInfoElement> GetSystemInfo();
 }

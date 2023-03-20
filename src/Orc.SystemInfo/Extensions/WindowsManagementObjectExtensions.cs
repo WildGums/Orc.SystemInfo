@@ -1,79 +1,74 @@
-﻿namespace Orc.SystemInfo
+﻿namespace Orc.SystemInfo;
+
+using System;
+using System.Collections.Generic;
+using Wmi;
+
+public static class WindowsManagementObjectExtensions
 {
-    using System;
-    using System.Collections.Generic;
-    using Orc.SystemInfo.Wmi;
-
-    public static class WindowsManagementObjectExtensions
+    public static string GetRequiredValue(this WindowsManagementObject obj, string key, string defaultValue = "")
     {
-        public static string GetRequiredValue(this WindowsManagementObject obj, string key, string defaultValue = "")
+        try
         {
-            try
-            {
-                var value = obj.GetValue<string?>(key);
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+            var value = obj.GetValue<string?>(key) ?? string.Empty;
 
-                return value;
-            }
-            catch (Exception)
-            {
-                // ignore
-                return defaultValue;
-            }
+            return value;
         }
-
-        public static string GetRequiredValue<TValue>(this WindowsManagementObject obj, string key, string defaultValue = "")
+        catch (Exception)
         {
-            try
-            {
-                var result = obj.GetValue<TValue>(key);
-                if (EqualityComparer<TValue>.Default.Equals(result, default))
-                {
-                    return defaultValue;
-                }
-
-                return Convert.ToString(result) ?? defaultValue;
-            }
-            catch (Exception)
-            {
-                // ignore
-                return defaultValue;
-            }
+            // ignore
+            return defaultValue;
         }
+    }
 
-        public static string? GetValue(this WindowsManagementObject obj, string key, string? defaultValue = null)
+    public static string GetRequiredValue<TValue>(this WindowsManagementObject obj, string key, string defaultValue = "")
+    {
+        try
         {
-            try
+            var result = obj.GetValue<TValue>(key);
+            if (EqualityComparer<TValue>.Default.Equals(result, default))
             {
-                return obj.GetValue<string?>(key) ?? defaultValue;
-            }
-            catch (Exception)
-            {
-                // ignore
                 return defaultValue;
             }
+
+            return Convert.ToString(result) ?? defaultValue;
         }
-
-        public static string? GetValue<TValue>(this WindowsManagementObject obj, string key, string? defaultValue = null)
+        catch (Exception)
         {
-            try
-            {
-                var result = obj.GetValue<TValue?>(key);
-                if (EqualityComparer<TValue>.Default.Equals(result, default))
-                {
-                    return defaultValue;
-                }
+            // ignore
+            return defaultValue;
+        }
+    }
 
-                return Convert.ToString(result) ?? defaultValue;
-            }
-            catch (Exception)
+    public static string? GetValue(this WindowsManagementObject obj, string key, string? defaultValue = null)
+    {
+        try
+        {
+            return obj.GetValue<string?>(key) ?? defaultValue;
+        }
+        catch (Exception)
+        {
+            // ignore
+            return defaultValue;
+        }
+    }
+
+    public static string? GetValue<TValue>(this WindowsManagementObject obj, string key, string? defaultValue = null)
+    {
+        try
+        {
+            var result = obj.GetValue<TValue?>(key);
+            if (EqualityComparer<TValue>.Default.Equals(result, default))
             {
-                // ignore
                 return defaultValue;
             }
+
+            return Convert.ToString(result) ?? defaultValue;
+        }
+        catch (Exception)
+        {
+            // ignore
+            return defaultValue;
         }
     }
 }

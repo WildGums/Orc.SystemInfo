@@ -1,21 +1,20 @@
-﻿namespace Orc.SystemInfo.Win32
+﻿namespace Orc.SystemInfo.Win32;
+
+internal static class IWbemServicesExtenions
 {
-    internal static class IWbemServicesExtenions
+    internal static void SetProxy(this IWbemServices wbemServices, WbemImpersonationLevel impersonationLevel, WbemAuthenticationLevel authenticationLevel)
     {
-        internal static void SetProxy(this IWbemServices wbemServices, WbemImpersonationLevel impersonationLevel, WbemAuthenticationLevel authenticationLevel)
-        {
-            var hr = WmiNetUtils.BlessIWbemServices(wbemServices, impersonationLevel, authenticationLevel);
+        var hr = WmiNetUtils.BlessIWbemServices(wbemServices, impersonationLevel, authenticationLevel);
 
-            hr.ThrowIfFailed();
-        }
+        hr.ThrowIfFailed();
+    }
 
-        internal static IWbemClassObjectEnumerator ExecQuery(this IWbemServices wbemServices, string query, WbemClassObjectEnumeratorBehaviorOptions enumeratorBehaviorOption, IWbemContext? ctx)
-        {
-            var hr = wbemServices.ExecQuery("WQL", query, enumeratorBehaviorOption, ctx, out var enumerator);
+    internal static IWbemClassObjectEnumerator ExecQuery(this IWbemServices wbemServices, string query, WbemClassObjectEnumeratorBehaviorOptions enumeratorBehaviorOption, IWbemContext? ctx)
+    {
+        var hr = wbemServices.ExecQuery("WQL", query, enumeratorBehaviorOption, ctx, out var enumerator);
 
-            hr.ThrowIfFailed();
+        hr.ThrowIfFailed();
 
-            return enumerator;
-        }
+        return enumerator;
     }
 }

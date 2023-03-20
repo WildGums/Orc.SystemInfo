@@ -1,8 +1,7 @@
-﻿namespace Orc.SystemInfo
+﻿namespace Orc.SystemInfo;
+
+public interface IWindowsManagementInformationService
 {
-    public interface IWindowsManagementInformationService
-    {
-        string GetIdentifier(string wmiClass, string wmiProperty);
-        string GetIdentifier(string wmiClass, string wmiProperty, string? additionalWmiToCheck, string? additionalWmiToCheckValue);
-    }
+    string GetIdentifier(string wmiClass, string wmiProperty);
+    string GetIdentifier(string wmiClass, string wmiProperty, string? additionalWmiToCheck, string? additionalWmiToCheckValue);
 }

@@ -1,89 +1,85 @@
-﻿namespace Orc.SystemInfo.Wmi
+﻿namespace Orc.SystemInfo.Wmi;
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using Catel.Logging;
+using Catel.Reflection;
+using Win32;
+
+public sealed class WindowsManagementObjectEnumerator : IEnumerator<WindowsManagementObject?>
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Runtime.InteropServices;
-    using Catel;
-    using Catel.Logging;
-    using Catel.Reflection;
-    using Orc.SystemInfo.Win32;
+    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-    public sealed class WindowsManagementObjectEnumerator : IEnumerator<WindowsManagementObject?>
+    private readonly IWbemClassObjectEnumerator _wbemClassObjectEnumerator;
+
+    private bool _disposed;
+
+    internal WindowsManagementObjectEnumerator(IWbemClassObjectEnumerator enumerator)
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        ArgumentNullException.ThrowIfNull(enumerator);
 
-        private readonly IWbemClassObjectEnumerator _wbemClassObjectEnumerator;
+        _wbemClassObjectEnumerator = enumerator;
 
-        private bool _disposed;
-
-        internal WindowsManagementObjectEnumerator(IWbemClassObjectEnumerator enumerator)
-        {
-            ArgumentNullException.ThrowIfNull(enumerator);
-
-            _wbemClassObjectEnumerator = enumerator;
-
-            enumerator.Reset();
-        }
+        enumerator.Reset();
+    }
 
 #pragma warning disable IDISP002 // Dispose member
-        public WindowsManagementObject? Current { get; private set; }
+    public WindowsManagementObject? Current { get; private set; }
 #pragma warning restore IDISP002 // Dispose member
 
-        object? IEnumerator.Current
+    object? IEnumerator.Current
+    {
+        get
         {
-            get
-            {
-                return Current;
-            }
+            return Current;
         }
+    }
 
-        public bool MoveNext()
-        {
-            ThrowIfDisposed();
+    public bool MoveNext()
+    {
+        ThrowIfDisposed();
 
-            var currentWmiObject = _wbemClassObjectEnumerator.Next();
-            if (currentWmiObject is null)
-            {
-                return false;
-            }
+        var currentWmiObject = _wbemClassObjectEnumerator.Next();
 
 #pragma warning disable IDISP003 // Dispose previous before re-assigning
-            Current = new WindowsManagementObject(currentWmiObject);
+        Current = new WindowsManagementObject(currentWmiObject);
 #pragma warning restore IDISP003 // Dispose previous before re-assigning
-            return true;
+        return true;
+    }
+
+    public void Reset()
+    {
+        ThrowIfDisposed();
+
+        var hresult = _wbemClassObjectEnumerator.Reset();
+        if (hresult.Failed)
+        {
+            hresult.ThrowIfFailed();
+        }
+    }
+
+    /// <summary>
+    /// Releases all resources used by the <see cref="WindowsManagementObjectEnumerator"/>.
+    /// </summary>
+    public void Dispose()
+    {
+        if (_disposed)
+        {
+            return;
         }
 
-        public void Reset()
+        Marshal.ReleaseComObject(_wbemClassObjectEnumerator);
+
+        _disposed = true;
+    }
+
+    private void ThrowIfDisposed()
+    {
+        if (_disposed)
         {
-            ThrowIfDisposed();
-
-            var hresult = _wbemClassObjectEnumerator.Reset();
-            if (hresult.Failed)
-            {
-                hresult.ThrowIfFailed();
-            }
-        }
-
-        /// <summary>
-        /// Releases all resources used by the <see cref="WindowsManagementObjectEnumerator"/>.
-        /// </summary>
-        public void Dispose()
-        {
-            if (!_disposed)
-            {
-                Marshal.ReleaseComObject(_wbemClassObjectEnumerator);
-
-                _disposed = true;
-            }
-        }
-
-        private void ThrowIfDisposed()
-        {
-            if (_disposed)
-            {
-                throw Log.ErrorAndCreateException<ObjectDisposedException>(typeof(WindowsManagementObjectEnumerator).GetSafeFullName());
-            }
+            throw Log.ErrorAndCreateException<ObjectDisposedException>(typeof(WindowsManagementObjectEnumerator).GetSafeFullName());
         }
     }
 }

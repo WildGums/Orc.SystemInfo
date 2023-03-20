@@ -1,42 +1,40 @@
-﻿namespace Orc.SystemInfo.Wmi
+﻿namespace Orc.SystemInfo.Wmi;
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using Win32;
+
+public class WindowsManagementQuery : IEnumerable<WindowsManagementObject?>
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using Orc.SystemInfo.Win32;
+    private readonly string _wql;
+    private readonly WbemClassObjectEnumeratorBehaviorOptions _enumeratorBehaviorOptions;
 
-    public class WindowsManagementQuery : IEnumerable<WindowsManagementObject?>
+    public WindowsManagementQuery(WindowsManagementConnection connection, string wql, 
+        WbemClassObjectEnumeratorBehaviorOptions enumeratorBehaviorOptions = WbemClassObjectEnumeratorBehaviorOptions.ReturnImmediately)
     {
-        private readonly string _wql;
-        private readonly WindowsManagementConnection _connection;
-        private readonly WbemClassObjectEnumeratorBehaviorOptions _enumeratorBehaviorOptions;
+        ArgumentNullException.ThrowIfNull(connection);
+        ArgumentNullException.ThrowIfNull(wql);
 
-        public WindowsManagementQuery(WindowsManagementConnection connection, string wql, 
-            WbemClassObjectEnumeratorBehaviorOptions enumeratorBehaviorOptions = WbemClassObjectEnumeratorBehaviorOptions.ReturnImmediately)
-        {
-            ArgumentNullException.ThrowIfNull(connection);
-            ArgumentNullException.ThrowIfNull(wql);
+        _wql = wql;
+        Connection = connection;
+        _enumeratorBehaviorOptions = enumeratorBehaviorOptions;
+    }
 
-            _wql = wql;
-            _connection = connection;
-            _enumeratorBehaviorOptions = enumeratorBehaviorOptions;
-        }
+    public string Wql => _wql;
 
-        public string Wql => _wql;
+    public WindowsManagementConnection Connection { get; }
 
-        public WindowsManagementConnection Connection => _connection;
+    public WbemClassObjectEnumeratorBehaviorOptions EnumeratorBehaviorOption => _enumeratorBehaviorOptions;
 
-        public WbemClassObjectEnumeratorBehaviorOptions EnumeratorBehaviorOption => _enumeratorBehaviorOptions;
+    public IEnumerator<WindowsManagementObject?> GetEnumerator()
+    {
+        var enumerator = Connection.ExecuteQuery(this);
+        return enumerator;
+    }
 
-        public IEnumerator<WindowsManagementObject?> GetEnumerator()
-        {
-            var enumerator = _connection.ExecuteQuery(this);
-            return enumerator;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }

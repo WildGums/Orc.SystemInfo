@@ -1,9 +1,8 @@
-﻿namespace Orc.SystemInfo
-{
-    using System.Collections.Generic;
+﻿namespace Orc.SystemInfo;
 
-    public interface IDbProvidersService
-    {
-        IEnumerable<string> GetInstalledDbProviders();
-    }
+using System.Collections.Generic;
+
+public interface IDbProvidersService
+{
+    IEnumerable<string> GetInstalledDbProviders();
 }
