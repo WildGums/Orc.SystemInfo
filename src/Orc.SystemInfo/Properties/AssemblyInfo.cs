@@ -17,3 +17,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 [assembly: InternalsVisibleTo("Orc.SystemInfo.Tests")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
