@@ -25,5 +25,5 @@ internal interface IWbemLocator
         [In, MarshalAs(UnmanagedType.Interface)]
         IWbemContext? ctx,
         [Out, MarshalAs(UnmanagedType.Interface)]
-        out IWbemServices wbemServices);
+        out IWbemServices? wbemServices);
 }
