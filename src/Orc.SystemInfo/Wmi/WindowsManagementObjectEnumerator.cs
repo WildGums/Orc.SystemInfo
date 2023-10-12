@@ -42,10 +42,15 @@ public sealed class WindowsManagementObjectEnumerator : IEnumerator<WindowsManag
         ThrowIfDisposed();
 
         var currentWmiObject = _wbemClassObjectEnumerator.Next();
+        if (currentWmiObject is null)
+        {
+            return false;
+        }
 
 #pragma warning disable IDISP003 // Dispose previous before re-assigning
         Current = new WindowsManagementObject(currentWmiObject);
 #pragma warning restore IDISP003 // Dispose previous before re-assigning
+
         return true;
     }
 
@@ -70,7 +75,10 @@ public sealed class WindowsManagementObjectEnumerator : IEnumerator<WindowsManag
             return;
         }
 
-        Marshal.ReleaseComObject(_wbemClassObjectEnumerator);
+        if (Marshal.IsComObject(_wbemClassObjectEnumerator))
+        {
+            Marshal.ReleaseComObject(_wbemClassObjectEnumerator);
+        }
 
         _disposed = true;
     }
