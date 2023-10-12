@@ -18,7 +18,7 @@ internal interface IWbemClassObjectEnumerator
         [In]
         uint count,
         [Out]
-        out IWbemClassObject objects,
+        out IWbemClassObject? objects,
         [Out]
         out uint returnedCount);
 

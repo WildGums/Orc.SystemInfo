@@ -94,4 +94,9 @@ internal struct HResult : IEquatable<HResult>
             throw ex;
         }
     }
+
+    public override string ToString()
+    {
+        return $"{_value} (Failed = {Failed})";
+    }
 }

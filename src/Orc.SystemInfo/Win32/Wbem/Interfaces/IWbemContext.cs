@@ -29,9 +29,9 @@ internal interface IWbemContext
         [In]
         uint flags,
         [Out, MarshalAs(UnmanagedType.BStr)]
-        out string name,
+        out string? name,
         [Out]
-        out object value);
+        out object? value);
 
     [PreserveSig]
     HResult EndEnumeration();
@@ -43,7 +43,7 @@ internal interface IWbemContext
         [In]
         uint flags,
         [In]
-        object value);
+        object? value);
 
     [PreserveSig]
     HResult GetValue(
@@ -52,7 +52,7 @@ internal interface IWbemContext
         [In]
         uint flags,
         [Out]
-        out object value);
+        out object? value);
 
     [PreserveSig]
     HResult DeleteValue(

@@ -41,9 +41,13 @@ public sealed class WindowsManagementConnection : Disposable
                 const WbemAuthenticationLevel authLevel = WbemAuthenticationLevel.PacketIntegrity;
 
                 _wbemServices = locator.ConnectServer(DefaultLocalRootPath, _context);
-                _wbemServices.SetProxy(WbemImpersonationLevel.Impersonate, authLevel);
 
-                _connected = true;
+                if (_wbemServices is not null)
+                {
+                    _wbemServices.SetProxy(WbemImpersonationLevel.Impersonate, authLevel);
+
+                    _connected = true;
+                }
             }
         }
         catch (Exception ex)
@@ -61,7 +65,11 @@ public sealed class WindowsManagementConnection : Disposable
         {
             if (_wbemServices is not null)
             {
-                Marshal.ReleaseComObject(_wbemServices);
+                if (Marshal.IsComObject(_wbemServices))
+                {
+                    Marshal.ReleaseComObject(_wbemServices);
+                }
+
                 _wbemServices = null;
             }
 

@@ -26,7 +26,7 @@ internal interface IWbemQualifierSet
         [In]
         int flags,
         [Out]
-        out object value,
+        out object? value,
         [Out]
         out int flavor);
 
@@ -42,9 +42,9 @@ internal interface IWbemQualifierSet
         [In]
         int flags,
         [Out, MarshalAs(UnmanagedType.BStr)]
-        out string name,
+        out string? name,
         [Out]
-        out object value,
+        out object? value,
         [Out]
         out int flavor);
 
@@ -53,7 +53,7 @@ internal interface IWbemQualifierSet
         [In, MarshalAs(UnmanagedType.LPWStr)]
         string name,
         [In]
-        object value,
+        object? value,
         [In]
         int flavor);
 }

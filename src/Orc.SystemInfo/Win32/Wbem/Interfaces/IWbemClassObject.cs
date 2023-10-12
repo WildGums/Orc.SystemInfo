@@ -32,31 +32,31 @@ internal interface IWbemClassObject
     HResult EndEnumeration();
 
     [PreserveSig]
-    HResult GetPropertyQualifierSet([In, MarshalAs(UnmanagedType.LPWStr)] string property, [Out] out IWbemQualifierSet qualifierSet);
+    HResult GetPropertyQualifierSet([In, MarshalAs(UnmanagedType.LPWStr)] string property, [Out] out IWbemQualifierSet? qualifierSet);
 
     [PreserveSig]
     HResult Clone([Out] out IWbemClassObject copy);
 
     [PreserveSig]
-    HResult GetObjectText([In] int flags, [Out, MarshalAs(UnmanagedType.BStr)] out string objectText);
+    HResult GetObjectText([In] int flags, [Out, MarshalAs(UnmanagedType.BStr)] out string? objectText);
 
     [PreserveSig]
-    HResult SpawnDerivedClass([In] int flags, [Out] out IWbemClassObject newClass);
+    HResult SpawnDerivedClass([In] int flags, [Out] out IWbemClassObject? newClass);
 
     [PreserveSig]
-    HResult SpawnInstance([In] int flags, [Out] out IWbemClassObject newInstance);
+    HResult SpawnInstance([In] int flags, [Out] out IWbemClassObject? newInstance);
 
     [PreserveSig]
     HResult CompareTo([In] WbemClassObjectComparisonOptions compareOption, [In] IWbemClassObject compareTo);
 
     [PreserveSig]
-    HResult GetPropertyOrigin([In, MarshalAs(UnmanagedType.LPWStr)] string name, [Out, MarshalAs(UnmanagedType.BStr)] out string className);
+    HResult GetPropertyOrigin([In, MarshalAs(UnmanagedType.LPWStr)] string name, [Out, MarshalAs(UnmanagedType.BStr)] out string? className);
 
     [PreserveSig]
     HResult InheritsFrom([In, MarshalAs(UnmanagedType.LPWStr)] string ancestor);
 
     [PreserveSig]
-    HResult GetMethod([In, MarshalAs(UnmanagedType.LPWStr)] string name, [In] int flags, [Out] out IWbemClassObject inSignature, [Out] out IWbemClassObject outSignature);
+    HResult GetMethod([In, MarshalAs(UnmanagedType.LPWStr)] string name, [In] int flags, [Out] out IWbemClassObject? inSignature, [Out] out IWbemClassObject? outSignature);
 
     [PreserveSig]
     HResult PutMethod([In, MarshalAs(UnmanagedType.LPWStr)] string name, [In] int flags, [In] IWbemClassObject inSignature, [In] IWbemClassObject outSignature);
@@ -68,14 +68,14 @@ internal interface IWbemClassObject
     HResult BeginMethodEnumeration([In] int enumFlags);
 
     [PreserveSig]
-    HResult NextMethod([In] int flags, [Out, MarshalAs(UnmanagedType.BStr)] string name, [Out] out IWbemClassObject inSignature, [Out] out IWbemClassObject outSignature);
+    HResult NextMethod([In] int flags, [Out, MarshalAs(UnmanagedType.BStr)] string name, [Out] out IWbemClassObject? inSignature, [Out] out IWbemClassObject? outSignature);
 
     [PreserveSig]
     HResult EndMethodEnumeration();
 
     [PreserveSig]
-    HResult GetMethodQualifierSet([In, MarshalAs(UnmanagedType.LPWStr)] string method, [Out] out IWbemQualifierSet qualifierSet);
+    HResult GetMethodQualifierSet([In, MarshalAs(UnmanagedType.LPWStr)] string method, [Out] out IWbemQualifierSet? qualifierSet);
 
     [PreserveSig]
-    HResult GetMethodOrigin([In, MarshalAs(UnmanagedType.LPWStr)] string methodName, [Out, MarshalAs(UnmanagedType.BStr)] out string className);
+    HResult GetMethodOrigin([In, MarshalAs(UnmanagedType.LPWStr)] string methodName, [Out, MarshalAs(UnmanagedType.BStr)] out string? className);
 }
