@@ -14,7 +14,7 @@ public class HResultFacts
         {
             var hresult = new HResult(-1);
 
-            Assert.IsTrue(hresult.Failed);
+            Assert.That(hresult.Failed, Is.True);
             Assert.Throws<COMException>(() => hresult.ThrowIfFailed());
         }
 
@@ -23,7 +23,7 @@ public class HResultFacts
         {
             var hresult = new HResult(0);
 
-            Assert.IsFalse(hresult.Failed);
+            Assert.That(hresult.Failed, Is.False);
             Assert.DoesNotThrow(() => hresult.ThrowIfFailed());
         }
     }
