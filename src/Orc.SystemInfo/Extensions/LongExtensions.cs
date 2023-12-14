@@ -1,41 +1,33 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LongExtensions.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.SystemInfo;
 
+using System;
 
-namespace Orc.SystemInfo
+public static class LongExtensions
 {
-    using System;
+    private static readonly string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
 
-    public static class LongExtensions
+    public static string ToReadableSize(this ulong value, int startUnitIndex = 0)
     {
-        private static readonly string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+        return ToReadableSize((long)value, startUnitIndex);
+    }
 
-        public static string ToReadableSize(this ulong value, int startUnitIndex = 0)
+    public static string ToReadableSize(this long value, int startUnitIndex = 0)
+    {
+        if (value < 0)
         {
-            return ToReadableSize((long)value, startUnitIndex);
+            return "-" + ToReadableSize(-value);
         }
 
-        public static string ToReadableSize(this long value, int startUnitIndex = 0)
+        var i = startUnitIndex;
+
+        var finalValue = (decimal)value;
+
+        while (Math.Round(finalValue / 1024) >= 1)
         {
-            if (value < 0)
-            {
-                return "-" + ToReadableSize(-value);
-            }
-
-            var i = startUnitIndex;
-
-            var finalValue = (decimal)value;
-
-            while (Math.Round(finalValue / 1024) >= 1)
-            {
-                finalValue /= 1024;
-                i++;
-            }
-
-            return string.Format("{0:N2} {1}", finalValue, SizeSuffixes[i]);
+            finalValue /= 1024;
+            i++;
         }
+
+        return $"{finalValue:N2} {SizeSuffixes[i]}";
     }
 }

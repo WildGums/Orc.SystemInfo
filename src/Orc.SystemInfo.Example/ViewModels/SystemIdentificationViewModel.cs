@@ -1,59 +1,50 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IdentificationViewModel.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.SystemInfo.Example.ViewModels;
 
+using System;
+using System.Threading.Tasks;
+using Catel.Logging;
+using Catel.MVVM;
+using Catel.Services;
 
-namespace Orc.SystemInfo.Example.ViewModels
+public class SystemIdentificationViewModel : ViewModelBase
 {
-    using System;
-    using System.Threading.Tasks;
-    using Catel;
-    using Catel.Logging;
-    using Catel.MVVM;
-    using Catel.Services;
-    using Catel.Threading;
+    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-    public class SystemIdentificationViewModel : ViewModelBase
+    private readonly ISystemIdentificationService _systemIdentificationService;
+    private readonly IDispatcherService _dispatcherService;
+
+    public SystemIdentificationViewModel(ISystemIdentificationService systemIdentificationService, IDispatcherService dispatcherService)
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        ArgumentNullException.ThrowIfNull(systemIdentificationService);
 
-        private readonly ISystemIdentificationService _systemIdentificationService;
-        private readonly IDispatcherService _dispatcherService;
+        _systemIdentificationService = systemIdentificationService;
+        _dispatcherService = dispatcherService;
+    }
 
-        public SystemIdentificationViewModel(ISystemIdentificationService systemIdentificationService, IDispatcherService dispatcherService)
+    public bool IsBusy { get; private set; }
+
+    public string? MachineId { get; set; }
+
+    public string? CpuId { get; set; }
+
+    public string? GpuId { get; set; }
+
+    public string? HardDriveId { get; set; }
+
+    public string? MacId { get; set; }
+
+    public string? MotherboardId { get; set; }
+
+    protected override async Task InitializeAsync()
+    {
+        await base.InitializeAsync();
+
+        IsBusy = true;
+
+        try
         {
-            Argument.IsNotNull(() => systemIdentificationService);
-
-            _systemIdentificationService = systemIdentificationService;
-            _dispatcherService = dispatcherService;
-        }
-
-        public bool IsBusy { get; private set; }
-
-        public string MachineId { get; set; }
-
-        public string CpuId { get; set; }
-
-        public string GpuId { get; set; }
-
-        public string HardDriveId { get; set; }
-
-        public string MacId { get; set; }
-
-        public string MotherboardId { get; set; }
-
-        protected override async Task InitializeAsync()
-        {
-            await base.InitializeAsync();
-
-            IsBusy = true;
-
-            try
+            await Task.WhenAll(new[]
             {
-                await TaskShim.WhenAll(new[]
-{
                 SetValueAsync(() => _systemIdentificationService.GetCpuId(), x => CpuId = x),
                 SetValueAsync(() => _systemIdentificationService.GetGpuId(), x => GpuId = x),
                 SetValueAsync(() => _systemIdentificationService.GetHardDriveId(), x => HardDriveId = x),
@@ -61,25 +52,24 @@ namespace Orc.SystemInfo.Example.ViewModels
                 SetValueAsync(() => _systemIdentificationService.GetMotherboardId(), x => MotherboardId = x)
             });
 
-                // Note: we calculate the machine id last because we don't want to cause "false timings" in our demo app (the machine id
-                // has to wait for all the others to finish so will take much longer then it actually does)
-                await TaskHelper.Run(() => SetValueAsync(() => _systemIdentificationService.GetMachineId(), x => MachineId = x), true);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Failed to get system identification");
-            }
-
-            IsBusy = false;
+            // Note: we calculate the machine id last because we don't want to cause "false timings" in our demo app (the machine id
+            // has to wait for all the others to finish so will take much longer then it actually does)
+            await Task.Run(() => SetValueAsync(() => _systemIdentificationService.GetMachineId(), x => MachineId = x));
         }
-
-        private async Task SetValueAsync(Func<string> retrievalFunc, Action<string> setter)
+        catch (Exception ex)
         {
-            var value = string.Empty;
-
-            await TaskHelper.Run(() => value = retrievalFunc(), true);
-
-            _dispatcherService.BeginInvokeIfRequired(() => setter(value));
+            Log.Error(ex, "Failed to get system identification");
         }
+
+        IsBusy = false;
+    }
+
+    private async Task SetValueAsync(Func<string> retrievalFunc, Action<string> setter)
+    {
+        var value = string.Empty;
+
+        await Task.Run(() => value = retrievalFunc());
+
+        _dispatcherService.BeginInvokeIfRequired(() => setter(value));
     }
 }

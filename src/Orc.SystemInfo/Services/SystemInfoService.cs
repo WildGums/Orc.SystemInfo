@@ -1,114 +1,101 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SystemInfoService.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.SystemInfo;
 
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using Catel.IoC;
+using Catel.Logging;
+using Catel.Services;
+using MethodTimer;
+using Win32;
 
-namespace Orc.SystemInfo
+public class SystemInfoService : ISystemInfoService
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Globalization;
-    using Catel;
-    using Catel.IoC;
-    using Catel.Logging;
-    using Catel.Services;
-    using MethodTimer;
-    using Win32;
+    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-    public class SystemInfoService : ISystemInfoService
+    private readonly IDotNetFrameworkService _dotNetFrameworkService;
+    private readonly ILanguageService _languageService;
+    private readonly IDbProvidersService _dbProviderService;
+    private readonly ISystemInfoProvider _wmiOperatingSystemSystemInfoProvider;
+    private readonly ISystemInfoProvider _wmiProcessorSystemInfoProvider;
+
+    public SystemInfoService(IDotNetFrameworkService dotNetFrameworkService, ILanguageService languageService,
+        IDbProvidersService dbProviderService, IServiceLocator serviceLocator)
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        ArgumentNullException.ThrowIfNull(dotNetFrameworkService);
+        ArgumentNullException.ThrowIfNull(languageService);
+        ArgumentNullException.ThrowIfNull(dbProviderService);
+        ArgumentNullException.ThrowIfNull(serviceLocator);
 
-        private readonly IDotNetFrameworkService _dotNetFrameworkService;
-        private readonly ILanguageService _languageService;
-        private readonly IDbProvidersService _dbProviderService;
-        private readonly ISystemInfoProvider _wmiOperatingSystemSystemInfoProvider;
-        private readonly ISystemInfoProvider _wmiProcesorSystemInfoProvider;
+        _dotNetFrameworkService = dotNetFrameworkService;
+        _languageService = languageService;
+        _dbProviderService = dbProviderService;
 
-        public SystemInfoService(IDotNetFrameworkService dotNetFrameworkService, ILanguageService languageService,
-            IDbProvidersService dbProviderService, IServiceLocator serviceLocator)
+        _wmiOperatingSystemSystemInfoProvider = serviceLocator.ResolveRequiredType<ISystemInfoProvider>(Constants.CimNamespaces.OperatingSystem);
+        _wmiProcessorSystemInfoProvider = serviceLocator.ResolveRequiredType<ISystemInfoProvider>(Constants.CimNamespaces.Processor);
+    }
+
+    [Time]
+    public IEnumerable<SystemInfoElement> GetSystemInfo()
+    {
+        Log.Debug("Retrieving system info");
+
+        var items = new List<SystemInfoElement>
         {
-            Argument.IsNotNull(() => dotNetFrameworkService);
-            Argument.IsNotNull(() => languageService);
-            Argument.IsNotNull(() => dbProviderService);
-            Argument.IsNotNull(() => serviceLocator);
+            new (_languageService.GetRequiredString("SystemInfo_UserName"), Environment.UserName),
+            new (_languageService.GetRequiredString("SystemInfo_UserDomainName"), Environment.UserDomainName),
+            new (_languageService.GetRequiredString("SystemInfo_MachineName"), Environment.MachineName),
+            new (_languageService.GetRequiredString("SystemInfo_OsVersion"), Environment.OSVersion.ToString()),
+            new (_languageService.GetRequiredString("SystemInfo_Version"), Environment.Version.ToString())
+        };
 
-            _dotNetFrameworkService = dotNetFrameworkService;
-            _languageService = languageService;
-            _dbProviderService = dbProviderService;
+        items.AddRange(_wmiOperatingSystemSystemInfoProvider.GetSystemInfoElements());
 
-            _wmiOperatingSystemSystemInfoProvider = serviceLocator.ResolveType<ISystemInfoProvider>(Constants.CimNamespaces.OperatingSystem);
-            _wmiProcesorSystemInfoProvider = serviceLocator.ResolveType<ISystemInfoProvider>(Constants.CimNamespaces.Processor);
+        var memStatus = new Kernel32.MemoryStatusEx();
+        if (Kernel32.GlobalMemoryStatusEx(memStatus))
+        {
+            items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_TotalMemory"), memStatus.ullTotalPhys.ToReadableSize()));
+            items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_AvailableMemory"), memStatus.ullAvailPhys.ToReadableSize()));
         }
 
-        #region ISystemInfoService Members
+        items.AddRange(_wmiProcessorSystemInfoProvider.GetSystemInfoElements());
 
-        [Time]
-        public IEnumerable<SystemInfoElement> GetSystemInfo()
+        items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_SystemUpTime"), GetSystemUpTime()));
+        items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_ApplicationUpTime"), (DateTime.Now - Process.GetCurrentProcess().StartTime).ToString()));
+
+        items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_CurrentCulture"), CultureInfo.CurrentCulture.ToString()));
+
+        items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_DotNetFrameworkVersions"), string.Empty));
+
+        foreach (var pair in _dotNetFrameworkService.GetInstalledFrameworks())
         {
-            Log.Debug("Retrieving system info");
-
-            var items = new List<SystemInfoElement>();
-
-            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_UserName"), Environment.UserName));
-            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_UserDomainName"), Environment.UserDomainName));
-            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_MachineName"), Environment.MachineName));
-            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_OsVersion"), Environment.OSVersion.ToString()));
-            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_Version"), Environment.Version.ToString()));
-
-            items.AddRange(_wmiOperatingSystemSystemInfoProvider.GetSystemInfoElements());
-
-            var memStatus = new Kernel32.MemoryStatusEx();
-            if (Kernel32.GlobalMemoryStatusEx(memStatus))
-            {
-                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_TotalMemory"), memStatus.ullTotalPhys.ToReadableSize()));
-                items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_AvailableMemory"), memStatus.ullAvailPhys.ToReadableSize()));
-            }
-
-            items.AddRange(_wmiProcesorSystemInfoProvider.GetSystemInfoElements());
-
-            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_SystemUpTime"), GetSystemUpTime()));
-            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_ApplicationUpTime"), (DateTime.Now - Process.GetCurrentProcess().StartTime).ToString()));
-
-            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_CurrentCulture"), CultureInfo.CurrentCulture.ToString()));
-
-            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_DotNetFrameworkVersions"), string.Empty));
-            foreach (var pair in _dotNetFrameworkService.GetInstalledFrameworks())
-            {
-                items.Add(new SystemInfoElement(string.Empty, pair));
-            }
-
-            items.Add(new SystemInfoElement(_languageService.GetString("SystemInfo_InstalledDatabaseProviders"), string.Empty));
-            foreach (var dbProviderName in _dbProviderService.GetInstalledDbProviders())
-            {
-                items.Add(new SystemInfoElement(string.Empty, dbProviderName));
-            }
-
-            Log.Debug("Retrieved system info");
-
-            return items;
+            items.Add(new SystemInfoElement(string.Empty, pair));
         }
-        #endregion
 
-        #region Methods
-        private static string GetSystemUpTime()
+        items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_InstalledDatabaseProviders"), string.Empty));
+
+        foreach (var dbProviderName in _dbProviderService.GetInstalledDbProviders())
         {
-            try
-            {
-                using (var upTime = new PerformanceCounter("System", "System Up Time"))
-                {
-                    upTime.NextValue();
-                    return TimeSpan.FromSeconds(upTime.NextValue()).ToString();
-                }
-            }
-            catch (Exception)
-            {
-                return "n/a";
-            }
+            items.Add(new SystemInfoElement(string.Empty, dbProviderName));
         }
-        #endregion
+
+        Log.Debug("Retrieved system info");
+
+        return items;
+    }
+
+    private static string GetSystemUpTime()
+    {
+        try
+        {
+            using var upTime = new PerformanceCounter("System", "System Up Time");
+            upTime.NextValue();
+            return TimeSpan.FromSeconds(upTime.NextValue()).ToString();
+        }
+        catch (Exception)
+        {
+            return "n/a";
+        }
     }
 }

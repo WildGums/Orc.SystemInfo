@@ -1,55 +1,45 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SystemInfoViewModel.cs" company="WildGums">
-//   Copyright (c) 2008 - 2015 WildGums. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿namespace Orc.SystemInfo.Example.ViewModels;
 
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Catel.Logging;
+using Catel.MVVM;
 
-namespace Orc.SystemInfo.Example.ViewModels
+public class SystemInfoViewModel : ViewModelBase
 {
-    using System;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using Catel;
-    using Catel.Logging;
-    using Catel.MVVM;
-    using Catel.Threading;
+    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-    public class SystemInfoViewModel : ViewModelBase
+    private readonly ISystemInfoService _systemInfoService;
+
+    public SystemInfoViewModel(ISystemInfoService systemInfoService)
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        ArgumentNullException.ThrowIfNull(systemInfoService);
 
-        private readonly ISystemInfoService _systemInfoService;
+        _systemInfoService = systemInfoService;
+    }
 
-        public SystemInfoViewModel(ISystemInfoService systemInfoService)
+    public bool IsBusy { get; private set; }
+
+    public string? SystemInfo { get; set; }
+
+    protected override async Task InitializeAsync()
+    {
+        await base.InitializeAsync();
+
+        IsBusy = true;
+
+        try
         {
-            Argument.IsNotNull(() => systemInfoService);
-
-            _systemInfoService = systemInfoService;
+            var systemInfo = await Task.Run(() => _systemInfoService.GetSystemInfo());
+            var systemInfoLines = systemInfo.Select(x => $"{x.Name} {x.Value}");
+            SystemInfo = string.Join("\n", systemInfoLines);
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Failed to get system info");
         }
 
-        public bool IsBusy { get; private set; }
-
-        public string SystemInfo { get; set; }
-
-        protected override async Task InitializeAsync()
-        {
-            await base.InitializeAsync();
-
-            IsBusy = true;
-
-            try
-            {
-                var systemInfo = await TaskHelper.Run(() => _systemInfoService.GetSystemInfo(), true);
-                var systemInfoLines = systemInfo.Select(x => string.Format("{0} {1}", x.Name, x.Value));
-                SystemInfo = string.Join("\n", systemInfoLines);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Failed to get system info");
-            }
-
-            IsBusy = false;
-        }
+        IsBusy = false;
     }
 }
