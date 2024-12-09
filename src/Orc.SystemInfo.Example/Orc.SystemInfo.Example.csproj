@@ -1,6 +1,6 @@
-<Project Sdk="MSBuild.Sdk.Extras">
+﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>net9.0-windows</TargetFrameworks>
+    <TargetFrameworks>net8.0-windows</TargetFrameworks>
     <AssemblyName>Orc.SystemInfo.Example</AssemblyName>
     <RootNamespace>Orc.SystemInfo.Example</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>

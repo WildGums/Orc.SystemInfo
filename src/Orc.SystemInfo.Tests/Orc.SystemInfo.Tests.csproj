@@ -1,4 +1,4 @@
-a<Project Sdk="MSBuild.Sdk.Extras">
+<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
     <TargetFrameworks>net8.0-windows</TargetFrameworks>
     <AssemblyName>Orc.SystemInfo.Tests</AssemblyName>
