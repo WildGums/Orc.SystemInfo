@@ -27,11 +27,11 @@
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net8.0')) ">
-    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="9.0.6" />
+    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="9.0.7" />
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net9.0')) ">
-    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="9.0.6" />
+    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="9.0.7" />
   </ItemGroup>
 
   <ItemGroup>
