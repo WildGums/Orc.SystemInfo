@@ -1,0 +1,38 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/misc/">
+    <File Path="Directory.build.project.props" />
+    <File Path="Directory.build.props" />
+    <File Path="Directory.build.shared.explicit.props" />
+    <File Path="Directory.build.shared.implicit.props" />
+    <File Path="Directory.build.shared.mat.props" />
+    <File Path="Directory.build.targets" />
+    <File Path="GlobalSuppressions.cs" />
+    <File Path="nuget.config" />
+    <File Path="Orc.SystemInfo.sln.DotSettings" />
+    <File Path="SolutionAssemblyInfo.cs" />
+  </Folder>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Core/">
+    <Project Path="Orc.SystemInfo/Orc.SystemInfo.csproj">
+      <BuildDependency Project="WbemShim/WbemShim.vcxproj" />
+    </Project>
+  </Folder>
+  <Folder Name="/src/Example/">
+    <Project Path="Orc.SystemInfo.Example/Orc.SystemInfo.Example.csproj" />
+  </Folder>
+  <Folder Name="/src/Native/">
+    <Project Path="WbemShim/WbemShim.vcxproj">
+      <BuildType Solution="Debug|Any CPU" Project="Release" />
+      <Build Solution="*|Any CPU" Project="false" />
+      <Build Solution="Debug|x86" Project="false" />
+    </Project>
+  </Folder>
+  <Folder Name="/src/Test/">
+    <Project Path="Orc.SystemInfo.Tests/Orc.SystemInfo.Tests.csproj" />
+  </Folder>
+</Solution>
