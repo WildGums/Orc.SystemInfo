@@ -26,7 +26,7 @@
     <Project Path="Orc.SystemInfo.Example/Orc.SystemInfo.Example.csproj" />
   </Folder>
   <Folder Name="/src/Native/">
-    <Project Path="WbemShim/WbemShim.vcxproj">
+    <Project Path="WbemShim/WbemShim.vcxproj" Id="a9114cf2-4a31-4357-9d1b-55eee3fe28c6">
       <BuildType Solution="Debug|Any CPU" Project="Release" />
       <Build Solution="*|Any CPU" Project="false" />
       <Build Solution="Debug|x86" Project="false" />
