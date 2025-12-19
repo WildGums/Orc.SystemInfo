@@ -14,7 +14,10 @@
             <RowDefinition Height="200" />
         </Grid.RowDefinitions>
 
-        <orctheming:ThemeSwitcherView />
+        <StackPanel Orientation="Horizontal">
+            <orctheming:ThemeSwitcherView />
+            <orctheming:FontSizeSwitcherView />
+        </StackPanel>
 
         <orccontrols:TabControl>
             <TabItem Header="System info">
