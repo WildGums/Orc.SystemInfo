@@ -4,19 +4,25 @@ using System;
 using System.Runtime.InteropServices;
 using Catel;
 using Catel.Logging;
+using Microsoft.Extensions.Logging;
 using Orc.SystemInfo.Win32;
 
 public sealed class WindowsManagementConnection : Disposable
 {
     private const string DefaultLocalRootPath = @"\\.\root\cimv2";
 
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
     private readonly object _lock = new();
+
+    private readonly ILogger _logger;
 
     private bool _connected;
     private IWbemServices? _wbemServices;
     private IWbemContext? _context;
+
+    public WindowsManagementConnection(ILogger logger)
+    {
+        _logger = logger;
+    }
 
     public void Open()
     {
@@ -53,7 +59,7 @@ public sealed class WindowsManagementConnection : Disposable
         catch (Exception ex)
         {
             _context = null;
-            Log.Error(ex);
+            _logger.LogError(ex, "Failed to open the connection");
         }
     }
 
@@ -99,7 +105,7 @@ public sealed class WindowsManagementConnection : Disposable
         var wbemServices = _wbemServices;
         if (wbemServices is null)
         {
-            throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot execute query without services");
+            throw _logger.LogErrorAndCreateException<InvalidOperationException>("Cannot execute query without services");
         }
 
         var enumerator = wbemServices.ExecQuery(query.Wql, query.EnumeratorBehaviorOption, _context);

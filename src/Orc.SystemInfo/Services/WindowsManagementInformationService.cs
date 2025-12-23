@@ -3,11 +3,17 @@
 using System;
 using System.Runtime.InteropServices;
 using Catel.Logging;
+using Microsoft.Extensions.Logging;
 using Wmi;
 
 public class WindowsManagementInformationService : IWindowsManagementInformationService
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private readonly ILogger<WindowsManagementInformationService> _logger;
+
+    public WindowsManagementInformationService(ILogger<WindowsManagementInformationService> logger)
+    {
+        _logger = logger;
+    }
 
     public string GetIdentifier(string wmiClass, string wmiProperty)
     {
@@ -23,7 +29,8 @@ public class WindowsManagementInformationService : IWindowsManagementInformation
             var query = string.Format("SELECT {0}{1} FROM {2}", wmiProperty,
                 string.IsNullOrWhiteSpace(additionalWmiToCheck) ? string.Empty : $", {additionalWmiToCheck}", wmiClass);
 
-            using var connection = new WindowsManagementConnection();
+            using var connection = new WindowsManagementConnection(_logger);
+
             foreach (var managementObject in connection.CreateQuery(query))
             {
                 if (managementObject is null)

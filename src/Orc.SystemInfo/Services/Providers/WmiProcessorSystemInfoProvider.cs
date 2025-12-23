@@ -5,24 +5,23 @@ using System.Collections.Generic;
 using System.Linq;
 using Catel.Logging;
 using Catel.Services;
+using Microsoft.Extensions.Logging;
 using Wmi;
 
 public class WmiProcessorSystemInfoProvider : ISystemInfoProvider
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
+    private readonly ILogger<WmiProcessorSystemInfoProvider> _logger;
     private readonly ILanguageService _languageService;
 
-    public WmiProcessorSystemInfoProvider(ILanguageService languageService)
+    public WmiProcessorSystemInfoProvider(ILogger<WmiProcessorSystemInfoProvider> logger, ILanguageService languageService)
     {
-        ArgumentNullException.ThrowIfNull(languageService);
-
+        _logger = logger;
         _languageService = languageService;
     }
 
     public IEnumerable<SystemInfoElement> GetSystemInfoElements()
     {
-        Log.Debug("Retrieving system info");
+        _logger.LogDebug("Retrieving system info");
 
         var notAvailable = _languageService.GetRequiredString("SystemInfo_NotAvailable");
 
@@ -33,14 +32,14 @@ public class WmiProcessorSystemInfoProvider : ISystemInfoProvider
             WindowsManagementObject? cpu = null;
             const string wql = "SELECT * FROM Win32_Processor";
 
-            using (var connection = new WindowsManagementConnection())
+            using (var connection = new WindowsManagementConnection(_logger))
             {
                 cpu = connection.CreateQuery(wql).FirstOrDefault();
             }
 
             if (cpu is null)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>($"Unexpected result from query: {wql}");
+                throw _logger.LogErrorAndCreateException<InvalidOperationException>($"Unexpected result from query: {wql}");
             }
 
             // __cpuid, see: https://docs.microsoft.com/ru-ru/cpp/intrinsics/cpuid-cpuidex?view=msvc-160;
@@ -57,7 +56,7 @@ public class WmiProcessorSystemInfoProvider : ISystemInfoProvider
         catch (Exception ex)
         {
             items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_CpuInfo"), "n/a, please contact support"));
-            Log.Warning(ex, "Failed to retrieve CPU information");
+            _logger.LogWarning(ex, "Failed to retrieve CPU information");
         }
 
         return items;

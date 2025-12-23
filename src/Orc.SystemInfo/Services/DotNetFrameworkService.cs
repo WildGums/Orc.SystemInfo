@@ -5,12 +5,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Catel;
-using Catel.Logging;
+using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 
 public class DotNetFrameworkService : IDotNetFrameworkService
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private readonly ILogger<DotNetFrameworkService> _logger;
+
+    public DotNetFrameworkService(ILogger<DotNetFrameworkService> logger)
+    {
+        _logger = logger;
+    }
 
     public virtual IEnumerable<string> GetInstalledFrameworks()
     {
@@ -47,7 +52,7 @@ public class DotNetFrameworkService : IDotNetFrameworkService
         }
         catch (Exception ex)
         {
-            Log.Warning(ex, "Failed to get .net framework versions");
+            _logger.LogWarning(ex, "Failed to get .net framework versions");
         }
 
         return versions;

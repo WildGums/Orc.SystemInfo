@@ -5,18 +5,17 @@ using System.Collections.Generic;
 using System.Linq;
 using Catel.Logging;
 using Catel.Services;
+using Microsoft.Extensions.Logging;
 using Wmi;
 
 public class WmiOperatingSystemSystemInfoProvider : ISystemInfoProvider
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
+    private readonly ILogger<WmiOperatingSystemSystemInfoProvider> _logger;
     private readonly ILanguageService _languageService;
 
-    public WmiOperatingSystemSystemInfoProvider(ILanguageService languageService)
+    public WmiOperatingSystemSystemInfoProvider(ILogger<WmiOperatingSystemSystemInfoProvider> logger, ILanguageService languageService)
     {
-        ArgumentNullException.ThrowIfNull(languageService);
-
+        _logger = logger;
         _languageService = languageService;
     }
 
@@ -32,18 +31,18 @@ public class WmiOperatingSystemSystemInfoProvider : ISystemInfoProvider
 
             const string wql = "SELECT * FROM Win32_OperatingSystem";
 
-            using (var connection = new WindowsManagementConnection())
+            using (var connection = new WindowsManagementConnection(_logger))
             {
                 wmi = connection.CreateQuery(wql).FirstOrDefault();
             }
 
             if (wmi is null)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>($"Unexpected result from query: {wql}");
+                throw _logger.LogErrorAndCreateException<InvalidOperationException>($"Unexpected result from query: {wql}");
             }
 
             items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_OsName"), wmi.GetRequiredValue("Caption", notAvailable)));
-            // Note: can be retrieved from SystemInfo.wProcessorAchitecture
+            // Note: can be retrieved from SystemInfo.wProcessorArchitecture
             items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_Architecture"), wmi.GetRequiredValue("OSArchitecture", notAvailable)));
             items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_Build"), wmi.GetRequiredValue("BuildNumber", notAvailable)));
             // Note: can be count from lpMaximumApplicationAddress (Kernel32.SystemInfo);
@@ -52,7 +51,7 @@ public class WmiOperatingSystemSystemInfoProvider : ISystemInfoProvider
         catch (Exception ex)
         {
             items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_OsInfo"), "n/a, please contact support"));
-            Log.Warning(ex, "Failed to retrieve OS information");
+            _logger.LogWarning(ex, "Failed to retrieve OS information");
         }
 
         return items;

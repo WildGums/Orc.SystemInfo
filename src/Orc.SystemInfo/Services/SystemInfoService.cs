@@ -4,42 +4,35 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using Catel.IoC;
-using Catel.Logging;
+using System.Linq;
+using Catel.Collections;
 using Catel.Services;
 using MethodTimer;
+using Microsoft.Extensions.Logging;
 using Win32;
 
 public class SystemInfoService : ISystemInfoService
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
+    private readonly ILogger<SystemInfoService> _logger;
     private readonly IDotNetFrameworkService _dotNetFrameworkService;
     private readonly ILanguageService _languageService;
     private readonly IDbProvidersService _dbProviderService;
-    private readonly ISystemInfoProvider _wmiOperatingSystemSystemInfoProvider;
-    private readonly ISystemInfoProvider _wmiProcessorSystemInfoProvider;
+    private readonly IReadOnlyList<ISystemInfoProvider> _systemInfoProviders;
 
-    public SystemInfoService(IDotNetFrameworkService dotNetFrameworkService, ILanguageService languageService,
-        IDbProvidersService dbProviderService, IServiceLocator serviceLocator)
+    public SystemInfoService(ILogger<SystemInfoService> logger, IDotNetFrameworkService dotNetFrameworkService, ILanguageService languageService,
+        IDbProvidersService dbProviderService, IEnumerable<ISystemInfoProvider> systemInfoProviders)
     {
-        ArgumentNullException.ThrowIfNull(dotNetFrameworkService);
-        ArgumentNullException.ThrowIfNull(languageService);
-        ArgumentNullException.ThrowIfNull(dbProviderService);
-        ArgumentNullException.ThrowIfNull(serviceLocator);
-
+        _logger = logger;
         _dotNetFrameworkService = dotNetFrameworkService;
         _languageService = languageService;
         _dbProviderService = dbProviderService;
-
-        _wmiOperatingSystemSystemInfoProvider = serviceLocator.ResolveRequiredType<ISystemInfoProvider>(Constants.CimNamespaces.OperatingSystem);
-        _wmiProcessorSystemInfoProvider = serviceLocator.ResolveRequiredType<ISystemInfoProvider>(Constants.CimNamespaces.Processor);
+        _systemInfoProviders = systemInfoProviders.ToArray();
     }
 
     [Time]
     public IEnumerable<SystemInfoElement> GetSystemInfo()
     {
-        Log.Debug("Retrieving system info");
+        _logger.LogDebug("Retrieving system info");
 
         var items = new List<SystemInfoElement>
         {
@@ -50,7 +43,10 @@ public class SystemInfoService : ISystemInfoService
             new (_languageService.GetRequiredString("SystemInfo_Version"), Environment.Version.ToString())
         };
 
-        items.AddRange(_wmiOperatingSystemSystemInfoProvider.GetSystemInfoElements());
+        foreach (var systemInfoProvider in _systemInfoProviders)
+        {
+            items.AddRange(systemInfoProvider.GetSystemInfoElements());
+        }
 
         var memStatus = new Kernel32.MemoryStatusEx();
         if (Kernel32.GlobalMemoryStatusEx(memStatus))
@@ -58,8 +54,6 @@ public class SystemInfoService : ISystemInfoService
             items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_TotalMemory"), memStatus.ullTotalPhys.ToReadableSize()));
             items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_AvailableMemory"), memStatus.ullAvailPhys.ToReadableSize()));
         }
-
-        items.AddRange(_wmiProcessorSystemInfoProvider.GetSystemInfoElements());
 
         items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_SystemUpTime"), GetSystemUpTime()));
         items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_ApplicationUpTime"), (DateTime.Now - Process.GetCurrentProcess().StartTime).ToString()));
@@ -80,7 +74,7 @@ public class SystemInfoService : ISystemInfoService
             items.Add(new SystemInfoElement(string.Empty, dbProviderName));
         }
 
-        Log.Debug("Retrieved system info");
+        _logger.LogDebug("Retrieved system info");
 
         return items;
     }
