@@ -9,7 +9,7 @@
     /// </summary>
     public static class OrcSystemInfoModule
     {
-        public static IServiceCollection AddOrcSystemInfoServices(this IServiceCollection serviceCollection)
+        public static IServiceCollection AddOrcSystemInfo(this IServiceCollection serviceCollection)
         {
             serviceCollection.TryAddSingleton<IDotNetFrameworkService, DotNetFrameworkService>();
             serviceCollection.TryAddSingleton<IDbProvidersService, DbProvidersService>();
