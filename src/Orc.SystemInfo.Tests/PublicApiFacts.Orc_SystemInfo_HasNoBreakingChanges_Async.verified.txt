@@ -17,7 +17,7 @@ namespace Orc.SystemInfo
     }
     public class DotNetFrameworkService : Orc.SystemInfo.IDotNetFrameworkService
     {
-        public DotNetFrameworkService() { }
+        public DotNetFrameworkService(Microsoft.Extensions.Logging.ILogger<Orc.SystemInfo.DotNetFrameworkService> logger) { }
         protected System.Collections.Generic.IEnumerable<string> BuildFrameworkNamesRecursively(Microsoft.Win32.RegistryKey registryKey, string name, string topLevelSp = "0", bool topLevel = false) { }
         public virtual System.Collections.Generic.IEnumerable<string> GetInstalledFrameworks() { }
         protected System.Collections.Generic.IEnumerable<string> GetNetFrameworkVersions() { }
@@ -57,9 +57,13 @@ namespace Orc.SystemInfo
         public static string ToReadableSize(this long value, int startUnitIndex = 0) { }
         public static string ToReadableSize(this ulong value, int startUnitIndex = 0) { }
     }
+    public static class OrcSystemInfoModule
+    {
+        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddOrcSystemInfo(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection) { }
+    }
     public class SystemIdentificationService : Orc.SystemInfo.ISystemIdentificationService
     {
-        public SystemIdentificationService(Orc.SystemInfo.IWindowsManagementInformationService windowsManagementInformationService) { }
+        public SystemIdentificationService(Microsoft.Extensions.Logging.ILogger<Orc.SystemInfo.IWindowsManagementInformationService> logger, Orc.SystemInfo.IWindowsManagementInformationService windowsManagementInformationService) { }
         protected virtual string CalculateHash(string input) { }
         public virtual string GetCpuId() { }
         public virtual string GetGpuId() { }
@@ -78,12 +82,12 @@ namespace Orc.SystemInfo
     }
     public class SystemInfoService : Orc.SystemInfo.ISystemInfoService
     {
-        public SystemInfoService(Orc.SystemInfo.IDotNetFrameworkService dotNetFrameworkService, Catel.Services.ILanguageService languageService, Orc.SystemInfo.IDbProvidersService dbProviderService, Catel.IoC.IServiceLocator serviceLocator) { }
+        public SystemInfoService(Microsoft.Extensions.Logging.ILogger<Orc.SystemInfo.SystemInfoService> logger, Orc.SystemInfo.IDotNetFrameworkService dotNetFrameworkService, Catel.Services.ILanguageService languageService, Orc.SystemInfo.IDbProvidersService dbProviderService, System.Collections.Generic.IEnumerable<Orc.SystemInfo.ISystemInfoProvider> systemInfoProviders) { }
         public System.Collections.Generic.IEnumerable<Orc.SystemInfo.SystemInfoElement> GetSystemInfo() { }
     }
     public class WindowsManagementInformationService : Orc.SystemInfo.IWindowsManagementInformationService
     {
-        public WindowsManagementInformationService() { }
+        public WindowsManagementInformationService(Microsoft.Extensions.Logging.ILogger<Orc.SystemInfo.WindowsManagementInformationService> logger) { }
         public string GetIdentifier(string wmiClass, string wmiProperty) { }
         public string GetIdentifier(string wmiClass, string wmiProperty, string? additionalWmiToCheck, string? additionalWmiToCheckValue) { }
     }
@@ -96,12 +100,12 @@ namespace Orc.SystemInfo
     }
     public class WmiOperatingSystemSystemInfoProvider : Orc.SystemInfo.ISystemInfoProvider
     {
-        public WmiOperatingSystemSystemInfoProvider(Catel.Services.ILanguageService languageService) { }
+        public WmiOperatingSystemSystemInfoProvider(Microsoft.Extensions.Logging.ILogger<Orc.SystemInfo.WmiOperatingSystemSystemInfoProvider> logger, Catel.Services.ILanguageService languageService) { }
         public System.Collections.Generic.IEnumerable<Orc.SystemInfo.SystemInfoElement> GetSystemInfoElements() { }
     }
     public class WmiProcessorSystemInfoProvider : Orc.SystemInfo.ISystemInfoProvider
     {
-        public WmiProcessorSystemInfoProvider(Catel.Services.ILanguageService languageService) { }
+        public WmiProcessorSystemInfoProvider(Microsoft.Extensions.Logging.ILogger<Orc.SystemInfo.WmiProcessorSystemInfoProvider> logger, Catel.Services.ILanguageService languageService) { }
         public System.Collections.Generic.IEnumerable<Orc.SystemInfo.SystemInfoElement> GetSystemInfoElements() { }
     }
 }
@@ -150,7 +154,7 @@ namespace Orc.SystemInfo.Wmi
 {
     public sealed class WindowsManagementConnection : Catel.Disposable
     {
-        public WindowsManagementConnection() { }
+        public WindowsManagementConnection(Microsoft.Extensions.Logging.ILogger logger) { }
         public Orc.SystemInfo.Wmi.WindowsManagementQuery CreateQuery(string wql) { }
         protected override void DisposeUnmanaged() { }
         public Orc.SystemInfo.Wmi.WindowsManagementObjectEnumerator ExecuteQuery(Orc.SystemInfo.Wmi.WindowsManagementQuery query) { }
