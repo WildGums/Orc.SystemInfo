@@ -1,6 +1,7 @@
 ﻿namespace Orc.SystemInfo
 {
     using Catel.Services;
+    using Catel.ThirdPartyNotices;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -21,6 +22,8 @@
             serviceCollection.AddSingleton<ISystemInfoProvider, WmiProcessorSystemInfoProvider>();
 
             serviceCollection.AddSingleton<ILanguageSource>(new LanguageResourceSource("Orc.SystemInfo", "Orc.SystemInfo.Properties", "Resources"));
+
+            serviceCollection.AddSingleton<IThirdPartyNotice>((x) => new LibraryThirdPartyNotice("Orc.SystemInfo", "https://github.com/wildgums/orc.systeminfo"));
 
             return serviceCollection;
         }
