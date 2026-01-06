@@ -8,6 +8,13 @@ public static class ModuleInitializer
     [System.Runtime.CompilerServices.ModuleInitializer]
     public static void Initialize() { }
 }
+namespace Orc
+{
+    public static class OrcSystemInfoModule
+    {
+        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddOrcSystemInfo(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection) { }
+    }
+}
 namespace Orc.SystemInfo
 {
     public class DbProvidersService : Orc.SystemInfo.IDbProvidersService
@@ -56,10 +63,6 @@ namespace Orc.SystemInfo
     {
         public static string ToReadableSize(this long value, int startUnitIndex = 0) { }
         public static string ToReadableSize(this ulong value, int startUnitIndex = 0) { }
-    }
-    public static class OrcSystemInfoModule
-    {
-        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddOrcSystemInfo(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection) { }
     }
     public class SystemIdentificationService : Orc.SystemInfo.ISystemIdentificationService
     {
