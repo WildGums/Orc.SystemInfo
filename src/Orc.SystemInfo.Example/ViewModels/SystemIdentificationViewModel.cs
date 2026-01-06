@@ -5,18 +5,19 @@ using System.Threading.Tasks;
 using Catel.Logging;
 using Catel.MVVM;
 using Catel.Services;
+using Microsoft.Extensions.Logging;
 
 public class SystemIdentificationViewModel : ViewModelBase
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(SystemIdentificationViewModel));
 
     private readonly ISystemIdentificationService _systemIdentificationService;
     private readonly IDispatcherService _dispatcherService;
 
-    public SystemIdentificationViewModel(ISystemIdentificationService systemIdentificationService, IDispatcherService dispatcherService)
+    public SystemIdentificationViewModel(ISystemIdentificationService systemIdentificationService, 
+        IDispatcherService dispatcherService, IServiceProvider serviceProvider)
+        : base(serviceProvider)
     {
-        ArgumentNullException.ThrowIfNull(systemIdentificationService);
-
         _systemIdentificationService = systemIdentificationService;
         _dispatcherService = dispatcherService;
     }
@@ -58,7 +59,7 @@ public class SystemIdentificationViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Failed to get system identification");
+            Logger.LogError(ex, "Failed to get system identification");
         }
 
         IsBusy = false;
