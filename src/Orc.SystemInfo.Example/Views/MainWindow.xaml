@@ -1,9 +1,10 @@
-﻿<catel:Window x:Class="Orc.SystemInfo.Example.Views.MainView"
+﻿<catel:Window x:Class="Orc.SystemInfo.Example.Views.MainWindow"
               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
               xmlns:catel="http://schemas.catelproject.com"
               xmlns:views="clr-namespace:Orc.SystemInfo.Example.Views"
-              xmlns:orccontrols="http://schemas.wildgums.com/orc/controls" 
+              xmlns:orccontrols="http://schemas.wildgums.com/orc/controls"
+              xmlns:orclogviewer="http://schemas.wildgums.com/orc/logviewer"
               xmlns:orctheming="http://schemas.wildgums.com/orc/theming"
               Height="600" Width="800">
 
@@ -29,7 +30,7 @@
             </TabItem>
         </orccontrols:TabControl>
 
-        <orccontrols:LogViewerControl />
+        <orclogviewer:AdvancedLogViewerControl />
     </orccontrols:StackGrid>
     
 </catel:Window>

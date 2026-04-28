@@ -5,17 +5,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using Catel.Logging;
 using Catel.MVVM;
+using Microsoft.Extensions.Logging;
 
 public class SystemInfoViewModel : ViewModelBase
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(SystemInfoViewModel));
 
     private readonly ISystemInfoService _systemInfoService;
 
-    public SystemInfoViewModel(ISystemInfoService systemInfoService)
+    public SystemInfoViewModel(ISystemInfoService systemInfoService, IServiceProvider serviceProvider)
+        : base(serviceProvider)
     {
-        ArgumentNullException.ThrowIfNull(systemInfoService);
-
         _systemInfoService = systemInfoService;
     }
 
@@ -37,7 +37,7 @@ public class SystemInfoViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Failed to get system info");
+            Logger.LogError(ex, "Failed to get system info");
         }
 
         IsBusy = false;

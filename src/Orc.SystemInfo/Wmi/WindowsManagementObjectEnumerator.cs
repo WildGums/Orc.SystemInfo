@@ -10,8 +10,6 @@ using Win32;
 
 public sealed class WindowsManagementObjectEnumerator : IEnumerator<WindowsManagementObject?>
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
     private readonly IWbemClassObjectEnumerator _wbemClassObjectEnumerator;
 
     private bool _disposed;
@@ -87,7 +85,7 @@ public sealed class WindowsManagementObjectEnumerator : IEnumerator<WindowsManag
     {
         if (_disposed)
         {
-            throw Log.ErrorAndCreateException<ObjectDisposedException>(typeof(WindowsManagementObjectEnumerator).GetSafeFullName());
+            throw new ObjectDisposedException(typeof(WindowsManagementObjectEnumerator).GetSafeFullName());
         }
     }
 }

@@ -8,19 +8,19 @@ using System.Threading.Tasks;
 using Catel.Caching;
 using Catel.Logging;
 using MethodTimer;
+using Microsoft.Extensions.Logging;
 
 public class SystemIdentificationService : ISystemIdentificationService
 {
-    private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
+    private readonly ILogger<IWindowsManagementInformationService> _logger;
     private readonly IWindowsManagementInformationService _windowsManagementInformationService;
 
     private readonly ICacheStorage<string, string> _cacheStorage = new CacheStorage<string, string>();
 
-    public SystemIdentificationService(IWindowsManagementInformationService windowsManagementInformationService)
+    public SystemIdentificationService(ILogger<IWindowsManagementInformationService> logger, IWindowsManagementInformationService windowsManagementInformationService)
     {
         ArgumentNullException.ThrowIfNull(windowsManagementInformationService);
-
+        _logger = logger;
         _windowsManagementInformationService = windowsManagementInformationService;
     }
 
@@ -32,7 +32,7 @@ public class SystemIdentificationService : ISystemIdentificationService
         var key = $"machineid_{separator}_{hashCombination}";
         return _cacheStorage.GetFromCacheOrFetch(key, () =>
         {
-            Log.Debug("Retrieving machine id");
+            _logger.LogDebug("Retrieving machine id");
 
             var cpuId = string.Empty;
             var motherboardId = string.Empty;
@@ -65,12 +65,12 @@ public class SystemIdentificationService : ISystemIdentificationService
                 var hashedValue = CalculateHash(value);
                 hashedValues.Add(hashedValue);
 
-                Log.Debug("* {0} => {1}", value, hashedValue);
+                _logger.LogDebug("* {0} => {1}", value, hashedValue);
             }
 
             var machineId = string.Join(separator, hashedValues);
 
-            Log.Debug("Hashed machine id '{0}'", machineId);
+            _logger.LogDebug("Hashed machine id '{0}'", machineId);
 
             if (hashCombination)
             {
@@ -89,7 +89,7 @@ public class SystemIdentificationService : ISystemIdentificationService
             var identifier = "Wireless: " + _windowsManagementInformationService.GetIdentifier("Win32_NetworkAdapter", "MACAddress", "AdapterType", "Wireless") +
                              "Wired: " + _windowsManagementInformationService.GetIdentifier("Win32_NetworkAdapter", "MACAddress", "AdapterType", "Ethernet 802.3");
 
-            Log.Debug("Using mac id '{0}'", identifier);
+            _logger.LogDebug("Using mac id '{0}'", identifier);
 
             return identifier;
         });
@@ -103,7 +103,7 @@ public class SystemIdentificationService : ISystemIdentificationService
             var identifier = _windowsManagementInformationService.GetIdentifier("Win32_VideoController", "DeviceID") +
                              _windowsManagementInformationService.GetIdentifier("Win32_VideoController", "Name");
 
-            Log.Debug("Using gpu id '{0}'", identifier);
+            _logger.LogDebug("Using gpu id '{0}'", identifier);
 
             return identifier;
         });
@@ -121,7 +121,7 @@ public class SystemIdentificationService : ISystemIdentificationService
                              + _windowsManagementInformationService.GetIdentifier("Win32_DiskDrive", "DeviceID", "InterfaceType", "!USB")
                              + _windowsManagementInformationService.GetIdentifier("Win32_DiskDrive", "SerialNumber", "InterfaceType", "!USB");
 
-            Log.Debug("Using hdd id '{0}'", identifier);
+            _logger.LogDebug("Using hdd id '{0}'", identifier);
 
             return identifier;
         });
@@ -136,7 +136,7 @@ public class SystemIdentificationService : ISystemIdentificationService
             var identifier = _windowsManagementInformationService.GetIdentifier("Win32_ComputerSystemProduct", "IdentifyingNumber")
                              + _windowsManagementInformationService.GetIdentifier("Win32_ComputerSystemProduct", "UUID");
 
-            Log.Debug("Using motherboard id '{0}'", identifier);
+            _logger.LogDebug("Using motherboard id '{0}'", identifier);
 
             return identifier;
         });
@@ -151,7 +151,7 @@ public class SystemIdentificationService : ISystemIdentificationService
             var identifier = _windowsManagementInformationService.GetIdentifier("Win32_Processor", "UniqueId");
             if (!string.IsNullOrWhiteSpace(identifier))
             {
-                Log.Debug("Using Processor.UniqueId to identify cpu '{0}'", identifier);
+                _logger.LogDebug("Using Processor.UniqueId to identify cpu '{0}'", identifier);
 
                 return identifier;
             }
@@ -159,7 +159,7 @@ public class SystemIdentificationService : ISystemIdentificationService
             identifier = _windowsManagementInformationService.GetIdentifier("Win32_Processor", "ProcessorId");
             if (!string.IsNullOrWhiteSpace(identifier))
             {
-                Log.Debug("Using Processor.ProcessorId to identify cpu '{0}'", identifier);
+                _logger.LogDebug("Using Processor.ProcessorId to identify cpu '{0}'", identifier);
 
                 return identifier;
             }
@@ -172,7 +172,7 @@ public class SystemIdentificationService : ISystemIdentificationService
                           + _windowsManagementInformationService.GetIdentifier("Win32_Processor", "MaxClockSpeed")
                           + _windowsManagementInformationService.GetIdentifier("Win32_Processor", "Version");
 
-            Log.Debug("Using Processor.Manufacturer + MaxClockSpeed + Version to identify cpu '{0}'", identifier);
+            _logger.LogDebug("Using Processor.Manufacturer + MaxClockSpeed + Version to identify cpu '{0}'", identifier);
 
             return identifier;
         });
