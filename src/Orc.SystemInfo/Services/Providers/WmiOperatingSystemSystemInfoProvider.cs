@@ -38,7 +38,7 @@ public class WmiOperatingSystemSystemInfoProvider : ISystemInfoProvider
 
             if (wmi is null)
             {
-                throw _logger.LogErrorAndCreateException<InvalidOperationException>($"Unexpected result from query: {wql}");
+                throw _logger.LogErrorAndCreateException<InvalidOperationException>("Unexpected result from query: {Wql}", wql);
             }
 
             items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_OsName"), wmi.GetRequiredValue("Caption", notAvailable)));
