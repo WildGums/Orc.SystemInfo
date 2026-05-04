@@ -39,7 +39,7 @@ public class WmiProcessorSystemInfoProvider : ISystemInfoProvider
 
             if (cpu is null)
             {
-                throw _logger.LogErrorAndCreateException<InvalidOperationException>($"Unexpected result from query: {wql}");
+                throw _logger.LogErrorAndCreateException<InvalidOperationException>("Unexpected result from query: {Wql}", wql);
             }
 
             // __cpuid, see: https://docs.microsoft.com/ru-ru/cpp/intrinsics/cpuid-cpuidex?view=msvc-160;

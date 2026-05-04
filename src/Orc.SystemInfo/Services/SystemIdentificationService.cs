@@ -65,12 +65,12 @@ public class SystemIdentificationService : ISystemIdentificationService
                 var hashedValue = CalculateHash(value);
                 hashedValues.Add(hashedValue);
 
-                _logger.LogDebug("* {0} => {1}", value, hashedValue);
+                _logger.LogDebug("* {Value} => {HashedValue}", value, hashedValue);
             }
 
             var machineId = string.Join(separator, hashedValues);
 
-            _logger.LogDebug("Hashed machine id '{0}'", machineId);
+            _logger.LogDebug("Hashed machine id '{MachineId}'", machineId);
 
             if (hashCombination)
             {
@@ -89,7 +89,7 @@ public class SystemIdentificationService : ISystemIdentificationService
             var identifier = "Wireless: " + _windowsManagementInformationService.GetIdentifier("Win32_NetworkAdapter", "MACAddress", "AdapterType", "Wireless") +
                              "Wired: " + _windowsManagementInformationService.GetIdentifier("Win32_NetworkAdapter", "MACAddress", "AdapterType", "Ethernet 802.3");
 
-            _logger.LogDebug("Using mac id '{0}'", identifier);
+            _logger.LogDebug("Using mac id '{Identifier}'", identifier);
 
             return identifier;
         });
@@ -103,7 +103,7 @@ public class SystemIdentificationService : ISystemIdentificationService
             var identifier = _windowsManagementInformationService.GetIdentifier("Win32_VideoController", "DeviceID") +
                              _windowsManagementInformationService.GetIdentifier("Win32_VideoController", "Name");
 
-            _logger.LogDebug("Using gpu id '{0}'", identifier);
+            _logger.LogDebug("Using gpu id '{Identifier}'", identifier);
 
             return identifier;
         });
@@ -121,7 +121,7 @@ public class SystemIdentificationService : ISystemIdentificationService
                              + _windowsManagementInformationService.GetIdentifier("Win32_DiskDrive", "DeviceID", "InterfaceType", "!USB")
                              + _windowsManagementInformationService.GetIdentifier("Win32_DiskDrive", "SerialNumber", "InterfaceType", "!USB");
 
-            _logger.LogDebug("Using hdd id '{0}'", identifier);
+            _logger.LogDebug("Using hdd id '{Identifier}'", identifier);
 
             return identifier;
         });
@@ -136,7 +136,7 @@ public class SystemIdentificationService : ISystemIdentificationService
             var identifier = _windowsManagementInformationService.GetIdentifier("Win32_ComputerSystemProduct", "IdentifyingNumber")
                              + _windowsManagementInformationService.GetIdentifier("Win32_ComputerSystemProduct", "UUID");
 
-            _logger.LogDebug("Using motherboard id '{0}'", identifier);
+            _logger.LogDebug("Using motherboard id '{Identifier}'", identifier);
 
             return identifier;
         });
@@ -151,7 +151,7 @@ public class SystemIdentificationService : ISystemIdentificationService
             var identifier = _windowsManagementInformationService.GetIdentifier("Win32_Processor", "UniqueId");
             if (!string.IsNullOrWhiteSpace(identifier))
             {
-                _logger.LogDebug("Using Processor.UniqueId to identify cpu '{0}'", identifier);
+                _logger.LogDebug("Using Processor.UniqueId to identify cpu '{Identifier}'", identifier);
 
                 return identifier;
             }
@@ -159,7 +159,7 @@ public class SystemIdentificationService : ISystemIdentificationService
             identifier = _windowsManagementInformationService.GetIdentifier("Win32_Processor", "ProcessorId");
             if (!string.IsNullOrWhiteSpace(identifier))
             {
-                _logger.LogDebug("Using Processor.ProcessorId to identify cpu '{0}'", identifier);
+                _logger.LogDebug("Using Processor.ProcessorId to identify cpu '{Identifier}'", identifier);
 
                 return identifier;
             }
@@ -172,7 +172,7 @@ public class SystemIdentificationService : ISystemIdentificationService
                           + _windowsManagementInformationService.GetIdentifier("Win32_Processor", "MaxClockSpeed")
                           + _windowsManagementInformationService.GetIdentifier("Win32_Processor", "Version");
 
-            _logger.LogDebug("Using Processor.Manufacturer + MaxClockSpeed + Version to identify cpu '{0}'", identifier);
+            _logger.LogDebug("Using Processor.Manufacturer + MaxClockSpeed + Version to identify cpu '{Identifier}'", identifier);
 
             return identifier;
         });
