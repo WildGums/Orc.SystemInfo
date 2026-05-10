@@ -1,34 +1,24 @@
 ﻿namespace Orc.SystemInfo.Tests;
 
-using System.Threading.Tasks;
-using Moq;
+using System.Runtime.InteropServices;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
-using Orc.SystemInfo.Win32;
 using Orc.SystemInfo.Wmi;
 
 public class WindowsManagementObjectEnumeratorFacts
 {
     [Test]
-    public async Task Returns_False_When_Enumerator_Returns_Null_Async()
+    [Platform(Include = "Win")]
+    public void Returns_False_When_No_More_Objects()
     {
-        IWbemClassObject objects;
-        uint returnedCount;
+        using var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+        var logger = loggerFactory.CreateLogger<WindowsManagementConnection>();
 
-        var wbemClassObjectEnumeratorMock = new Mock<IWbemClassObjectEnumerator>();
+        using var connection = new WindowsManagementConnection(logger);
+        using var enumerator = connection.ExecuteQuery(connection.CreateQuery("SELECT * FROM Win32_OperatingSystem"));
 
-        wbemClassObjectEnumeratorMock.Setup(x => x.Next(It.IsAny<int>(), It.IsAny<uint>(), out objects, out returnedCount))
-            .Returns((int to, uint c, out IWbemClassObject o, out uint rc) =>
-            {
-                o = null;
-                rc = 0;
-
-                return new HResult(0);
-            });
-
-        using var enumerator = new WindowsManagementObjectEnumerator(wbemClassObjectEnumeratorMock.Object);
-
-        var moveNextResult = enumerator.MoveNext();
-
-        Assert.That(moveNextResult, Is.False);
+        // Win32_OperatingSystem always has exactly one instance
+        Assert.That(enumerator.MoveNext(), Is.True);
+        Assert.That(enumerator.MoveNext(), Is.False);
     }
 }

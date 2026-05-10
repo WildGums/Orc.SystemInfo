@@ -114,7 +114,6 @@ namespace Orc.SystemInfo
 }
 namespace Orc.SystemInfo.Win32
 {
-    public static class IWbemClassObjectEnumeratorExtensions { }
     [System.Flags]
     public enum LoadLibraryFlags : uint
     {
@@ -142,11 +141,6 @@ namespace Orc.SystemInfo.Win32
         EnsureLocatable = 256,
         UseAmendedQualifiers = 131072,
     }
-    public enum WbemConnectOption
-    {
-        None = 0,
-        UseMaxWait = 128,
-    }
     public enum WmiObjectGenus
     {
         Class = 1,
@@ -159,7 +153,7 @@ namespace Orc.SystemInfo.Wmi
     {
         public WindowsManagementConnection(Microsoft.Extensions.Logging.ILogger logger) { }
         public Orc.SystemInfo.Wmi.WindowsManagementQuery CreateQuery(string wql) { }
-        protected override void DisposeUnmanaged() { }
+        protected override void DisposeManaged() { }
         public Orc.SystemInfo.Wmi.WindowsManagementObjectEnumerator ExecuteQuery(Orc.SystemInfo.Wmi.WindowsManagementQuery query) { }
         public void Open() { }
     }
@@ -176,7 +170,7 @@ namespace Orc.SystemInfo.Wmi
         public string? Relpath { get; }
         public string? Server { get; }
         public string? SuperClass { get; }
-        protected override void DisposeUnmanaged() { }
+        protected override void DisposeManaged() { }
         public System.Collections.Generic.IEnumerable<string> GetPropertyNames() { }
         public object? GetValue(string propertyName) { }
         public TValue? GetValue<TValue>(string propertyName) { }

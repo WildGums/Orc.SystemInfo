@@ -27,28 +27,17 @@
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net8.0')) ">
     <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="8.0.1" />
+    <PackageReference Include="System.Management" Version="8.0.1" />
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net9.0')) ">
     <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="9.0.11" />
+    <PackageReference Include="System.Management" Version="9.0.11" />
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net10.0')) ">
     <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="10.0.7" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="costura-win-x86\WbemShim.dll" />
-    <None Remove="costura-win-x64\WbemShim.dll" />
-    <None Remove="Resources\Dlls\x64\WbemShim.dll" />
-    <None Remove="Resources\Dlls\x86\WbemShim.dll" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="costura-win-x86\WbemShim.dll" />
-    <EmbeddedResource Include="costura-win-x64\WbemShim.dll" />
-    <EmbeddedResource Include="Resources\Dlls\x64\WbemShim.dll" />
-    <EmbeddedResource Include="Resources\Dlls\x86\WbemShim.dll" />
+    <PackageReference Include="System.Management" Version="10.0.7" />
   </ItemGroup>
 
   <Import Project="$(MSBuildProjectDirectory)\..\Directory.Build.nullable.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.Build.nullable.props')" />

@@ -3,24 +3,23 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using Catel.Logging;
+using System.Management;
 using Catel.Reflection;
-using Win32;
 
 public sealed class WindowsManagementObjectEnumerator : IEnumerator<WindowsManagementObject?>
 {
-    private readonly IWbemClassObjectEnumerator _wbemClassObjectEnumerator;
+    private readonly ManagementObjectCollection _collection;
+
+    private ManagementObjectCollection.ManagementObjectEnumerator _enumerator;
 
     private bool _disposed;
 
-    internal WindowsManagementObjectEnumerator(IWbemClassObjectEnumerator enumerator)
+    internal WindowsManagementObjectEnumerator(ManagementObjectCollection collection)
     {
-        ArgumentNullException.ThrowIfNull(enumerator);
+        ArgumentNullException.ThrowIfNull(collection);
 
-        _wbemClassObjectEnumerator = enumerator;
-
-        enumerator.Reset();
+        _collection = collection;
+        _enumerator = collection.GetEnumerator();
     }
 
 #pragma warning disable IDISP002 // Dispose member
@@ -39,14 +38,19 @@ public sealed class WindowsManagementObjectEnumerator : IEnumerator<WindowsManag
     {
         ThrowIfDisposed();
 
-        var currentWmiObject = _wbemClassObjectEnumerator.Next();
-        if (currentWmiObject is null)
+        if (!_enumerator.MoveNext())
+        {
+            return false;
+        }
+
+        var managementObject = _enumerator.Current;
+        if (managementObject is null)
         {
             return false;
         }
 
 #pragma warning disable IDISP003 // Dispose previous before re-assigning
-        Current = new WindowsManagementObject(currentWmiObject);
+        Current = new WindowsManagementObject(managementObject);
 #pragma warning restore IDISP003 // Dispose previous before re-assigning
 
         return true;
@@ -56,11 +60,8 @@ public sealed class WindowsManagementObjectEnumerator : IEnumerator<WindowsManag
     {
         ThrowIfDisposed();
 
-        var hresult = _wbemClassObjectEnumerator.Reset();
-        if (hresult.Failed)
-        {
-            hresult.ThrowIfFailed();
-        }
+        _enumerator.Dispose();
+        _enumerator = _collection.GetEnumerator();
     }
 
     /// <summary>
@@ -73,10 +74,10 @@ public sealed class WindowsManagementObjectEnumerator : IEnumerator<WindowsManag
             return;
         }
 
-        if (Marshal.IsComObject(_wbemClassObjectEnumerator))
-        {
-            Marshal.ReleaseComObject(_wbemClassObjectEnumerator);
-        }
+#pragma warning disable IDISP007 // Don't dispose injected
+        _enumerator.Dispose();
+        _collection.Dispose();
+#pragma warning restore IDISP007 // Don't dispose injected
 
         _disposed = true;
     }
