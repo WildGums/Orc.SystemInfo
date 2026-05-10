@@ -78,14 +78,7 @@ public class WindowsManagementObject : Disposable
     public object? GetValue(string propertyName)
     {
         CheckDisposed();
-        try
-        {
-            return _managementObject[propertyName];
-        }
-        catch
-        {
-            return null;
-        }
+        return _managementObject[propertyName];
     }
 
     public TValue? GetValue<TValue>(string propertyName)
