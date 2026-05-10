@@ -8,7 +8,7 @@ public class LongExtensionsFacts
     public class The_ToReadableSize_Method
     {
         [Test]
-        public void Returns_Bytes_For_Small_Values()
+        public void Returns_Bytes_For_Values_Under_1KB()
         {
             var value = 512L;
 
