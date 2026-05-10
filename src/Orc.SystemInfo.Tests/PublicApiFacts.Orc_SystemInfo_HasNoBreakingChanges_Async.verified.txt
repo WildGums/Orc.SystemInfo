@@ -159,7 +159,7 @@ namespace Orc.SystemInfo.Wmi
     {
         public WindowsManagementConnection(Microsoft.Extensions.Logging.ILogger logger) { }
         public Orc.SystemInfo.Wmi.WindowsManagementQuery CreateQuery(string wql) { }
-        protected override void DisposeUnmanaged() { }
+        protected override void DisposeManaged() { }
         public Orc.SystemInfo.Wmi.WindowsManagementObjectEnumerator ExecuteQuery(Orc.SystemInfo.Wmi.WindowsManagementQuery query) { }
         public void Open() { }
     }
@@ -176,7 +176,7 @@ namespace Orc.SystemInfo.Wmi
         public string? Relpath { get; }
         public string? Server { get; }
         public string? SuperClass { get; }
-        protected override void DisposeUnmanaged() { }
+        protected override void DisposeManaged() { }
         public System.Collections.Generic.IEnumerable<string> GetPropertyNames() { }
         public object? GetValue(string propertyName) { }
         public TValue? GetValue<TValue>(string propertyName) { }

@@ -1,11 +1,10 @@
 ﻿namespace Orc.SystemInfo.Wmi;
 
 using System;
-using System.Runtime.InteropServices;
+using System.Management;
 using Catel;
 using Catel.Logging;
 using Microsoft.Extensions.Logging;
-using Orc.SystemInfo.Win32;
 
 public sealed class WindowsManagementConnection : Disposable
 {
@@ -16,8 +15,7 @@ public sealed class WindowsManagementConnection : Disposable
     private readonly ILogger _logger;
 
     private bool _connected;
-    private IWbemServices? _wbemServices;
-    private IWbemContext? _context;
+    private ManagementScope? _managementScope;
 
     public WindowsManagementConnection(ILogger logger)
     {
@@ -35,8 +33,6 @@ public sealed class WindowsManagementConnection : Disposable
                 return;
             }
 
-            var locator = new WbemLocator();
-
             lock (_lock)
             {
                 if (_connected)
@@ -44,41 +40,33 @@ public sealed class WindowsManagementConnection : Disposable
                     return;
                 }
 
-                const WbemAuthenticationLevel authLevel = WbemAuthenticationLevel.PacketIntegrity;
-
-                _wbemServices = locator.ConnectServer(DefaultLocalRootPath, _context);
-
-                if (_wbemServices is not null)
+                var options = new ConnectionOptions
                 {
-                    _wbemServices.SetProxy(WbemImpersonationLevel.Impersonate, authLevel);
+                    Impersonation = ImpersonationLevel.Impersonate,
+                    Authentication = AuthenticationLevel.PacketIntegrity,
+                    EnablePrivileges = true
+                };
 
-                    _connected = true;
-                }
+                _managementScope = new ManagementScope(DefaultLocalRootPath, options);
+                _managementScope.Connect();
+
+                _connected = true;
             }
         }
         catch (Exception ex)
         {
-            _context = null;
+            _managementScope = null;
             _logger.LogError(ex, "Failed to open the connection");
         }
     }
 
-    protected override void DisposeUnmanaged()
+    protected override void DisposeManaged()
     {
-        base.DisposeUnmanaged();
+        base.DisposeManaged();
 
         lock (_lock)
         {
-            if (_wbemServices is not null)
-            {
-                if (Marshal.IsComObject(_wbemServices))
-                {
-                    Marshal.ReleaseComObject(_wbemServices);
-                }
-
-                _wbemServices = null;
-            }
-
+            _managementScope = null;
             _connected = false;
         }
     }
@@ -97,18 +85,19 @@ public sealed class WindowsManagementConnection : Disposable
         return new WindowsManagementObjectEnumerator(InternalExecuteQuery(query));
     }
 
-    internal IWbemClassObjectEnumerator InternalExecuteQuery(WindowsManagementQuery query)
+    internal ManagementObjectCollection InternalExecuteQuery(WindowsManagementQuery query)
     {
         CheckDisposed();
         Open();
 
-        var wbemServices = _wbemServices;
-        if (wbemServices is null)
+        var scope = _managementScope;
+        if (scope is null)
         {
-            throw _logger.LogErrorAndCreateException<InvalidOperationException>("Cannot execute query without services");
+            throw _logger.LogErrorAndCreateException<InvalidOperationException>("Cannot execute query without management scope");
         }
 
-        var enumerator = wbemServices.ExecQuery(query.Wql, query.EnumeratorBehaviorOption, _context);
-        return enumerator;
+        var objectQuery = new ObjectQuery(query.Wql);
+        using var searcher = new ManagementObjectSearcher(scope, objectQuery);
+        return searcher.Get();
     }
 }

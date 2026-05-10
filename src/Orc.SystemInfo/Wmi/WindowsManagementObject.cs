@@ -2,33 +2,34 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
+using System.Linq;
+using System.Management;
 using Catel;
-using Win32;
+using Orc.SystemInfo.Win32;
 
 /// <summary>
 /// Represent object bound to wbem object
 /// </summary>
 public class WindowsManagementObject : Disposable
 {
-    private const string ClassPropertyName = "__class";
-    private const string DerivationPropertyName = "__derivation";
-    private const string DynastyPropertyName = "__dynasty";
-    private const string GenusPropertyName = "__genus";
-    private const string NamespacePropertyName = "__namespace";
-    private const string PathPropertyName = "__path";
-    private const string PropertyCountPropertyName = "__property_count";
-    private const string RelpathPropertyName = "__relpath";
-    private const string ServerPropertyName = "__server";
-    private const string SuperClassPropertyName = "__superclass";
+    private const string ClassPropertyName = "__CLASS";
+    private const string DerivationPropertyName = "__DERIVATION";
+    private const string DynastyPropertyName = "__DYNASTY";
+    private const string GenusPropertyName = "__GENUS";
+    private const string NamespacePropertyName = "__NAMESPACE";
+    private const string PathPropertyName = "__PATH";
+    private const string PropertyCountPropertyName = "__PROPERTY_COUNT";
+    private const string RelpathPropertyName = "__RELPATH";
+    private const string ServerPropertyName = "__SERVER";
+    private const string SuperClassPropertyName = "__SUPERCLASS";
 
-    private readonly IWbemClassObject _wbemClassObject;
+    private readonly ManagementBaseObject _managementObject;
 
-    internal WindowsManagementObject(IWbemClassObject wmiObject)
+    internal WindowsManagementObject(ManagementBaseObject managementObject)
     {
-        ArgumentNullException.ThrowIfNull(wmiObject);
+        ArgumentNullException.ThrowIfNull(managementObject);
 
-        _wbemClassObject = wmiObject;
+        _managementObject = managementObject;
     }
 
     public string? Class => (string?)GetValue(ClassPropertyName);
@@ -59,23 +60,32 @@ public class WindowsManagementObject : Disposable
         }
     }
 
-    protected override void DisposeUnmanaged()
+    protected override void DisposeManaged()
     {
-        base.DisposeUnmanaged();
+        base.DisposeManaged();
 
-        Marshal.ReleaseComObject(_wbemClassObject);
+#pragma warning disable IDISP007 // Don't dispose injected
+        _managementObject.Dispose();
+#pragma warning restore IDISP007 // Don't dispose injected
     }
 
     public IEnumerable<string> GetPropertyNames()
     {
         CheckDisposed();
-        return _wbemClassObject.GetNames();
+        return _managementObject.Properties.Cast<PropertyData>().Select(p => p.Name);
     }
 
     public object? GetValue(string propertyName)
     {
         CheckDisposed();
-        return _wbemClassObject.Get(propertyName);
+        try
+        {
+            return _managementObject[propertyName];
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     public TValue? GetValue<TValue>(string propertyName)
