@@ -2,12 +2,6 @@
 
 using System;
 
-public enum WbemConnectOption
-{
-    None = 0x00,
-    UseMaxWait = 0x80
-}
-
 /// <summary>
 /// Behavior of WMI query execution methods which use an enumerator.
 /// </summary>

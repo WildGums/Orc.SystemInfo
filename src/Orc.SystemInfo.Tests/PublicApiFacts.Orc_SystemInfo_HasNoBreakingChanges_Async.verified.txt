@@ -114,7 +114,6 @@ namespace Orc.SystemInfo
 }
 namespace Orc.SystemInfo.Win32
 {
-    public static class IWbemClassObjectEnumeratorExtensions { }
     [System.Flags]
     public enum LoadLibraryFlags : uint
     {
@@ -141,11 +140,6 @@ namespace Orc.SystemInfo.Win32
         DirectRead = 512,
         EnsureLocatable = 256,
         UseAmendedQualifiers = 131072,
-    }
-    public enum WbemConnectOption
-    {
-        None = 0,
-        UseMaxWait = 128,
     }
     public enum WmiObjectGenus
     {
