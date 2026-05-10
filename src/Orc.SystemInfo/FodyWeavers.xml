@@ -2,11 +2,5 @@
 <Weavers VerifyAssembly="false" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="FodyWeavers.xsd">
   <MethodTimer />
   <Catel />
-  <Costura>
-    <IncludeAssemblies>
-    </IncludeAssemblies>
-    <IncludeRuntimeAssemblies>
-    </IncludeRuntimeAssemblies>
-  </Costura>
   <Obsolete />
 </Weavers>
