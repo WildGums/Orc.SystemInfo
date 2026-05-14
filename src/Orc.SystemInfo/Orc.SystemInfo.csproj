@@ -18,7 +18,7 @@
   <ItemGroup>
     <PackageReference Include="Catel.Core" Version="7.0.0-alpha0326" />
     <PackageReference Include="Catel.Fody" Version="7.1.0-alpha0016" PrivateAssets="all" />
-    <PackageReference Include="Catel.SourceGenerators" Version="7.1.0-alpha0052" PrivateAssets="all" />
+    <PackageReference Include="Catel.SourceGenerators" Version="7.1.0-alpha0059" PrivateAssets="all" />
     <PackageReference Include="Fody" Version="6.9.3" PrivateAssets="all" />
     <PackageReference Include="MethodTimer.Fody" Version="3.2.3" PrivateAssets="all" />
     <PackageReference Include="Obsolete.Fody" Version="5.3.1" PrivateAssets="all" />
