@@ -55,7 +55,7 @@ public class WmiProcessorSystemInfoProvider : ISystemInfoProvider
         }
         catch (Exception ex)
         {
-            items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_CpuInfo"), "n/a, please contact support"));
+            items.Add(new SystemInfoElement(_languageService.GetRequiredString("SystemInfo_CpuInfo"), _languageService.GetRequiredString("SystemInfo_NotAvailablePleaseContactSupport")));
             _logger.LogWarning(ex, "Failed to retrieve CPU information");
         }
 

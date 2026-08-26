@@ -59,6 +59,7 @@ public partial class App
         serviceProvider.CreateTypesThatMustBeConstructedAtStartup();
 
         var languageService = serviceProvider.GetRequiredService<ILanguageService>();
+        languageService.RegisterLanguageSource(new LanguageResourceSource("Orc.SystemInfo.Example", "Orc.SystemInfo.Example.Properties", "Resources"));
 
         // Note: it's best to use .CurrentUICulture in actual apps since it will use the preferred language
         // of the user. But in order to demo multilingual features for devs (who mostly have en-US as .CurrentUICulture),

@@ -21,11 +21,11 @@
         </StackPanel>
 
         <orccontrols:TabControl>
-            <TabItem Header="System info">
+            <TabItem Header="{catel:LanguageBinding SystemInfoExample_SystemInfoTab}">
                 <views:SystemInfoView />
             </TabItem>
 
-            <TabItem Header="System identification">
+            <TabItem Header="{catel:LanguageBinding SystemInfoExample_SystemIdentificationTab}">
                 <views:SystemIdentificationView />
             </TabItem>
         </orccontrols:TabControl>

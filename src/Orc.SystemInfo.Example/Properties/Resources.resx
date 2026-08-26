@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,91 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="SystemInfo_AddressWidth" xml:space="preserve">
-    <value>Address width</value>
+  <data name="SystemInfoExample_WorkingOnIt" xml:space="preserve">
+    <value>Working on it...</value>
   </data>
-  <data name="SystemInfo_ApplicationUpTime" xml:space="preserve">
-    <value>Application up time</value>
+  <data name="SystemInfoExample_MachineId" xml:space="preserve">
+    <value>Machine ID</value>
   </data>
-  <data name="SystemInfo_Architecture" xml:space="preserve">
-    <value>Architecture</value>
+  <data name="SystemInfoExample_CpuId" xml:space="preserve">
+    <value>CPU ID</value>
   </data>
-  <data name="SystemInfo_AvailableMemory" xml:space="preserve">
-    <value>Available memory</value>
+  <data name="SystemInfoExample_GpuId" xml:space="preserve">
+    <value>GPU ID</value>
   </data>
-  <data name="SystemInfo_Build" xml:space="preserve">
-    <value>Build</value>
+  <data name="SystemInfoExample_HardDriveId" xml:space="preserve">
+    <value>Hard drive ID</value>
   </data>
-  <data name="SystemInfo_BusSpeedMhz" xml:space="preserve">
-    <value>Bus speed (Mhz)</value>
+  <data name="SystemInfoExample_MacId" xml:space="preserve">
+    <value>Mac ID</value>
   </data>
-  <data name="SystemInfo_ClockSpeedMhz" xml:space="preserve">
-    <value>Clock speed (Mhz)</value>
+  <data name="SystemInfoExample_MotherboardId" xml:space="preserve">
+    <value>Motherboard ID</value>
   </data>
-  <data name="SystemInfo_CpuInfo" xml:space="preserve">
-    <value>CPU info</value>
+  <data name="SystemInfoExample_SystemInfoTab" xml:space="preserve">
+    <value>System info</value>
   </data>
-  <data name="SystemInfo_CpuName" xml:space="preserve">
-    <value>CPU name</value>
-  </data>
-  <data name="SystemInfo_CurrentCulture" xml:space="preserve">
-    <value>Current culture</value>
-  </data>
-  <data name="SystemInfo_DataWidth" xml:space="preserve">
-    <value>Data width</value>
-  </data>
-  <data name="SystemInfo_Description" xml:space="preserve">
-    <value>Description</value>
-  </data>
-  <data name="SystemInfo_DotNetFrameworkVersions" xml:space="preserve">
-    <value>.NET Framework versions</value>
-  </data>
-  <data name="SystemInfo_InstalledDatabaseProviders" xml:space="preserve">
-    <value>Installed database providers</value>
-  </data>
-  <data name="SystemInfo_MachineName" xml:space="preserve">
-    <value>Machine name</value>
-  </data>
-  <data name="SystemInfo_MaxProcessRam" xml:space="preserve">
-    <value>Max. process RAM</value>
-  </data>
-  <data name="SystemInfo_NotAvailable" xml:space="preserve">
-    <value>n/a</value>
-  </data>
-  <data name="SystemInfo_NumberOfCores" xml:space="preserve">
-    <value>Number of cores</value>
-  </data>
-  <data name="SystemInfo_NumberOfLogicalProcessors" xml:space="preserve">
-    <value>Number of logical processors</value>
-  </data>
-  <data name="SystemInfo_OsInfo" xml:space="preserve">
-    <value>OS info</value>
-  </data>
-  <data name="SystemInfo_OsName" xml:space="preserve">
-    <value>OS name</value>
-  </data>
-  <data name="SystemInfo_OsVersion" xml:space="preserve">
-    <value>OS version</value>
-  </data>
-  <data name="SystemInfo_ProcessorId" xml:space="preserve">
-    <value>Processor ID</value>
-  </data>
-  <data name="SystemInfo_SystemUpTime" xml:space="preserve">
-    <value>System up time</value>
-  </data>
-  <data name="SystemInfo_TotalMemory" xml:space="preserve">
-    <value>Total memory</value>
-  </data>
-  <data name="SystemInfo_UserDomainName" xml:space="preserve">
-    <value>User domain name</value>
-  </data>
-  <data name="SystemInfo_UserName" xml:space="preserve">
-    <value>User name</value>
-  </data>
-  <data name="SystemInfo_Version" xml:space="preserve">
-    <value>Version</value>
-  </data>
-  <data name="SystemInfo_NotAvailablePleaseContactSupport" xml:space="preserve">
-    <value>n/a, please contact support</value>
+  <data name="SystemInfoExample_SystemIdentificationTab" xml:space="preserve">
+    <value>System identification</value>
   </data>
 </root>
