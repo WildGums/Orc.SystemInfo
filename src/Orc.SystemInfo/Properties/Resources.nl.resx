@@ -96,4 +96,7 @@
   <data name="SystemInfo_Version" xml:space="preserve">
     <value>Versie</value>
   </data>
+  <data name="SystemInfo_NotAvailablePleaseContactSupport" xml:space="preserve">
+    <value>n/a, please contact support</value>
+  </data>
 </root>

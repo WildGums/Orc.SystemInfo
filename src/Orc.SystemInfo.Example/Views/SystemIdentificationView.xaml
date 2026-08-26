@@ -8,7 +8,7 @@
                    mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
 
     <Grid>
-        <Label Content="Working on it..." HorizontalAlignment="Center" VerticalAlignment="Center" 
+        <Label Content="{catel:LanguageBinding SystemInfoExample_WorkingOnIt}" HorizontalAlignment="Center" VerticalAlignment="Center" 
                Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}}" />
 
         <orccontrols:StackGrid Visibility="{Binding IsBusy, Converter={catel:BooleanToHidingVisibilityConverter}, ConverterParameter=True}">
@@ -26,22 +26,22 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Label Content="Machine ID" />
+            <Label Content="{catel:LanguageBinding SystemInfoExample_MachineId}" />
             <TextBox Text="{Binding MachineId}" IsReadOnly="True" />
 
-            <Label Content="CPU ID" />
+            <Label Content="{catel:LanguageBinding SystemInfoExample_CpuId}" />
             <TextBox Text="{Binding CpuId}" IsReadOnly="True" />
 
-            <Label Content="GPU ID" />
+            <Label Content="{catel:LanguageBinding SystemInfoExample_GpuId}" />
             <TextBox Text="{Binding GpuId}" IsReadOnly="True" />
 
-            <Label Content="Hard drive ID" />
+            <Label Content="{catel:LanguageBinding SystemInfoExample_HardDriveId}" />
             <TextBox Text="{Binding HardDriveId}" IsReadOnly="True" />
 
-            <Label Content="Mac ID" />
+            <Label Content="{catel:LanguageBinding SystemInfoExample_MacId}" />
             <TextBox Text="{Binding MacId}" IsReadOnly="True" />
 
-            <Label Content="Motherboard ID" />
+            <Label Content="{catel:LanguageBinding SystemInfoExample_MotherboardId}" />
             <TextBox Text="{Binding MotherboardId}" IsReadOnly="True" />
         </orccontrols:StackGrid>
     </Grid>

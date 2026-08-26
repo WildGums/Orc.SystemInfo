@@ -79,7 +79,7 @@ public class SystemInfoService : ISystemInfoService
         return items;
     }
 
-    private static string GetSystemUpTime()
+    private string GetSystemUpTime()
     {
         try
         {
@@ -89,7 +89,7 @@ public class SystemInfoService : ISystemInfoService
         }
         catch (Exception)
         {
-            return "n/a";
+            return _languageService.GetRequiredString("SystemInfo_NotAvailable");
         }
     }
 }
