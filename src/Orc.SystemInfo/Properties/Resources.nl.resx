@@ -97,6 +97,6 @@
     <value>Versie</value>
   </data>
   <data name="SystemInfo_NotAvailablePleaseContactSupport" xml:space="preserve">
-    <value>n/a, please contact support</value>
+    <value>n/b, neem contact op met support</value>
   </data>
 </root>

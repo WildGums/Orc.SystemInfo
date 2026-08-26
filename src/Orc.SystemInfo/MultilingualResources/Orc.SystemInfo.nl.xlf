@@ -77,6 +77,10 @@
           <source>n/a</source>
           <target state="translated">n/b</target>
         </trans-unit>
+        <trans-unit id="SystemInfo_NotAvailablePleaseContactSupport" translate="yes" xml:space="preserve">
+          <source>n/a, please contact support</source>
+          <target state="new">n/b, neem contact op met support</target>
+        </trans-unit>
         <trans-unit id="SystemInfo_NumberOfCores" translate="yes" xml:space="preserve">
           <source>Number of cores</source>
           <target state="translated">Aantal cores</target>

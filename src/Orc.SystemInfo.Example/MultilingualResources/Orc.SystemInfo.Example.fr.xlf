@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en-US" target-language="fr" original="ORC.SYSTEMINFO.EXAMPLE/PROPERTIES/RESOURCES.RESX">
+    <body>
+      <group id="ORC.SYSTEMINFO.EXAMPLE/PROPERTIES/RESOURCES.RESX" datatype="resx">
+        <trans-unit id="SystemInfoExample_CpuId" translate="yes" xml:space="preserve">
+          <source>CPU ID</source>
+          <target state="new">CPU ID</target>
+        </trans-unit>
+        <trans-unit id="SystemInfoExample_GpuId" translate="yes" xml:space="preserve">
+          <source>GPU ID</source>
+          <target state="new">GPU ID</target>
+        </trans-unit>
+        <trans-unit id="SystemInfoExample_HardDriveId" translate="yes" xml:space="preserve">
+          <source>Hard drive ID</source>
+          <target state="new">ID du disque dur</target>
+        </trans-unit>
+        <trans-unit id="SystemInfoExample_MacId" translate="yes" xml:space="preserve">
+          <source>Mac ID</source>
+          <target state="new">Mac ID</target>
+        </trans-unit>
+        <trans-unit id="SystemInfoExample_MachineId" translate="yes" xml:space="preserve">
+          <source>Machine ID</source>
+          <target state="new">Machine ID</target>
+        </trans-unit>
+        <trans-unit id="SystemInfoExample_MotherboardId" translate="yes" xml:space="preserve">
+          <source>Motherboard ID</source>
+          <target state="new">ID de la carte mère</target>
+        </trans-unit>
+        <trans-unit id="SystemInfoExample_SystemIdentificationTab" translate="yes" xml:space="preserve">
+          <source>System identification</source>
+          <target state="new">Identification du système</target>
+        </trans-unit>
+        <trans-unit id="SystemInfoExample_SystemInfoTab" translate="yes" xml:space="preserve">
+          <source>System info</source>
+          <target state="new">Informations système</target>
+        </trans-unit>
+        <trans-unit id="SystemInfoExample_WorkingOnIt" translate="yes" xml:space="preserve">
+          <source>Working on it...</source>
+          <target state="new">J’y travaille...</target>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+</xliff>
