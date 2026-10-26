@@ -26,12 +26,12 @@
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net8.0')) ">
     <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="8.0.*" />
-    <PackageReference Include="System.Management" Version="8.0.*" />
+    <PackageReference Include="System.Management" Version="10.0.*" />
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net9.0')) ">
     <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="9.0.*" />
-    <PackageReference Include="System.Management" Version="9.0.*" />
+    <PackageReference Include="System.Management" Version="10.0.*" />
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net10.0')) ">
